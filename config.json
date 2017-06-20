@@ -1,0 +1,18 @@
+{
+	"rootdir": "/home/yzhou51/workspace/wire_check-dev-yzhou51/",
+	"domain": "www.zskjsdxl.top",
+	"port": {
+		"web": "6178",
+		"socket" : "6189",
+		"picserver": "9090",
+		"wechat" : "80"
+	},
+	"picpath": "/home/yzhou51/workspace/files/",
+	"database": {
+		"host": "localhost",
+		"port": "3306",
+		"user": "root",
+		"password": "kooling123",
+ 		"schema": "wirecheck"
+	}
+}
