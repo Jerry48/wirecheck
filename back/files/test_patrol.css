@@ -1,0 +1,287 @@
+html,
+body {
+    height: 100%;
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 1200px) {
+    html {
+        width: 1200px;
+        overflow-x: auto;
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    * {
+        font-size: 12px;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    * {
+        font-size: 14px;
+    }
+}
+
+* {
+    padding: 0px;
+    margin: 0px;
+    /*overflow-x: hidden;
+	overflow-y: hidden;*/
+    font-family: 'SimSun';
+}
+
+div {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+#nav {
+    width: 100%;
+    height: 11%;
+    /*background-color: rgb(170,247,247);*/
+    background-image: url(elements/nav.jpg);
+    background-size: cover;
+    visibility: hidden;
+}
+
+#main {
+    width: 100%;
+    height: 89%;
+    visibility: hidden;
+}
+
+#nav_left {
+    width: 13%;
+    height: 100%;
+    float: left;
+    text-align: center;
+}
+
+#nav_left > img {
+    width: 90%;
+    height: 70%;
+}
+
+#nav_left > img:hover {
+	cursor: pointer;
+}
+
+#nav_right {
+    width: 87%;
+    height: 100%;
+    float: left;
+}
+
+#header {
+    width: 100%;
+    height: 70%;
+    font-size: 25px;
+    color: rgb(1, 111, 111);
+}
+
+#header>div {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+#header_right {
+    float: right;
+}
+
+#header_right>ul {
+    height: 50%;
+    float: right;
+}
+
+#header_right>ul>li {
+    height: 100%;
+    float: left;
+    list-style: none;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+#header_right>ul>li>a,
+#header_right>ul>li>a>span,
+#header_right>ul>li>a>span>img {
+    height: 100%;
+}
+
+#tabs {
+    width: 100%;
+    height: 30%;
+}
+
+#tabs_left {
+    width: 70%;
+    height: 100%;
+    float: left;
+}
+
+#tabs_left>ul {
+    height: 100%;
+}
+
+#tabs_left>ul>li {
+    height: 100%;
+    width: 90px;
+    float: left;
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    /*background-color: rgb(1,111,111);*/
+    background-image: url(elements/tabs.gif);
+    background-size: 100% 100%;
+    margin-left: 10px;
+    text-align: center;
+}
+
+#tabs_left>ul>li>a {
+    color: white;
+    text-decoration: none;
+}
+
+#tabs_right {
+    width: 30%;
+    height: 100%;
+    float: left;
+}
+
+#tabs_right>p {
+    float: right;
+}
+
+#main {
+	width: 100%;
+	height: 89%;
+	visibility: hidden;
+}
+
+#main_left {
+    width: 13%;
+    height: 100%;
+    float: left;
+    background-color: rgb(1, 111, 111);
+    padding-right: 8px;
+}
+
+#tree {
+    width: 100%;
+    height: 100%;
+    /*background-color: rgb(170,247,247);*/
+    background-image: url(elements/list_back.jpg);
+}
+
+.list {
+    width: 100%;
+    height: 30px;
+    /*background-color: rgb(1,111,111); */
+    background-image: url(elements/list.jpg);
+    border-top: 2px solid rgb(2, 130, 130);
+    text-align: center;
+    cursor: pointer;
+}
+
+.list > p {
+    margin: 0px;
+    color: white;
+    display: inline;
+}
+
+.list >img {
+    margin-left: 10px;
+    display: inline;
+}
+
+.content {
+    width: 100%;
+    color: rgb(1, 111, 111);
+    overflow-y: auto;
+    white-space: nowrap;
+}
+
+
+/*patrol*/
+#patrol {
+	width: 87%;
+	height: 100%;
+	float: left;
+	background-color: black;
+}
+
+#pics, #pics4x4 {
+	width: 100%;
+	height: 95%;
+}
+
+#operations {
+	width: 100%;
+	height: 5%;
+	background-color: rgb(3,161,161);
+	overflow-y: hidden;
+}
+
+/*full screen*/
+#fullMain {
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	display: none;
+}
+
+#fullMain4x4 {
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	display: none;
+}
+
+.pics>img {
+	width: 100%;
+	height: 100%;
+}
+
+.pics4x4>img {
+	width: 100%;
+	height: 100%;
+}
+
+.pic13, .pic46,.pic79 {
+	width: 100%;
+	height: 33.33%;
+}
+
+.pics {
+	width: 33.33%;
+	height:100%;
+}
+
+.pic14, .pic58, .pic912, .pic1316 {
+	width: 100%;
+	height: 25%;
+}
+
+.pics4x4 {
+	width: 24.99%;
+	height: 100%;
+}
+
+/*border*/
+.border-right {
+	border-right: 1px green solid;
+}
+
+.border-bottom {
+	border-bottom: 1px green solid;
+}
+
+/*#hoverArea:hover {
+	background-color: blue;
+}*/

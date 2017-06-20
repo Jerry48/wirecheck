@@ -1,0 +1,3 @@
+CCFLab SJTU http server listening on 6189
+req.session:{"cookie":{"originalMaxAge":86400000,"expires":"2016-05-20T23:21:34.301Z","secure":false,"httpOnly":false,"path":"/"}}
+::ffff:121.42.0.34 - - [19/May/2016:23:21:34 +0000] "GET / HTTP/1.0" 200 40 "-" "spiderman"

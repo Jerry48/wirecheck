@@ -1,0 +1,401 @@
+body {
+	font-family: Microsoft YaHei;	
+}
+html, body {
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	padding: 0px;
+	margin: 0px;
+}
+
+#nav {
+	width: 100%;
+	height: 7%;
+	background-color: rgb(176,196,222);
+}
+
+#title {
+	height: 60%;
+	overflow-y: hidden;
+}
+
+#title>ul {
+	position: relative;
+}
+
+#title>ul>li {
+	margin-left: 10px;
+}
+
+
+#title>ul>li>a {
+	padding: 0px;
+	font-size: 12px;
+}
+
+#welcome {
+	height: 40%;
+	overflow-y: hidden;
+}
+
+#welcome > p {
+	padding: 0px;
+}
+
+#main {
+	width: 100%;
+	height: 93%;
+	padding-top: 2px;
+}
+
+/*设备列表*/
+#devices {
+	width: 25%;
+	height: 100%;
+	float: left;
+}
+
+#devices > ul > li > a {
+	padding: 3px;
+}
+
+#tree {
+/*	width: 100%;*/
+	overflow-y: auto;
+	overflow-x: auto;
+	white-space:nowrap;
+}
+
+#tree>ul>li {
+	padding:6px;
+}
+
+.chosen {
+	background-color: rgb(176,196,222);
+}
+
+#middle {
+	width: 50%;
+	height: 100%;
+	float: left;
+}
+
+#header {
+	width: 100%;
+	height: 4%;
+	padding-left: 5px;
+	margin-bottom: 5px;
+	background-color: rgb(176,196,222);	
+}
+
+#header_p {
+	width: 40%;
+	height: 100%;
+	overflow-y: hidden;
+	float: left;
+}
+
+#header_button {
+	width: 60%;
+	height: 100%;
+	overflow-y: hidden;
+	float: left;
+}
+
+#header_button>button {
+	float: right;
+}
+#header_button>select {
+	float: right;
+}
+
+#header >div> p{
+	height: 100%;
+	position: relative;
+	top:0%;
+	margin-bottom: 0px;
+}
+
+#pics {
+	height: 95%;
+	width: 100%;
+	/*background-color: blue;*/
+}
+
+#pic0 {
+	width: 41%;
+	height: 100%;
+	float: left;
+	padding-left: 8px;
+	
+}
+
+#pic16 {
+	width: 59%;
+	height: 100%;
+	float: left;
+}
+
+#pic0 > p {
+	width: 100%;
+	background-color: rgb(176,196,222);
+	border: 1px black solid;
+	margin: 0px;
+	padding: 2px;
+}
+
+.imgs {
+	width: 100%;
+	overflow-x: hidden;
+	background-color: black;
+	border: 1px solid black;
+}
+
+/*.imgs >img{
+	width: 100%;
+}*/
+
+.margin0 {
+	margin:0px;
+}
+
+.pics > p {
+	width: 100%;
+	background-color: rgb(176,196,222);
+	border: 1px black solid;
+	margin: 0px;
+	padding: 2px;
+}
+
+.pics {
+	float: left;
+	width: 33.33%;
+	padding-left: 5px;
+
+}
+
+/*@media (min-width: 600px){
+	#records {font-size: 8px;}
+	p,span,label {font-size: 10px;}
+
+}*/
+
+/*@media (min-width: 700px) and (min-width: 800px){
+	#records {font-size: 12px;}
+	p,span,label {font-size: 12px;}
+
+}*/
+
+@media (min-width: 1000px){
+	#records {font-size: 12px;}
+	p,span,label,#review {font-size: 12px;}
+	#title>ul>li>a>span>img {
+		height: 20px;
+		width: 20px;
+
+	}
+}
+
+@media (min-width: 1000px){
+	#records {font-size: 12px;}
+	p,span,label,#review {font-size: 12px;}
+
+}
+/*工作记录*/
+#records {
+/*	height: 200px;*/
+	width: 100%;
+	padding-left: 5px;
+	padding-top: 2px;
+	background-color: white;
+}
+
+#records-menu {
+	height: 15%;
+	overflow-y: hidden;
+}
+
+#records-menu > ul {
+	position: relative;
+}
+#records-menu>div {
+	height: 100%;
+}
+
+#records-menu>div>div {
+	height: 100%;
+}
+
+#records-menu>div>div>button {
+	position: relative;
+	height: 80%;
+	padding: 0px;
+	top:10%;
+}
+
+#records-menu>div>p {
+	position: relative;
+	margin-right: 3px;
+}
+
+#records-content {
+	height: 70%;
+	white-space: nowrap;
+	overflow-y: hidden;
+}
+
+#records-content>table {
+	height: 100%;
+	width: 100%;
+	overflow-x: scroll;
+}
+
+#records-content>table>thead {
+/*	background-color: rgb(176,196,222);*/
+	/*width: calc(100% - 200px);*/
+	height: 20%;
+}
+
+#records-content > table >tbody {
+	overflow-y: auto;
+}
+
+#records-button {
+	height: 15%;
+	overflow-y: hidden;
+}
+
+#records-button>span {
+	height: 100%;
+}
+
+#records-button>span>button {
+	height: 80%;
+	position: relative;
+	top: 10%;
+	padding: 0px;
+}
+
+#records-button>span>p {
+	position: relative;
+	margin-bottom: 0px;
+}
+/*#records-content>table>tbody>tr {
+	height: 20%;
+}*/
+
+/*#records>div>table>tbody>tr {
+	height: 25px;
+}
+
+#records-menu {
+	overflow-y: hidden;
+}
+
+#records-content {
+	overflow-x: scroll;
+	white-space: nowrap;
+	text-overflow:ellipsis;
+}
+
+#records-button {
+	overflow-y: hidden;
+}*/
+
+
+/*右侧*/
+
+#operations {
+	width: 25%;
+	height: 100%;
+	float: left;
+	padding-left: 5px;
+	overflow-y: auto;
+}
+
+#review {
+	width: 100%;
+	border: 1px black solid;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+#review>div{
+	width: 95%;
+	height: 30px;
+}
+
+.head {
+	border-left: 1px black solid;
+	background-color: rgb(176,196,222);	
+	padding-left:2px;
+	margin:0px;
+}
+
+/*#head1 {
+	border-top: 1px black solid;
+}*/
+
+#deviceList {
+	width: 100%;
+	height: 30%;
+	border: 1px black solid;
+	white-space:nowrap;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+#deviceList>p {
+	margin: 0px;
+}
+
+#deviceList>ul>li {
+	padding: 6px;
+}
+
+.tempMeasure {
+	background-color: black;
+	color: white;
+	margin-left: 10px;
+}
+
+#picList {
+	width: 100%;
+	border: 1px black solid;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+#tempArea {
+	width: 100%;
+	border: 1px black solid;
+	display: none;
+	overflow-y: auto;
+	white-space:nowrap;
+	overflow-x: auto;
+}
+
+#tempArea > table {
+
+}
+
+#canvasDiv {
+	width: 100%;
+	border: 1px black solid;
+	display: none;
+	overflow-x: auto;
+}
+
+#icon {
+	padding-right: 110px;
+}
+
+/*map*/
+#mapArea {
+	width: 75%;
+	height: 100%;
+	float: left;
+	padding-left: 5px;
+}

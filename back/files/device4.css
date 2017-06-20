@@ -1,0 +1,263 @@
+body {
+	font-family: Microsoft YaHei;	
+}
+html, body {
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+#nav {
+	width: 100%;
+	height: 7%;
+	background-color: rgb(176,196,222);
+}
+
+#title {
+	height: 60%;
+	overflow-y: hidden;
+}
+
+
+/*设备信息*/
+#main {
+	height: 93%;
+	padding: 30px;
+}
+
+#list {
+	width: 80%;
+	height: 100%;
+	float: left;
+	border: 1px black solid;
+}
+
+#table {
+	width: 100%;
+	height: 95%;
+	margin-bottom: 0px;
+	white-space:nowrap;
+	overflow-x: auto;
+}
+
+#op {
+	width: 100%;
+	height: 5%;
+	background-color: rgb(176,196,222);
+	margin-top: 0px;
+	padding: 5px;
+}
+
+#op>div {
+	margin-right: 5px;
+}
+
+#table>thead {
+	background-color: rgb(176,196,222);
+}
+
+#table>tbody {
+	height: 95%;
+}
+
+#search {
+	width: 20%;
+	height: 100%;
+	float: left;
+	border-top: 1px black solid;
+	border-bottom: 1px black solid;
+	border-right: 1px black solid;
+	padding:10px;
+	white-space:nowrap;	
+	font-size: 12px;
+}
+
+#search>div {
+	width: 100%;
+	height: 5%;
+}
+
+#search>div>p {
+	margin-bottom: 0px;
+}
+
+#search>div>select , #search>div>input{
+	width: 50%;
+}
+
+/*设备编辑*/
+#main2 {
+	height: 93%;
+	width: 100%;
+	padding:30px;
+	
+}
+
+#header {
+	height: 5%;
+	width: 100%;
+	background-color: grey;
+	border: 1px black solid;
+}
+
+#header>p {
+	padding:5px;
+	margin:0px;
+	color: white;
+}
+
+#header>div {
+	color: black;
+	padding:5px;
+}
+
+#header>div>button {
+	padding: 0px;
+}
+
+#table2 {
+	width: 100%;
+	height: 90%;
+	overflow-y: scroll;
+	border: 1px black solid;
+	white-space:nowrap;
+	overflow-x: auto;
+}
+
+#table2>table {
+	margin-bottom: 0px;
+}
+
+#table2>table>thead {
+	background-color: rgb(176,196,222);
+}
+
+#op2 {
+	width: 100%;
+	height: 5%;
+	background-color: rgb(176,196,222);
+	margin-top: 0px;
+	padding: 5px;
+}
+
+#modalAdd-body>div, #modalEdit-body>div {
+	margin: 5px;
+}
+
+#modalAdd-body>div, #modalEdit-body>div {
+	width: 100%;
+	height: 30px;
+}
+
+#modalDanger-body>table {
+	height: 100%;
+}
+
+#modalSetting-body>div {
+	width: 100%;
+	height: 30px;
+}
+
+/*区域设置*/
+#main3 {
+	height: 90%;
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-top: 30px;
+}
+
+#main3>div {
+	height: 100%;
+	width: 100%;
+	border: 1px solid black;
+}
+
+#areaSet {
+	height: 100%;
+	width: 50%;
+	border-left: 2px solid black;
+	float: left;
+}
+
+#treeView {
+	height: 100%;
+	width: 50%;
+	float: left;
+}
+
+#main3>div>div>p {
+	height: 5%;
+	width: 100%;
+	background-color: rgb(176,196,222);
+	font-size: 15px;
+	padding: 10px;
+	margin-bottom: 0px;
+	border-bottom: 1px solid black;
+}
+
+#levelTree {
+	height: 95%;
+	width: 100%;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+#areaSet>div {
+	padding: 10px;
+}
+
+#areaSet>div>p {
+	margin-top: 5px;
+}
+
+/*线路设置*/
+#main4 {
+	height: 90%;
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-top: 30px;
+}
+
+#main4>div {
+	height: 100%;
+	width: 100%;
+	border: 1px solid black;
+}
+
+#lineSet {
+	height: 100%;
+	width: 50%;
+	border-left: 2px solid black;
+	float: left;
+}
+
+#lineView {
+	height: 100%;
+	width: 50%;
+	float: left;
+}
+
+#main4>div>div>p {
+	height: 5%;
+	width: 100%;
+	background-color: rgb(176,196,222);
+	font-size: 15px;
+	padding: 10px;
+	margin-bottom: 0px;
+	border-bottom: 1px solid black;
+}
+
+#lineTree {
+	height: 95%;
+	width: 100%;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+#lineSet>div {
+	padding: 10px;
+}
+
+#lineSet>div>p {
+	margin-top: 5px;
+}

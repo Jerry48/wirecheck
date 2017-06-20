@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!--引用百度地图API-->
+  <style type="text/css">
+        .iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
+        .iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
+  </style>
+            
+  <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+
+  <title>科霖输电线路可视化巡查系统——巡检</title>
+  <link rel="stylesheet" type="text/css" href="patrol4.css">
+  <link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="bootstrap-daterangepicker/daterangepicker.css">
+    <!-- 图片查看器 -->
+  <link rel="stylesheet" href="viewer.min.css">
+  <!-- <link rel="stylesheet" href="css/smoothzoom.css"> -->
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+  <!-- for progressbar -->
+  <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+  <!-- <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css"> -->
+</head>
+<body style="font-family: Microsoft YaHei;">
+
+<div id="nav">
+  	<div id="title">
+	  	<a href="/main" style="text-decoration-line:none;">科霖输电线路可视化巡查系统</a>
+	  	<ul id="menu1ul" class="nav navbar-nav navbar-right" style='position:relative;right:50px;'>
+<!-- 	  		<li><a href="#"><span style="display: inherit;height: 20px;width: 20px;"><img src="photo.png" ></span></a></li>
+	  		<li><a href="#"><span style="display: inherit;height: 20px;width: 20px;"><img src="analyse.png" ></span></a></li>
+	  		<li><a href="#"><span style="display: inherit;height: 20px;width: 20px;"><img src="config.png" ></span></a></li>
+	  		<li><a href="#"><span style="display: inherit;height: 20px;width: 20px;"><img src="map.png" ></span></a></li>
+	  		<li><a href="#" data-toggle="modal" data-target="#pushModal"><span style="display: inherit;"><img src="push.jpg" ></span></a></li> -->
+	  	</ul>
+	 </div>
+
+  	<div id="welcome">
+	  	<p style="float: left;">欢迎您: 用户名 今天是XXX年XX月XX日 星期X</p>
+	  	<ul class="nav navbar-nav navbar-right" style='position:relative; right:50px'>
+	  		<!-- <li style="padding: 0px;"><a style='color:black;padding: 0px;font-size: 14px;' id="alertOp">隐藏/显示告警</a></li> -->
+	  		<li style="padding: 0px;"><a target="_blank" href="/patrol" style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;'>巡检</a></li>
+	  		<li style="padding: 0px;"><a target="_blank" href="/device" style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;'>设备管理</a></li>
+	  		<li style="padding: 0px;"><a target="_blank" href="/user" style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;'>用户管理</a></li>
+	  		<li style="padding: 0px;"><a href="#" style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;' id='logout'>退出登陆</a></li>
+	  	</ul>
+	</div>  
+</div>
+
+<div id="main" style="z-index: -1;">
+	<div id="devices">
+		<ul class="nav nav-tabs">
+			<li role="presentation" class="chosen"><a href="#" style="margin-right: 0px;border-radius: 0px;">设备列表</a></li>
+<!-- 			<li role="presentation"><a href="#" style="margin-right: 0px;border-radius: 0px;">线路列表</a></li>
+			<li role="presentation"><a href="#" style="margin-right: 0px;border-radius: 0px;">巡检分组</a></li> -->
+		</ul>
+		<div id="tree"></div>
+	</div>
+	<div id="patrol">
+		<div id="pics">
+			<div class="pic13">
+				<div class = 'pics border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics border-bottom' style="float: left;">
+					<img src="">
+				</div>
+			</div>
+			<div class="pic46">
+				<div class = 'pics border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics border-bottom' style="float: left;">
+					<img src="">
+				</div>
+			</div>
+			<div class="pic79">
+				<div class = 'pics border-right' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics border-right' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics' style="float: left;">
+					<img src="">
+				</div>
+			</div>
+		</div>
+
+		<div id="pics4x4" style="display: none;">
+			<div class="pic14">
+				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-bottom' style="float: left;">
+					<img src="">
+				</div>
+			</div>
+			<div class="pic58">
+				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-bottom' style="float: left;">
+					<img src="">
+				</div>
+			</div>
+			<div class="pic912">
+				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-bottom' style="float: left;">
+					<img src="">
+				</div>
+			</div>
+			<div class="pic1316">
+				<div class = 'pics4x4 border-right' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-right' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-right' style="float: left;">
+					<img src="">
+				</div>
+				<div class = 'pics4x4 border-bottom' style="float: left;">
+					<img src="">
+				</div>
+			</div>
+		</div>
+		<div id="operations">
+			<button id="fullScreen">全屏</button>
+			<button id="picsNumChange" style="">4x4</button>
+			<select class="interval">
+				<option value="20">20秒</option>
+				<option value="40">40秒</option>
+				<option value="60">1分</option>
+				<option value="300">5分</option>
+			</select>
+			<button class="push" style="">推送</button>
+		</div>
+	</div>
+</div>
+
+<div id="fullMain" style="display: none;z-index: -1;">
+	<div class="pic13">
+		<div class = 'pics border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics border-bottom' style="float: left;">
+			<img src="">
+		</div>
+	</div>
+	<div class="pic46">
+		<div class = 'pics border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics border-bottom' style="float: left;">
+			<img src="">
+		</div>
+	</div>
+	<div class="pic79">
+		<div class = 'pics border-right' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics border-right' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics' style="float: left;">
+			<img src="">
+		</div>
+	</div>
+</div>
+
+<div id="fullMain4x4" style="display: none;">
+	<div class="pic14">
+		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-bottom' style="float: left;">
+			<img src="">
+		</div>
+	</div>
+	<div class="pic58">
+		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-bottom' style="float: left;">
+			<img src="">
+		</div>
+	</div>
+	<div class="pic912">
+		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-bottom' style="float: left;">
+			<img src="">
+		</div>
+	</div>
+	<div class="pic1316">
+		<div class = 'pics4x4 border-right' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-right' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-right' style="float: left;">
+			<img src="">
+		</div>
+		<div class = 'pics4x4 border-bottom' style="float: left;">
+			<img src="">
+		</div>
+	</div>
+</div>
+
+<div id="hoverArea" style="position: fixed;bottom: 0px; height: 30px;width: 100%; background-color:transparent;z-index: 9999;display: none;overflow-y: hidden;">
+	<div id="hoverContent" style="display: none;">
+		<button id="exitFullScreen" style="">退出全屏</button>
+		
+		<button id="picsNumChangeFull" style="">4x4</button>
+		<select class="interval">
+			<option value="20">20秒</option>
+			<option value="40">40秒</option>
+			<option value="60">1分</option>
+			<option value="300">5分</option>
+		</select>
+		<button class='push' style="">推送</button>
+	</div>
+</div>
+
+<!-- 推送 -->
+<div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 200px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(176,196,222)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">图片推送</h4>
+            </div>
+            <div class="modal-body" id="modalPush-body" style="width: 100%">
+            	
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<script src="jquery.min.js"></script>
+<script src="js.cookie.js"></script>
+<script src="bootstrap-treeview.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bootstrap-daterangepicker/moment.js"></script>
+<script type="text/javascript" src="bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="assets/js/vendor/holder.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="assets/js/ie-emulation-modes-warning.js"></script>
+<script type="text/javascript" src="ichart.1.2.min.js"></script>
+<script src="viewer.min.js"></script>
+<script src="jquery.rotate.js"></script>
+<!-- for progressbar -->
+
+<script src="patrol4.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+.btn-main {
+	width: 100%;
+}
+/*for alertDetails.html*/
+.header{
+    background-color: black;
+    color: white;
+    font-size: 15px;
+    text-align: center;
+}
+
+.header-mid {
+	padding-top: 7px; 
+}
+
+/*for viewDevices.html*/
+.tb-text {
+	padding-top: 13px;
+}
+
+.tb2-text {
+	float:left;
+	padding-top: 6px;
+}
+
+.input-pos {
+	width: 50%;
+	float:left;
+}

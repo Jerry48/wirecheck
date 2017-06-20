@@ -1,0 +1,20 @@
+
+/*.selected{
+    box-shadow:0px 12px 22px 1px #333;
+
+}
+*/
+
+/*.daterangepicker .calendar.left {
+    margin-right: 10px;
+}*/
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 0px;
+    
+}
+.table{
+    margin-bottom: 0px;    
+}
+
+.rot90{-moz-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform:rotate(90deg); filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1);}

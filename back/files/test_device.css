@@ -1,0 +1,421 @@
+html,
+body {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.input_button {
+	width: 40px;
+	background-color:rgb(1, 111, 111);
+	color: white;
+}
+
+@media screen and (max-width: 1200px) {
+    html {
+        width: 1200px;
+        overflow-x: auto;
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    * {
+        font-size: 12px;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    * {
+        font-size: 14px;
+    }
+}
+
+* {
+    padding: 0px;
+    margin: 0px;
+    /*overflow-x: hidden;
+	overflow-y: hidden;*/
+    font-family: 'SimSun';
+}
+
+/*div {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+*/
+a {
+    text-decoration: none;
+    color: white;
+}
+
+#nav {
+    width: 100%;
+    height: 11%;
+    /*background-color: rgb(170,247,247);*/
+    background-image: url(elements/nav.jpg);
+    background-size: cover;
+    visibility: hidden;
+}
+
+#nav_left {
+    width: 15%;
+    height: 100%;
+    float: left;
+    text-align: center;
+}
+
+#nav_left > img {
+    width: 90%;
+    height: 70%;
+}
+
+#nav_left > img:hover {
+	cursor: pointer;
+}
+
+#nav_right {
+    width: 85%;
+    height: 100%;
+    float: left;
+}
+
+#header {
+    width: 100%;
+    height: 70%;
+    font-size: 25px;
+    color: rgb(1, 111, 111);
+}
+
+#header>div {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+#header_right {
+    float: right;
+}
+
+#header_right>ul {
+    height: 50%;
+    float: right;
+}
+
+#header_right>ul>li {
+    height: 100%;
+    float: left;
+    list-style: none;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+#header_right>ul>li>a,
+#header_right>ul>li>a>span,
+#header_right>ul>li>a>span>img {
+    height: 100%;
+}
+
+#tabs {
+    width: 100%;
+    height: 30%;
+}
+
+#tabs_left {
+    width: 70%;
+    height: 100%;
+    float: left;
+}
+
+#tabs_left>ul {
+    height: 100%;
+}
+
+#tabs_left>ul>li {
+    height: 100%;
+    width: 90px;
+    float: left;
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    /*background-color: rgb(1,111,111);*/
+    background-image: url(elements/tabs.gif);
+    background-size: 100% 100%;
+    margin-left: 10px;
+    text-align: center;
+}
+
+#tabs_left>ul>li>a {
+    color: white;
+    text-decoration: none;
+}
+
+#tabs_right {
+    width: 30%;
+    height: 100%;
+    float: left;
+}
+
+#tabs_right>p {
+    float: right;
+}
+
+
+/*设备信息*/
+#main {
+	height: 89%;
+	padding: 30px;
+	visibility: hidden;
+}
+
+#list {
+	width: 80%;
+	height: 100%;
+	float: left;
+	border: 1px black solid;
+}
+
+#table {
+	width: 100%;
+	height: 95%;
+	margin-bottom: 0px;
+	white-space:nowrap;
+	overflow-x: auto;
+	overflow-y: auto;
+}
+
+#op {
+	width: 100%;
+	height: 5%;
+	background-color: rgb(3,161,161);
+	color:white
+	margin-top: 0px;
+	padding: 5px;
+}
+
+#op>div {
+	margin-right: 5px;
+}
+
+#op>span {
+	height: 100%;
+}
+
+#table>table>thead {
+	background-color: rgb(3,161,161);
+	color:white;
+}
+
+#table>tbody {
+	height: 95%;
+}
+
+#search {
+	width: 20%;
+	height: 100%;
+	float: left;
+	border-top: 1px black solid;
+	border-bottom: 1px black solid;
+	border-right: 1px black solid;
+	padding:10px;
+	white-space:nowrap;	
+	font-size: 12px;
+}
+
+#search>div {
+	width: 100%;
+	height: 5%;
+}
+
+#search>div>p {
+	margin-bottom: 0px;
+}
+
+#search>div>select , #search>div>input{
+	width: 50%;
+}
+
+/*设备编辑*/
+#main2 {
+	height: 89%;
+	width: 100%;
+	padding:30px;
+	display: none;
+}
+
+#main2_header {
+	height: 5%;
+	width: 100%;
+	background-color: grey;
+	border: 1px black solid;
+}
+
+#main2_header>p {
+	padding:5px;
+	margin:0px;
+	color: white;
+}
+
+#main2_header>div {
+	color: black;
+	padding:5px;
+}
+
+#main2_header>div>button {
+	padding: 0px;
+}
+
+#table2 {
+	width: 100%;
+	height: 90%;
+	overflow-y: scroll;
+	border: 1px black solid;
+	white-space:nowrap;
+	overflow-x: auto;
+}
+
+#table2>table {
+	margin-bottom: 0px;
+}
+
+#table2>table>thead {
+/*	background-color: rgb(3,161,161);
+	color:white;*/
+}
+
+#op2 {
+	width: 100%;
+	height: 5%;
+	background-color: rgb(3,161,161);
+	color:white
+	margin-top: 0px;
+	padding: 5px;
+}
+
+#modalAdd-body>div, #modalEdit-body>div {
+	margin: 5px;
+}
+
+#modalAdd-body>div, #modalEdit-body>div {
+	width: 100%;
+	height: 35px;
+}
+
+#modalDanger-body>table {
+	height: 100%;
+}
+
+#modalSetting-body>div {
+	width: 100%;
+	height: 35px;
+}
+
+/*区域设置*/
+#main3 {
+	height: 89%;
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-top: 30px;
+	display: none;
+}
+
+#main3>div {
+	height: 100%;
+	width: 100%;
+	border: 1px solid black;
+}
+
+#areaSet {
+	height: 100%;
+	width: 50%;
+	border-left: 2px solid black;
+	float: left;
+}
+
+#treeView {
+	height: 100%;
+	width: 50%;
+	float: left;
+}
+
+#main3>div>div>p {
+	height: 5%;
+	width: 100%;
+	background-color: rgb(3,161,161);
+	color:white;
+	font-size: 15px;
+	padding: 10px;
+	margin-bottom: 0px;
+	border-bottom: 1px solid black;
+}
+
+#levelTree {
+	height: 95%;
+	width: 100%;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+#areaSet>div {
+	padding: 10px;
+}
+
+#areaSet>div>p {
+	margin-top: 5px;
+}
+
+/*线路设置*/
+#main4 {
+	height: 89%;
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-top: 30px;
+	display: none;
+}
+
+#main4>div {
+	height: 100%;
+	width: 100%;
+	border: 1px solid black;
+}
+
+#lineSet {
+	height: 100%;
+	width: 50%;
+	border-left: 2px solid black;
+	float: left;
+}
+
+#lineView {
+	height: 100%;
+	width: 50%;
+	float: left;
+}
+
+#main4>div>div>p {
+	height: 5%;
+	width: 100%;
+	background-color: rgb(3,161,161);
+	color:white;
+	font-size: 15px;
+	padding: 10px;
+	margin-bottom: 0px;
+	border-bottom: 1px solid black;
+}
+
+#lineTree {
+	height: 95%;
+	width: 100%;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+#lineSet>div {
+	padding: 10px;
+}
+
+#lineSet>div>p {
+	margin-top: 5px;
+}
+
+.modal-body > div > p{
+	margin-bottom: 0px;
+}

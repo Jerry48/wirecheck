@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!--引用百度地图API-->
+  <style type="text/css">
+        .iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
+        .iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
+  </style>
+            
+  <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+
+  <title>输电线路可视化巡查系统</title>
+  <link rel="stylesheet" type="text/css" href="main4.css">
+  <link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="bootstrap-daterangepicker/daterangepicker.css">
+  <!-- 图片查看器 -->
+  <link rel="stylesheet" href="viewer.min.css">
+  <!-- uploader -->
+  <link rel="stylesheet" type="text/css" href="webuploader/webuploader.css">
+
+  <!-- <link rel="stylesheet" href="css/smoothzoom.css"> -->
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+  <!-- for progressbar -->
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  
+  <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+
+</head>
+<body style="font-family: Microsoft YaHei;">
+
+<div id="nav" style="display: none;">
+  	<div id="title">
+	  	<a href="/main" style="text-decoration-line:none;">输电线路可视化巡查系统</a>
+	  	<ul id="menu1ul" class="nav navbar-nav navbar-right" style='position:relative;right:50px;'>
+	  		<li><a href="#"><span style="display: inherit;" title="设备拍照"><img src="photo.png" ></span></a></li>
+	  		<li><a href="#"><span style="display: inherit;" title="图像分析"><img src="analyse.png" ></span></a></li>
+	  		<li><a href="#"><span style="display: inherit;" title="设备配置"><img src="config.png" ></span></a></li>
+	  		<li><a href="#"><span style="display: inherit;" title="查看地图"><img src="map.png" ></span></a></li>
+	  		<!-- <li><a href="#" data-toggle="modal" data-target="#pushModal"  title="图片推送"><span style="display: inherit;"><img src="push.jpg" ></span></a></li> -->
+	  	</ul>
+	 </div>
+
+  	<div id="welcome">
+	  	<p style="float: left;">欢迎您: 用户名 今天是XXX年XX月XX日 星期X</p>
+	  	<ul class="nav navbar-nav navbar-right" style='position:relative; right:50px'>
+
+	  		<!-- <li style="padding: 0px;"><a style='color:black;padding: 0px;font-size: 14px;' id="alertOp">隐藏/显示告警</a></li> -->
+	  		<!-- <li style="padding: 0px;"><a style='color:black;padding: 0px;font-size: 14px;margin-left: 10px;' id="setRef">设置对比图片</a></li> -->
+	  		<li style="padding: 0px;"><a target="_blank" href="/patrol" style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;'>巡检</a></li>
+	  		<!-- <li style="padding: 0px;" id="update"><a style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;'>升级</a></li>
+	  		<li style="padding: 0px;" id="reset"><a style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;'>复位</a></li>
+	  		<li style="padding: 0px;" id="upload"><a style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;'>上传升级文件</a></li> -->
+	  		<li style="padding: 0px;"><a target="_blank" href="/device" style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;'>设备管理</a></li>
+	  		<li style="padding: 0px;"><a target="_blank" href="/user" style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;'>用户管理</a></li>
+	  		<li style="padding: 0px;"><a href="#" style='color:black;padding: 0px;margin-left: 10px;font-size: 14px;' id='logout'>退出登陆</a></li>
+	  	</ul>
+	</div>  
+</div>
+
+<div id="main" style="z-index: -1;display: none;">
+	<div id="devices">
+		<ul class="nav nav-tabs">
+			<li role="presentation" class="chosen"><a href="#" style="margin-right: 0px;border-radius: 0px;">设备列表</a></li>
+			<li role="presentation"><a href="#" style="margin-right: 0px;border-radius: 0px;">线路列表</a></li>
+			<li role="presentation"><a href="#" style="margin-right: 0px;border-radius: 0px;">巡检分组</a></li>
+		</ul>
+		<div id="tree"></div>
+	</div>
+	<div id="middle">
+		<div id="header">
+			<div id="header_p">
+				<p>输电线路可视化巡查系统</p>
+			</div>
+			<div id="header_button">
+				<select class="interval">
+					<option value="20">20秒</option>
+					<option value="40">40秒</option>
+					<option value="60" selected="selected">1分</option>
+					<option value="300">5分</option>
+				</select>
+				<button id="picShow">图片显示</button>
+				<button id="alertOp">显示告警</button>
+				<button id="refresh">刷新</button>
+				<button id="setRef">设置对比图片</button>
+				<button id="picNext">下一页</button>
+				<button id="picLast">上一页</button>
+
+			</div>
+		</div>
+		<div id="canvasDiv" style="display: none;"></div>
+		<div id="pics">
+			<div id="pic0" class="pics">
+				<p>拍照时间：</p>
+				<div class="imgs" style="">
+					<img class="" src="" style="">
+				</div>
+			</div>
+			<div id="pic16">
+				<div id="pic13">
+					<div class="pics">
+						<p class="margin0">拍照时间：</p>
+						<div class="imgs">
+							<img class="" src="">
+						</div>
+					</div>
+					<div class="pics">
+						<p class="margin0">拍照时间：</p>
+						<div class="imgs">
+							<img class="" src="">
+						</div>
+					</div>
+					<div class="pics">
+						<p class="margin0">拍照时间：</p>
+						<div class="imgs">
+							<img class="" src="">
+						</div>
+					</div>
+				</div>
+				<div id="pic46">
+					<div class="pics">
+						<p class="margin0">拍照时间：</p>
+						<div class="imgs">
+							<img class="" src="">
+						</div>
+					</div>
+					<div class="pics">
+						<p class="margin0">拍照时间：</p>
+						<div class="imgs">
+							<img class="" src="">
+						</div>
+					</div>
+					<div class="pics">
+						<p class="margin0">拍照时间：</p>
+						<div class="imgs">
+							<img class="" src="">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<!-- 		<ul id="pics">
+			<li><img data-original="img/tibet-1.jpg" src="img/thumbnails/tibet-1.jpg" alt="图片1"></li>
+			<li><img data-original="img/tibet-2.jpg" src="img/thumbnails/tibet-2.jpg" alt="图片2"></li>
+			<li><img data-original="img/tibet-3.jpg" src="img/thumbnails/tibet-3.jpg" alt="图片3"></li>
+			<li><img data-original="img/tibet-4.jpg" src="img/thumbnails/tibet-4.jpg" alt="图片4"></li>
+			<li><img data-original="img/tibet-5.jpg" src="img/thumbnails/tibet-5.jpg" alt="图片5"></li>
+			<li><img data-original="img/tibet-6.jpg" src="img/thumbnails/tibet-6.jpg" alt="图片6"></li>
+		</ul> -->
+		<div id="records" style="position: fixed;bottom:0px;z-index: 99999;display: none;">
+			<div id="records-menu" style="">
+				<ul class="nav nav-tabs" style="float: left;">
+					<li role="presentation" class="chosen"><a href="#" style="padding: 0px;margin-right: 0px;border-radius: 0px;">告警记录</a></li>
+					<!-- <li role="presentation"><a href="#" style="padding: 0px;margin-right: 0px;border-radius: 0px;">服务器工作记录</a></li> -->
+				</ul>
+<!-- 				<div style="float: right;">
+					<p id="picCount" style="float: right;margin-left: 10px;margin-bottom: 0px">第xxx页，共xxx页</p>
+					<div style="float: right;">
+						<button type="button" class="" id='picLast' style='display: none;'>上一页</button>
+						<button type="button" class="" id='picNext' style='display: none;'>下一页</button>
+						<button type="button" class="" id='setRef' style=''>设置对比图片</button>
+					</div>
+				</div> -->
+			</div>
+			<div id="records-content" style="">
+				<table class="table" style="margin-bottom: 0px;">
+					<thead>
+						<tr style="">
+							<th style="width:150px;padding: 1px;">设备名</th>
+							<th style="width:150px;padding: 1px;">报警类型</th>
+							<th style="width:200px;padding: 1px;">时间</th>
+							<th style="width:200px;padding: 1px;">处理时间</th>
+							<th style="width:150px;padding: 1px;">处理状态</th>
+							<th style="width:150px;padding: 1px;">报警信息</th>
+
+        				</tr>
+        			</thead>
+        			<tbody>
+        				<tr>
+        					<td style="width:150px;padding: 1px;"></td>
+        					<td style="width:150px;padding: 1px;"></td>
+        					<td style="width:200px;padding: 1px;"></td>
+        					<td style="width:200px;padding: 1px;"></td>
+        					<td style="width:150px;padding: 1px;"></td>
+        					<td style="width:133px;padding: 1px;"></td>
+
+
+        				</tr>
+        				<tr>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:200px;padding: 1px;;"></td>
+        					<td style="width:200px;padding: 1px;;"></td>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:133px;padding: 1px;;"></td>
+
+        				</tr>
+        				<tr>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:200px;padding: 1px;;"></td>
+        					<td style="width:200px;padding: 1px;;"></td>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:133px;padding: 1px;;"></td>
+
+        				</tr>
+        				<tr>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:200px;padding: 1px;;"></td>
+        					<td style="width:200px;padding: 1px;;"></td>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:133px;padding: 1px;;"></td>
+
+        				</tr>
+        				<tr>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:200px;padding: 1px;;"></td>
+        					<td style="width:200px;padding: 1px;;"></td>
+        					<td style="width:150px;padding: 1px;;"></td>
+        					<td style="width:133px;padding: 1px;;"></td>
+
+        				</tr>
+        				
+        			</tbody>
+        		</table>        		
+        	</div>
+        	<div id="records-button"  style="">
+        		<span>
+        			<button type="button" class="" id='recordLast' style=''>上一页</button>
+        		</span>
+        		<span>
+        			<button type="button" class="" id='recordNext' style=''>下一页</button>
+        		</span>
+        		<span>
+        			<p id = "recordCount" style="float: right;">
+        				第0页，共0页
+        			</p>
+        		</span>
+        	</div>
+		</div>
+	</div>
+
+	<div id="operations">
+		<div id = "reviewhead" style="background-color: rgb(176,196,222);height: 20px;">
+			<p id="reviewhead1"  style="float: left;margin-bottom: 0px;color:white;">历史图片</p>
+			<p id="reviewhead2"  style="float: left;margin-bottom: 0px;">&nbsp&nbsp&nbsp线路测温</p>
+		</div>
+		
+		<div id="review">
+			<div class="" style="margin-top: 5px;margin-left: 3px;">
+				<p style="width: 15%;float: left;">开始&nbsp</p>
+				<input type="text" name="daterange"  style="width: 30%;float: left;padding: 0px;margin-right: 3px;">
+				<select id="startHour"  style="width: 18%;float: left;"></select>
+				<p  style="width:8%;float: left;">&nbsp时</p>
+				<select id="startMin"  style="width: 18%;float: left;"></select>
+				<p  style="width:8%;float: left;">&nbsp分</p>
+			</div>
+			<div class="" style="margin-left: 3px;">
+				<p style="width: 15%;float: left;">结束&nbsp</p>
+				<input type="text" name="daterange"  style="width: 30%;float: left;padding: 0px;margin-right: 3px;">
+				<select id="endHour"  style="width: 18%;float: left;"></select>
+				<p  style="width:8%;float: left;">&nbsp时</p>
+				<select id="endMin"  style="width: 18%;float: left;"></select>
+				<p  style="width:8%;float: left;">&nbsp分</p>
+			</div>
+			<!-- <button type="button" class="" id='picSearch' style=''>搜索</button> -->
+			<button type="button" class="" id='picDownload' style=''>下载到本地</button>
+			<div id="progressbarPicList"></div>
+		</div>
+		<p class="head">设备列表</p>
+		<div id="deviceList">	
+
+		</div>
+		<p class="head" id="listpart1" style="display: block;">回看图片列表</p>
+		<div class="head" id="listpart2" style="display: block;">
+			<!-- <span id="orderName">名称▼</span> -->
+			<span><button  type="button" class="" id='push' style=''>微信推送</button></span>
+			<!-- <span id="orderDate">拍摄日期▼</span> -->
+		</div>
+		<div id="picList" style="display: block;">
+
+		</div>
+
+		<div id = "temphead" style="background-color: rgb(176,196,222);height: 20px;display: none;">
+			<p id="temphead1"  style="float: left;margin-bottom: 0px;">当前组温测</p>
+		</div>
+		<div id="temppart2" style="background-color: rgb(176,196,222);height: 20px;overflow-y:hidden;display: none;">
+			<button style="float: left;margin-bottom: 0px;padding-top: 0px;padding-bottom: 0px;">查询</button>
+			<select id="searchType" style="float: left;">
+				<option value="day" selected="selected">日查询</option>
+				<option value="month">月查询</option>
+				<option value="year">年查询</option>
+			</select>
+			<select id="searchMonth" style="float: left;display: none;">
+				<option value="1" selected="selected">1月</option>
+				<option value="2">2月</option>
+				<option value="3">3月</option>
+				<option value="4">4月</option>
+				<option value="5">5月</option>
+				<option value="6">6月</option>
+				<option value="7">7月</option>
+				<option value="8">8月</option>
+				<option value="9">9月</option>
+				<option value="10">10月</option>
+				<option value="11">11月</option>
+				<option value="12">12月</option>
+			</select>
+			<input type="text" name="daterange"  style="width: 100px;float: left;padding: 0px;height: 20px;font-size:12px;">
+		</div>
+		<div id="tempArea">
+			<table class="table table-striped table-condensed" style="margin-bottom: 0px;">
+				<thead>
+					<tr>
+						<th colspan="1">设备名</th>
+						<th colspan="1">温度</th>
+						<th colspan="1">时间</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+	<div id="mapArea" style="display: none;">
+		<div id='mapWrapper' style="width: 100%;height: 100%;">
+            <div class="" id='mapInput' style="width: 100%;height: 5%;">
+            	<span style="float:left">
+                    <button type="button" class="btn btn-primary" id="back">返回主页</button>
+                </span>   
+                <span style="float:left;width: 30%">
+                    <input type="text" class="form-control"  placeholder="输入地址，如东方明珠">
+                </span>
+                <span style="float:left;width: 30%">
+                    <input type="text" class="form-control"  placeholder="输入半径(km)">
+                </span>
+                <span style="float:left">
+                    <button type="button" class="btn btn-primary">查询</button>
+                </span>            
+            </div>
+            <div class="" id='map' style="width:100%;height:95%;border:#ccc solid 1px;">
+            </div>
+        </div>
+	</div>
+</div>
+
+<!-- 设置对比图片需要密码 -->
+<div class="modal fade" id="modalPwd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 200px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(176,196,222)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">设置对比图片</h4>
+            </div>
+            <div class="modal-body" id="modalPwd-body" style="width: 100%">
+            	<div style="margin-bottom: 10px;">
+            		<input type="" name="" placeholder="请输入用户名">
+            	</div>
+            	<div style="margin-bottom: 10px;">
+            		<input type="password" name="" placeholder="请输入密码">
+            	</div>
+            	<div>
+            		<input type="password" name="" placeholder="请确认密码">
+            	</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 推送 -->
+<div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 200px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(176,196,222)">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">图片推送</h4>
+            </div>
+            <div class="modal-body" id="modalPush-body" style="width: 100%">
+            	
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+<script src="jquery.min.js"></script>
+<script src="js.cookie.js"></script>
+<script src="bootstrap-treeview.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bootstrap-daterangepicker/moment.js"></script>
+<script type="text/javascript" src="bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="assets/js/vendor/holder.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="assets/js/ie-emulation-modes-warning.js"></script>
+<script type="text/javascript" src="ichart.1.2.min.js"></script>
+<script src="viewer.min.js"></script>
+<script src="jquery.rotate.js"></script>
+<!-- for progressbar -->
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<!-- uploader -->
+<script type="text/javascript" src="webuploader/webuploader.js"></script>
+<script src="main4.js"></script>
+<script src="common.js"></script>
+
+</body>
+
+</html>

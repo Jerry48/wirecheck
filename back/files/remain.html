@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>科霖输电线路可视化巡查系统</title>
+		<!-- Bootstrap core CSS -->
+	    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="remain.css" rel="stylesheet">
+	</head>	
+
+
+<body>
+	<nav class="navbar navbar-default" role="navigation" style="height: auto;">
+		<div class="container-fluid" style="background-color: rgb(176,196,222);">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">科霖输电线路可视化巡查系统</a>
+			</div>
+
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right" style="font-size: smaller">
+			        <li><a href='#'><span style="display: inherit;"><img src="replay.png" style="width: 22px; height: 22px;"></span>回放</a></li>
+	                <li><a href="#" data-toggle="modal" data-target="#myModal" data-index="0"><span style="display: inherit;"><img src="search.png" style="width: 22px; height: 22px;"></span>查询</a></li>
+	                <li><a href="#"><span style="display: inherit;"><img src="photo.png" style="width: 22px; height: 22px;"></span>拍照</a></li>
+	                <li><a href="#"><span style="display: inherit;"><img src="analyse.png" style="width: 22px; height: 22px;"></span>分析</a></li>
+	                <li><a href="#"><span style="display: inherit;"><img src="config.png" style="width: 22px; height: 22px;"></span>配置</a></li>
+	                <li><a href="#"><span style="display: inherit;"><img src="map.png" style="width: 22px; height: 22px;"></span>地图</a></li>
+	                <li><a href="#" data-toggle="modal" data-target="#pushModal"><span style="display: inherit;"><img src="push.jpg" style="width: 22px; height: 22px;"></span>推送</a></li>
+			    </ul>
+			</div>
+		</div>
+		
+		<div class="container-fluid" style="margin-top: -15px;background-color: rgb(176,196,222);" >
+			<div class="navbar-header">
+              <a class="navbar-brand" style="font-size: smaller;">欢迎您: 用户名 今天是XXX年XX月XX日 星期X</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">管理</a></li>
+                    <li><a href="#">退出登陆</a></li>
+                </ul>
+            </div>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<ul class="nav nav-tabs" id='tabTree'">
+	              <li role="presentation" class="active"><a href="#">设备列表</a></li>
+	              <li role="presentation"><a href="#">设备分组</a></li>
+	            </ul>
+	            <div class="col-md-2" id="tree">
+            	</div>
+			</div>
+
+			<div class="col-md-10">
+				<div class= id='main'>
+		            <div class="row">
+		                <button type="button" class="btn btn-default  btn-sm" id='toggle-record' style='float: left'>隐藏实时记录</button>
+		                <button type="button" class="btn btn-default  btn-sm" id='rotatePic' style='float: left'>旋转图片</button>
+		                <button type="button" class="btn btn-default  btn-sm" id='setRef' style='display:none;float: left'>设置为对比图片</button>
+		                <button type="button" class="btn btn-default  btn-sm" id='lastPage' style='display:none;float: left'>上一页</button>
+		                <button type="button" class="btn btn-default  btn-sm" id='nextPage' style='display:none;float: left'>下一页</button>
+		            </div>
+		            
+		            <div class="row" style="" id="pics">
+		                <div class="col-xs-3 rot90" id="pic1">     
+		                  <img src="" width="100%" height="200" style='display:none;border-radius:0' class="img-responsive magnify" alt="Generic placeholder thumbnail" data-num='1' >
+		                </div>
+		                <div class="col-xs-3 rot90" id="pic2">
+		                  <img src="" width="100%" height="200" style='display:none;border-radius:0' class="img-responsive magnify" alt="Generic placeholder thumbnail" data-num='2' >
+		                </div>
+		                <div class="col-xs-3 rot90" id="pic3">
+		                  <img src="" width="100%" height="200" style='display:none;border-radius:0' class="img-responsive magnify" alt="Generic placeholder thumbnail" data-num='3' >
+		                </div>
+		                <div class="col-xs-3 rot90" id="pic4">
+		                  <img src="" width="100%" height="200" style='display:none;border-radius:0' class="img-responsive magnify" alt="Generic placeholder thumbnail" data-num='4' >
+		                </div> 
+		            </div>         
+	          	</div>
+
+	          	<div style="position:fixed;bottom:210px;width:83%;" id='menu3ul'>
+			        <div>
+			            <p class="muted credit" style="float: right;color:black;background-color: rgb(176,196,222)">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+			        </div>
+			    </div>
+
+			    <div style="position:fixed;bottom:0px;right:0px;width:83%;display: block;overflow-x: scroll;" id='records'>
+			    	<ul class="nav nav-tabs" id="recordsTab">
+			            <li role="presentation" class="active"><a href="#">设备告警记录</a></li>
+			            <li role="presentation"><a href="#">视频服务器工作记录</a></li>
+			        </ul>
+			        <table class="table table-striped" style="margin-bottom: 0px">
+			            <thead>
+			                <tr>
+			                    <th>设备名</th>
+			                    <th>电压</th>
+			                    <th>充电电压</th>
+			                    <th>温度</th>
+			                    <th>警告</th>
+			                    <th>时间</th>
+
+			                    <th></th>
+			                    <th></th>
+			                    <th></th>
+			                </tr>
+			            </thead>
+			            <tbody>
+			                <tr>
+			                    <td> &nbsp </td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                </tr>
+			                <tr>
+			                    <td>  &nbsp</td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                </tr>
+			                <tr>
+			                    <td>  &nbsp</td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                </tr>
+			                <tr>
+			                    <td> &nbsp </td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                </tr>
+			                <tr>
+			                    <td>&nbsp</td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+
+			                    <td></td>
+			                    <td></td>
+			                    <td></td>
+			                </tr>
+			            </tbody>
+			        </table>
+			        <span>
+			            <button type="button" class="btn btn-default btn-sm" id='recordLastPage' style=''>上一页</button>
+			        </span>
+			        <span>
+			            <button type="button" class="btn btn-default btn-sm" id='recordNextPage' style=''>下一页</button>
+			        </span>
+			        <span>
+			            <p id = "recordCount" style="float: right;padding-right: 10px">
+			            </p>
+			        </span>
+			    </div>
+			</div>
+		</div>
+
+		
+	</div>
+
+    <script type="text/javascript" src="jquery.magnifier.js"></script>
+    <script src="jquery.rotate.js"></script>
+    <script src="js.cookie.js"></script>
+    <script src="common.js"></script>
+    <script src="main.js"></script>
+
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bootstrap-daterangepicker/moment.js"></script>
+    <script type="text/javascript" src="bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="bootstrap-treeview.min.js"></script>
+</body>
+
+
+
+</html>

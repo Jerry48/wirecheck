@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>科霖输电线路可视化巡查系统</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
+    <link href="common.css" rel="stylesheet">
+    <link href='fullcalendar/fullcalendar.css' rel='stylesheet' />
+    <link href='fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="fullcalendar/lib/moment.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/main">科霖输电线路可视化巡查系统</a>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="container-fluid" style="margin-top: 10px">
+        <div class="row">
+                <!-- sidebar -->
+                <div class="col-md-2">
+                    <!-- menu -->
+                    <div style="margin-bottom: 10px">
+                      <ul class="nav nav-pills nav-justified" role="tablist">
+                          <li role="presentation"><a href="/user">用户</a></li>
+                          <li role="presentation" class="active"><a href="/device">设备</a></li>
+                      </ul>  
+                    </div>
+                                           
+                      <!-- menu -->
+                      <div>
+                          <ul class="nav nav-pills nav-stacked" id="sidebar-nav">
+                            <li><a href="#">添加设备</a></li>
+                            <li><a href="#">编辑设备</a></li>
+                            <li><a href="#">删除设备</a></li>
+                            <li><a href="#">创建分组</a></li>
+                            <li><a href="#">编辑分组</a></li>
+                            <li><a href="#">删除分组</a></li>
+                            <li><a href="#">管理分组</a></li>
+                            <li><a href="#">搜索</a></li>
+                          </ul>
+                      </div>
+                </div>
+
+                <!-- main -->
+                <div class="col-md-10">
+                    
+                    <div class="col-md-6" style="text-align:left;dislay:none;" id="createDevice">
+                        <form class="col-md-6">
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="PMS标准17位设备ID">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="名字">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="昵称">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="经度">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="纬度">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="心跳频率">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="拍照时间间隔">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="分辨率">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="Mac地址">
+                            </fieldset>
+                        </form>
+
+                        <form class="col-md-6">
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="电压(低)">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="充电电压(低)">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="温度(低)">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="电压(高)">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="充电电压(高)">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="温度(高)">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="工作开始时间(24) 格式: hh:mm">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="工作结束时间(24) 格式: hh:mm">
+                            </fieldset>
+                            <button type="button" class="btn btn-primary" >提交</button>
+                        </form>
+                    </div>
+                    
+
+                    
+                    <div class="col-xs-4 col-sm-4" style="text-align:left;display:none;" id="createGroup">
+                        <form>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="输入分组名">
+                            </fieldset>
+                            <button type="button" class="btn btn-primary" >提交</button>
+                        </form>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" id="deleteGroupSubmit">提交</button>
+                    <button type="button" class="btn btn-primary" id='deleteDevice' style="float: left;">确定</button>
+
+                    <div class="col-md-4" style="text-align:left;display:none " id="tree">
+                    </div>
+
+                    <div class="col-md-4" style="text-align:left;display:none " id="groupTree">
+                    </div>
+
+                    <div class="col-md-6" style="text-align:left;display:none" id="searchList">
+                        <table class="table table-striped"  id="deviceProductListSearch">
+                            <thead>
+                                <td>设备ID</td>
+                                <td>设备名</td>
+                                <td>出厂名</td>
+                                <td>Meid</td>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+<!--                         <h3></h3>
+                        <table class="table table-striped" id="groupListSearch">
+                            <thead>
+                                <td>组名</td>
+                                <td>操作</td>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table> -->
+                    </div>
+
+                    <!-- 搜索 -->
+                    <div class="col-md-4" style="text-align:left;display:none;margin-top: 20px" id="search">
+                        <form>
+                            <fieldset class="form-group">
+                                <input type="text" class="form-control" placeholder="输入你想搜索的内容">
+                            </fieldset>
+                            <button type="button" class="btn btn-primary" >提交</button>
+                        </form>
+                    </div>
+
+                    <div id='calendarWrapper' style='display:none;height:500px'>
+                     <div class="col-xs-4 col-sm-4" style="text-align:left;" id="calendar">
+                     </div>
+                     <button type="button" class="btn btn-primary" style='top: 400px; right: 470px; position: relative;'>提交</button>
+                    </div>        
+                </div>
+                
+            </div>
+        </div>
+    </div>
+        
+    <div id="footer" style="z-index: 1001;position:absolute;bottom:10px;width:100%;margin-top: 200px">
+        <div class="container">
+            <p class="muted credit" style="float: right;">copyright &copy by XX</p>
+        </div>
+    </div>
+     
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="jquery.min.js"></script>
+    <script src="common.js"></script>
+    <script src="device.js"></script>
+    <script src="jquery.tips.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="bootstrap-treeview.min.js"></script>
+    <script src='fullcalendar/fullcalendar.min.js'></script>
+  </body>
+  
+</html>

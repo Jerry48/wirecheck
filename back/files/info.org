@@ -1,0 +1,3 @@
+http://css-tricks.github.io/MovingBoxes/basic.html#&slider1=2
+http://jaukia.github.io/zoomooz/
+https://github.com/kthornbloom/Smoothzoom

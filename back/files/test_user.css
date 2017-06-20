@@ -1,0 +1,384 @@
+html,
+body {
+    height: 100%;
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 1200px) {
+    html {
+        width: 1200px;
+        overflow-x: auto;
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    * {
+        font-size: 12px;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    * {
+        font-size: 14px;
+    }
+}
+
+* {
+    padding: 0px;
+    margin: 0px;
+    /*overflow-x: hidden;
+	overflow-y: hidden;*/
+    font-family: 'SimSun';
+}
+
+/*div {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+*/
+a {
+    text-decoration: none;
+    color: white;
+}
+
+#nav {
+    width: 100%;
+    height: 11%;
+    /*background-color: rgb(170,247,247);*/
+    background-image: url(elements/nav.jpg);
+    background-size: cover;
+    visibility: hidden;
+}
+
+#main {
+    width: 100%;
+    height: 89%;
+    visibility: hidden;
+}
+
+#nav_left {
+    width: 15%;
+    height: 100%;
+    float: left;
+    text-align: center;
+}
+
+#nav_left > img {
+    width: 90%;
+    height: 70%;
+}
+
+#nav_left > img:hover {
+	cursor: pointer;
+}
+
+#nav_right {
+    width: 85%;
+    height: 100%;
+    float: left;
+}
+
+#header {
+    width: 100%;
+    height: 70%;
+    font-size: 25px;
+    color: rgb(1, 111, 111);
+}
+
+#header>div {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+#header_right {
+    float: right;
+}
+
+#header_right>ul {
+    height: 50%;
+    float: right;
+}
+
+#header_right>ul>li {
+    height: 100%;
+    float: left;
+    list-style: none;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+#header_right>ul>li>a,
+#header_right>ul>li>a>span,
+#header_right>ul>li>a>span>img {
+    height: 100%;
+}
+
+#tabs {
+    width: 100%;
+    height: 30%;
+}
+
+#tabs_left {
+    width: 70%;
+    height: 100%;
+    float: left;
+}
+
+#tabs_left>ul {
+    height: 100%;
+}
+
+#tabs_left>ul>li {
+    height: 100%;
+    width: 90px;
+    float: left;
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    /*background-color: rgb(1,111,111);*/
+    background-image: url(elements/tabs.gif);
+    background-size: 100% 100%;
+    margin-left: 10px;
+    text-align: center;
+}
+
+#tabs_left>ul>li>a {
+    color: white;
+    text-decoration: none;
+}
+
+#tabs_right {
+    width: 30%;
+    height: 100%;
+    float: left;
+}
+
+#tabs_right>p {
+    float: right;
+}
+
+/*main*/
+
+#main {
+	height: 89%;
+	padding: 30px;
+	visibility: hidden;
+}
+
+#main_header {
+	height: 5%;
+	width: 100%;
+	background-color: grey;
+	border: 1px black solid;
+}
+
+#main_header>p {
+	padding:5px;
+	margin:0px;
+	color: white;
+}
+
+#main_header>div {
+	color: black;
+	padding:5px;
+}
+
+#main>table>thead {
+	/*background-color: rgb(3,161,161);*/
+	/*color:white;*/
+}
+
+#main>table>tbody {
+	height: 95%;
+}
+
+#main>table {
+	height: 95%;
+	border: 1px black solid;
+	margin-bottom: 0px;
+	white-space:nowrap;
+	overflow-x: auto;
+}
+
+#modalAdd-body>div, #modalEdit-body>div {
+	width: 100%;
+	margin: 5px;
+	height: 30px;
+}
+
+#modalAdd-body>div>p,#modalEdit-body>div>p {
+	display: inline;
+}
+
+#modalAdd-body>div>input, #modalEdit-body>div>input {
+	width: 80%;
+}
+
+#privilege {
+	width: 100%;
+}
+
+#privilege>div {
+	width: 100%;
+	border: 1px solid black;
+
+}
+
+/*main2*/
+#main2 {
+	height: 89%;
+	width: 100%;
+	padding: 30px;
+	display: none;
+}
+
+#left {
+	height: 100%;
+	width: 20%;
+	float: left;
+	border: 1px solid black;
+}
+
+#left-header {
+	height: 5%;
+}
+
+#left-header > p {
+	height: 100%;
+	margin-bottom: 0px;
+	border-bottom: 1px solid black;
+}
+
+#right {
+	height: 100%;
+	width: 80%;
+	float: left;
+	border: 1px solid black;
+}
+
+#right-header {
+	height: 5%;
+}
+
+#right-header > p {
+	height: 100%;
+	margin-bottom: 0px;
+	border-bottom: 1px solid black;
+}
+
+#list {
+	width: 100%;
+	height: 95%;
+	float: left;
+}
+
+#table {
+	width: 100%;
+	height: 100%;
+	margin-bottom: 0px;
+	white-space:nowrap;
+	overflow-x: auto;
+}
+
+/*main3*/
+#main3 {
+	height: 89%;
+	padding: 30px;
+	display: none;
+}
+
+#header3 {
+	height: 5%;
+	width: 100%;
+	background-color: rgb(3,161,161);
+	color:white;
+	border: 1px black solid;
+}
+
+#header3>p {
+	padding:5px;
+	margin:0px;
+}
+
+#content3 {
+	height: 95%;
+	width: 100%;
+	border: 1px black solid;
+}
+
+#part1,#part2,#part3,#part4,#part5 {
+	border: 1px solid black;
+	height: 100%;
+	overflow-y: auto;
+	float: left;
+}
+
+#part1 {
+	width: 30%;
+}
+#part2 {
+	width: 10%;
+	text-align: center;
+}
+#part3 {
+	width: 30%;
+}
+
+#headerGroup {
+	background-color: rgb(3,161,161);
+	color:white;
+	width: 100%;
+	height: 5%;
+}
+
+#searchGroup {
+	padding: 5px;
+	width: 100%;
+	height: 5%;
+	border-bottom: 1px solid black;
+}
+
+#part3>div>input {
+	width: 80%;
+}
+#part3>div>span {
+	width: 20%;
+}
+
+#part4 {
+	width: 10%;
+	text-align: center;
+}
+#part5 {
+	width: 30%;
+}
+
+#headerTemGroup {
+	background-color: rgb(3,161,161);
+	color:white;
+	width: 100%;
+	height: 5%;
+}
+
+#searchTemGroup {
+	padding: 5px;
+	width: 100%;
+	height: 5%;
+	border-bottom: 1px solid black;
+}
+
+#part5>div>input {
+	width: 80%;
+}
+#part5>div>span {
+	width: 20%;
+}
+
+.showGroup>p,#showTemGroup>p {
+	padding-left: 5px;
+}
+
+.modal-body > div > p{
+	margin-bottom: 0px;
+}

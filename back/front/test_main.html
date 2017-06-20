@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>输电线路可视化巡检系统</title>
+    <link rel="stylesheet" href="test_main.css">
+    <link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap-daterangepicker/daterangepicker.css">
+    <!-- 图片查看器 -->
+    <link rel="stylesheet" href="viewer.min.css">
+    <!-- uploader -->
+    <link rel="stylesheet" type="text/css" href="webuploader/webuploader.css">
+    <!-- <link rel="stylesheet" href="css/smoothzoom.css"> -->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <!-- for progressbar -->
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+
+    <!--引用百度地图API-->
+	<style type="text/css">
+	    .iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
+	    .iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
+	</style>
+	        
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+</head>
+
+<body>
+    <div id="nav">
+        <div id="nav_left">
+            <!-- <img src="/elements/logo.gif"> -->
+        </div>
+        <div id="nav_right">
+            <div id="header">
+                <div id="header_left">
+                    <p><b style="font-size: 25px;cursor: pointer;" id="home">输电线路可视化巡检系统</b></p>
+                </div>
+                <div id="header_right">
+                    <ul>
+                        <li><a href="#" id="icon_photo"><span><img src="elements/icon_photo.gif" alt="photo" title="手动拍照"></span></a></li>
+                        <li><a href="#"><span><img src="elements/icon_analysis.gif" alt="analysis" title="手动分析"></span></a></li>
+                        <li><a href="#"  id="icon_setting"><span><img src="elements/icon_setting.gif" alt="setting" title="配置设备"></span></a></li>
+                        <li><a href="#" id="icon_map"><span><img src="elements/icon_map.gif" alt="map" title="查看地图"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="tabs">
+                <div id="tabs_left">
+                    <ul>
+                        <li class="tabs" style="margin-left: 0px;"><a target="_blank" href="/patrol">巡检</a></li>
+                        <li class="tabs"><a target="_blank" href="/device">设备管理</a></li>
+                        <li class="tabs"><a target="_blank" href="/user">用户管理</a></li>
+                        <li class="tabs"><a href="#" id="logout">退出登录</a></li>
+                        <li class="tabs"><a href="#" id="history">历史图片</a></li>
+                        <li class="tabs"><a href="#" id="temperature">线路测温</a></li>
+                        <li class="tabs"><a href="#">温度曲线</a></li>
+                    </ul>
+                </div>
+                <div id="tabs_right">
+                    <p style="margin-right: 5px">2014年1月1日</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="main">
+        <div id="main_left">
+            <div id="tree">
+                <div id="list1" class="list">
+                    <img src="elements/list_icon.gif">
+                    <p>设备列表</p>
+                    <img src="elements/list_down_arrow.gif">
+                </div>
+                <div id="content1" class="content"></div>
+                <div id="list2" class="list">
+                    <img src="elements/list_icon.gif">
+                    <p>线路列表</p>
+                    <img src="elements/list_down_arrow.gif">
+                </div>
+                <div id="content2" class="content" style="display: none;"></div>
+                <!-- <div id="list3" class="list">
+                    <img src="elements/list_icon.gif">
+                    <p>巡检分组</p>
+                    <img src="elements/list_down_arrow.gif">
+                </div>
+                <div id="content3" class="content" style="display: none;"></div> -->
+            </div>
+        </div>
+        <div id="main_right">
+            <div id="buttons">
+                <div id="buttons_left">
+                    <ul>
+                        <li><a href="#" id="picLast">上一页</a></li>
+                        <li><a href="#" id="picNext">下一页</a></li>
+                        <li><a href="#" id="setRef">设置对比图片</a></li>
+                        <li><a href="#" id="refresh">刷新</a></li>
+                        <li><a href="#" id="showAlert">显示警告</a></li>
+                        <li><a href="#" id="push">推送</a></li>
+                        <li>
+                            <select id="interval">
+                                <option value="60">1分钟</option>
+                                <option value="180">3分钟</option>
+                                <option value="300">5分钟</option>
+                                <option value="600">10分钟</option>                            
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <div id="buttons_right">
+                    <p style="display: inline;">主站：</p>
+                    <img src="elements/server_status.gif">
+                    <p style="display: inline;">数据库通讯：</p>
+                    <img src="elements/server_status.gif">
+                    <p style="display: inline;">微信：</p>
+                    <img src="elements/server_status.gif">
+                    <p style="display: inline;">设备服务器：</p>
+                    <img src="elements/server_status.gif">
+                </div>
+            </div>
+            <div id="pics">
+                <div id="picss">
+                    <div id="pics0">
+                        <div id="pics0_desc">
+                        	<div>
+                        		<div>
+                        			<p>拍照时间：</p>
+                        			<input type="text">
+                        		</div>
+                        		<div>
+                        			<p>MEID：</p>
+                        			<input type="text">
+                        		</div>
+                        	</div>
+                        	<div>
+                        		<div>
+                        			<p>电话号码：</p>
+                        			<input type="text">
+                        		</div>
+                        		<div>
+                        			<p>IMSI：</p>
+                        			<input type="text">
+                        		</div>
+                        	</div>
+                        </div>
+                        <div id="imgs0">
+                            <img src="test5.jpg">
+                        </div>
+                    </div>
+                    <div id="pics14">
+                        <div id="pics12">
+                            <div id="pics1" class="pics">
+                                <div id="pic1_desc" class="desc">
+                                    <p>12:00</p>
+                                </div>
+                                <div id="imgs1" class="img">
+                                    <img src="test5.jpg">
+                                </div>
+                            </div>
+                            <div id="pics2" class="pics">
+                                <div id="pic2_desc" class="desc">
+                                    <p>12:00</p>
+                                </div>
+                                <div id="imgs2" class="img">
+                                    <img src="test5.jpg">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="pics34">
+                            <div id="pics3" class="pics">
+                                <div id="pic3_desc" class="desc">
+                                    <p>12:00</p>
+                                </div>
+                                <div id="imgs3" class="img">
+                                    <img src="test5.jpg">
+                                </div>
+                            </div>
+                            <div id="pics4" class="pics">
+                                <div id="pic4_desc" class="desc">
+                                    <p>12:00</p>
+                                </div>
+                                <div id="imgs4" class="img">
+                                    <img src="test5.jpg">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="dvc_status">
+                            <div style="height: 25%;padding-left: 10px"><p style="margin-bottom: 0px;"></p></div>
+                            <div style="height: 25%;padding-left: 10px"><p style="margin-bottom: 0px;"></p></div>
+                            <div style="height: 25%;padding-left: 10px"><p style="margin-bottom: 0px;"></p></div>
+                            <div style="height: 25%;padding-left: 10px"><p style="margin-bottom: 0px;"></p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+        <div id="mapArea" style="display: none;">
+			<div id='mapWrapper'>
+	            <div id='mapInput'>
+	                <button type="button" id="back">返回主页</button>   
+	                <input type="text" class="form-control"  placeholder="输入地址，如东方明珠">
+	                <input type="text" class="form-control"  placeholder="输入半径(km)">
+	                <button type="button">查询</button>            
+	            </div>
+	            <div id='map'>
+	            </div>
+	        </div>
+		</div>
+
+        <div id="tempArea" style="display: none;">
+            <div id="" class="buttons">
+                <div id="" class="buttons_left">
+                    <ul>
+                        <li><a href="#" id="">上一页</a></li>
+                        <li><a href="#" id="">下一页</a></li>
+                        <li><a href="#" id="">设置对比图片</a></li>
+                        <li><a href="#" id="">刷新</a></li>
+                        <li><a href="#" id="">显示警告</a></li>
+                        <li><a href="#" id="">推送</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="width: 100%;height: 90%;text-align: center;padding-left: 10px;padding-right: 10px;">
+                <table class="table table-striped table-condensed" style="width:100%;margin-bottom: 0px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;">测温设备</th>
+                            <th style="text-align: center;">温度</th>
+                            <th style="text-align: center;">时间</th>
+                            <th style="text-align: center;">查看</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+        <div id="chartArea" style="display: none;">
+            <div id="" class="buttons">
+                <div id="" class="buttons_left">
+                    <ul>
+                        <li><a href="#" id="">上一页</a></li>
+                        <li><a href="#" id="">下一页</a></li>
+                        <li><a href="#" id="">设置对比图片</a></li>
+                        <li><a href="#" id="">刷新</a></li>
+                        <li><a href="#" id="">显示警告</a></li>
+                        <li><a href="#" id="">推送</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="width: 100%;text-align: center;margin-top: 5px;margin-bottom: 5px;">
+                <input type="text" name="daterange"  style="width:30%;padding: 0px;margin-right: 3px;">
+                <button id="searchTemp">查询</button>
+
+            </div>
+            <div id="canvasDiv" style="width: 100%;"></div>
+        </div>
+        <div id="historyArea" style="display: none;">
+            <div id="" class="buttons">
+                <div id="" class="buttons_left">
+                    <ul>
+                        <li><a href="#" id="">上一页</a></li>
+                        <li><a href="#" id="">下一页</a></li>
+                        <li><a href="#" id="">设置对比图片</a></li>
+                        <li><a href="#" id="">刷新</a></li>
+                        <li><a href="#" id="">显示警告</a></li>
+                        <li><a href="#" id="">推送</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="width: 100%;text-align: center;margin-top: 5px;margin-bottom: 5px;">
+                <label style="width: 25%;">
+                    开始时间:
+                    <input type="text" name="daterange"  style="width:70%;padding: 0px;margin-right: 3px;">
+                </label>
+                <label style="width: 25%;">
+                     结束时间:
+                    <input type="text" name="daterange"  style="width:70%;padding: 0px;margin-right: 3px;">
+                </label>
+                <button class="" id="searchHis">查询</button>
+            </div>
+            <div id="hispics" style="text-align: center;width: 100%;">
+            <div style="text-align: center;width: 100%;">
+                <div class="hispics" style="float: left;width: 33%;text-align: center;">
+                    <img src="" style="width: 90%;">
+                    <p></p>
+                </div>
+                <div class="hispics" style="float: left;width: 33%;text-align: center;">
+                    <img src="" style="width: 90%;">
+                    <p></p>
+                </div>
+                <div class="hispics" style="float: left;width: 33%;text-align: center;">
+                    <img src="" style="width: 90%;">
+                    <p></p>
+                </div>
+            </div>
+            <div style="text-align: center;width: 100%;">
+                <div class="hispics" style="float: left;width: 33%;text-align: center;">
+                    <img src="" style="width: 90%;">
+                    <p></p>
+                </div>
+                <div class="hispics" style="float: left;width: 33%;text-align: center;">
+                    <img src="" style="width: 90%;">
+                    <p></p>
+                </div>
+                <div class="hispics" style="float: left;width: 33%;text-align: center;">
+                    <img src="" style="width: 90%;">
+                    <p></p>
+                </div>
+            </div>
+            <div style="text-align: center;width: 100%;">
+                <div class="hispics" style="float: left;width: 33%;text-align: center;">
+                    <img src="" style="width: 90%;">
+                    <p></p>
+                </div>
+                <div class="hispics" style="float: left;width: 33%;text-align: center;">
+                    <img src="" style="width: 90%;">
+                    <p></p>
+                </div>
+                <div class="hispics" style="float: left;width: 33%;text-align: center;">
+                    <img src="" style="width: 90%;">
+                    <p></p>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div id="records">
+        <div id="records_tab">
+            <ul>
+                <li style="background-color: rgb(228,241,250);"><a href="#" style="color:rgb(3,108,108);">图片对比告警</a></li>
+                <li><a href="#">设备通讯故障</a></li>
+                <li><a href="#">事件</a></li>
+            </ul>
+        </div>
+        <div id="records_content">
+        	<table>
+        		<thead>
+        			<tr>
+        				<th>设备名</th>
+        				<th>告警类型</th>
+        				<th>发生时间</th>
+        				<th>处理状态</th>
+        				<th>处理时间</th>
+        				<th>告警信息</th>
+        			</tr>
+        		</thead>
+        		<tbody>
+        			<tr>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+
+
+        			</tr>
+        			<tr>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+
+        			</tr>
+        			<tr>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+
+        			</tr>
+        			<tr>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+
+        			</tr>
+        			<tr>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+        				<td></td>
+
+        			</tr>
+        			
+        		</tbody>
+        	</table>
+        </div>
+    </div>
+
+	<!-- 设置对比图片需要密码 -->
+	<div class="modal fade" id="modalPwd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" style="padding-top: 200px">
+	        <div class="modal-content">
+	            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="myModalLabel">设置对比图片</h4>
+	            </div>
+	            <div class="modal-body" id="modalPwd-body" style="width: 100%">
+	            	<div style="margin-bottom: 10px;">
+	            		<input type="" name="" placeholder="请输入用户名">
+	            	</div>
+	            	<div style="margin-bottom: 10px;">
+	            		<input type="password" name="" placeholder="请输入密码">
+	            	</div>
+	            	<div>
+	            		<input type="password" name="" placeholder="请确认密码">
+	            	</div>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="">确定</button>
+	                <button type="button" class="" data-dismiss="modal">取消</button>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal -->
+	</div>
+
+	<!-- 推送 -->
+	<div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" style="padding-top: 200px">
+	        <div class="modal-content">
+	            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="myModalLabel">图片推送</h4>
+	            </div>
+	            <div class="modal-body" id="modalPush-body" style="width: 100%">
+	            	
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="">确定</button>
+	                <button type="button" class="" data-dismiss="modal">取消</button>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal -->
+	</div>
+
+	<!-- 告警对比 -->
+	<div class="modal fade" id="modalAlert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" style="padding-top: 200px">
+	        <div class="modal-content">
+	            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="myModalLabel">告警图像</h4>
+	            </div>
+	            <div class="modal-body" id="modalPush-body" style="width: 100%">
+	            	<div style="width: 47%;float: left;">
+	            		<img src="" id="modal_refpic" style="width: 100%;">
+	            	</div>
+	            	<div style="width: 47%;float: right;">
+	            		<img src="" id="modal_alertpic" style="width: 100%;">
+	            	</div>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="">确定</button>
+	                <button type="button" class="" data-dismiss="modal">取消</button>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal -->
+	</div>
+
+	<!-- 手动配置 -->
+	<div class="modal fade" id="modalSetting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" style="padding-top: 200px">
+	        <div class="modal-content">
+	            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="myModalLabel">手动配置</h4>
+		            </div>
+		            <div class="modal-body" id="modalPush-body" style="width: 100%">
+		            	<div style="margin-bottom: 10px;height: 20px;">
+						<p style="width: 35%;float: left;">设备ID:&nbsp</p><input type="text" name="deviceID" id="deviceID" style="width: 60%;float: left;"></input>
+					</div>
+					<div style="margin-bottom: 10px;height: 20px;">
+						<p style="width: 35%;float: left;">&nbsp相机名称:&nbsp</p><input type="text" name="channelName" id="channelName" style="width: 60%;float: left;"></input>
+					</div>
+					<div style="margin-bottom: 10px;height: 20px;">
+						<p style="width: 35%;float: left;">工作时间:&nbsp</p>
+						<select id="beginHour" style="width: 10%;float: left;"></select>
+						<p style="width: 5%;float: left;">&nbsp时</p>
+						<select id="beginMin" style="width: 10%;float: left;"></select>
+						<p style="width: 5;float: left;">&nbsp分&nbsp&nbsp~~&nbsp&nbsp</p>
+						<select id="endHour" style="width: 10%;float: left;"></select>
+						<p style="width: 5%;float: left;">&nbsp时</p>
+						<select id="endMin" style="width: 10%;float: left;"></select>
+						<p style="width: 5%;float: left;">&nbsp分</p>
+					</div>
+					<div style="margin-bottom: 10px;height: 20px;">
+						<p style="width: 35%;float: left;">&nbsp拍照时间间隔/分钟:&nbsp</p>
+						<select id="capturePeriod" style="width: 60%;float: left;">
+							<option value="30">30</option>
+							<option value="60">60</option>
+							<option value="90">90</option>
+							<option value="120">120</option>
+						</select>
+					</div>
+					<div style="margin-bottom: 10px;height: 20px;">
+						<p style="width: 35%;float: left;">&nbsp照片分辨率:&nbsp</p>
+						<select id="resolution"  style="width: 60%;float: left;">
+							<option value="2">640*480</option>
+							<option value="8">1920*1080</option>
+						</select>
+					</div>
+					<div style="margin-bottom: 10px;height: 20px;">
+						<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					</div>
+					<div style="margin-bottom: 10px;height: 20px;">
+						<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+					</div>
+					<div style="margin-bottom: 10px;height: 20px;">
+						<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+					</div>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="">确定</button>
+	                <button type="button" class="" data-dismiss="modal">取消</button>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal -->
+	</div>
+</body>
+<script src="jquery.min.js"></script>
+<script src="common.js"></script>
+<script src="test_main.js"></script>
+<script src="js.cookie.js"></script>
+<script src="bootstrap-treeview.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
+</script>
+<script src="dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bootstrap-daterangepicker/moment.js"></script>
+<script type="text/javascript" src="bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="assets/js/vendor/holder.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="assets/js/ie-emulation-modes-warning.js"></script>
+<script type="text/javascript" src="ichart.1.2.min.js"></script>
+<script src="viewer.min.js"></script>
+<script src="jquery.rotate.js"></script>
+<!-- for progressbar -->
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<!-- uploader -->
+<script type="text/javascript" src="webuploader/webuploader.js"></script>
+</html>

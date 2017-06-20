@@ -1,0 +1,525 @@
+.left {
+    float: left;
+}
+
+html,
+body {
+    height: 100%;
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 1200px) {
+    html {
+        width: 1200px;
+        overflow-x: auto;
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    * {
+        font-size: 12px;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    * {
+        font-size: 14px;
+    }
+}
+
+* {
+    padding: 0px;
+    margin: 0px;
+    /*overflow-x: hidden;
+	overflow-y: hidden;*/
+    font-family: 'SimSun';
+}
+
+div {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+#nav {
+    width: 100%;
+    height: 11%;
+    /*background-color: rgb(170,247,247);*/
+    /*background-image: url(elements/nav.jpg);*/
+    background-color: rgb(0,105,101);
+    background-size: cover;
+    visibility: hidden;
+    color: white;
+}
+
+#main {
+    width: 100%;
+    height: 89%;
+    visibility: hidden;
+}
+
+#nav_left {
+    width: 15%;
+    height: 100%;
+    float: left;
+    text-align: center;
+}
+
+#nav_left > img {
+    width: 90%;
+    height: 70%;
+}
+
+#nav_left > img:hover {
+	cursor: pointer;
+}
+
+#nav_right {
+    width: 85%;
+    height: 100%;
+    float: left;
+}
+
+#header {
+    width: 100%;
+    height: 70%;
+    font-size: 25px;
+    /*color: rgb(1, 111, 111);*/
+
+}
+
+#header>div {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+#header_right {
+    float: right;
+}
+
+#header_right>ul {
+    height: 50%;
+    float: right;
+}
+
+#header_right>ul>li {
+    height: 100%;
+    float: left;
+    list-style: none;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+#header_right>ul>li>a,
+#header_right>ul>li>a>span,
+#header_right>ul>li>a>span>img {
+    height: 100%;
+}
+
+#tabs {
+    width: 100%;
+    height: 30%;
+}
+
+#tabs_left {
+    width: 70%;
+    height: 100%;
+    float: left;
+}
+
+#tabs_left>ul {
+    height: 100%;
+}
+
+#tabs_left>ul>li {
+    height: 100%;
+    width: 90px;
+    float: left;
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    /*background-color: rgb(1,111,111);*/
+    background-image: url(elements/tabs.gif);
+    background-size: 100% 100%;
+    margin-left: 10px;
+    text-align: center;
+}
+
+#tabs_left>ul>li>a {
+    color: white;
+    text-decoration: none;
+}
+
+#tabs_right {
+    width: 30%;
+    height: 100%;
+    float: left;
+}
+
+#tabs_right>p {
+    float: right;
+}
+
+#main_left {
+    width: 15%;
+    height: 100%;
+    float: left;
+    background-color: rgb(1, 111, 111);
+    padding-right: 8px;
+}
+
+#tree {
+    width: 100%;
+    height: 100%;
+    /*background-color: rgb(170,247,247);*/
+    background-image: url(elements/list_back.jpg);
+}
+
+.list {
+    width: 100%;
+    height: 30px;
+    /*background-color: rgb(1,111,111); */
+    background-image: url(elements/list.jpg);
+    border-top: 2px solid rgb(2, 130, 130);
+    text-align: center;
+    cursor: pointer;
+}
+
+.list > p {
+    margin: 0px;
+    color: white;
+    display: inline;
+}
+
+.list >img {
+    margin-left: 10px;
+    display: inline;
+}
+
+.content {
+    width: 100%;
+    color: rgb(1, 111, 111);
+    overflow-y: auto;
+    white-space: nowrap;
+}
+
+#main_right {
+    width: 85%;
+    height: 100%;
+    float: left;
+}
+
+#buttons {
+    width: 100%;
+    height: 3%;
+    /*background-color: rgb(0,175,175);*/
+    background-image: url(elements/buttons.jpg);
+}
+
+#buttons_left {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+#buttons_left>ul {
+    height: 100%;
+}
+
+#buttons_left>ul>li {
+    height: 100%;
+    float: left;
+    list-style: none;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-right: 1px solid rgb(1, 111, 111);
+}
+
+#buttons_left>ul>li>a {
+    color: rgb(1, 111, 111);
+    text-decoration: none;
+}
+
+.buttons {
+    width: 100%;
+    height: 3%;
+    /*background-color: rgb(0,175,175);*/
+    background-image: url(elements/buttons.jpg);
+}
+
+.buttons_left {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+.buttons_left>ul {
+    height: 100%;
+}
+
+.buttons_left>ul>li {
+    height: 100%;
+    float: left;
+    list-style: none;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-right: 1px solid rgb(1, 111, 111);
+}
+
+.buttons_left>ul>li>a {
+    color: rgb(1, 111, 111);
+    text-decoration: none;
+}
+
+#buttons_right {
+    width: 30%;
+    height: 100%;
+    color: white;
+    float: left;
+    margin-left: 30px;
+}
+
+#interval {
+    background-color: transparent;
+    color: rgb(1, 111, 111);
+    border: none;
+}
+
+#buttons_right>img {
+    height: 100%;
+    margin-left: 10px;
+}
+
+#pics {
+    width: 100%;
+    height: 97%;
+    padding: 8px;
+    background-color: rgb(3, 161, 161);
+}
+
+#picss {
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    background-color: white;
+}
+
+#pics0 {
+    width: 54%;
+    height: 100%;
+    float: left;
+}
+
+#pics14 {
+    width: 45%;
+    height: 100%;
+    float: left;
+    margin-left: 4px;
+}
+
+#pics12,
+#pics34 {
+    width: 100%;
+    height: 42.25%;
+}
+
+#pics1,
+#pics3 {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
+#pics2,
+#pics4 {
+    width: 49%;
+    height: 100%;
+    float: left;
+    margin-left: 4px;
+}
+
+#pics0_desc {
+    height: 10%;
+    width: 100%;
+    background-color: rgb(1, 111, 111);
+}
+
+#pics0_desc>div {
+	width: 100%;
+	height: 40%;
+	text-align: center;
+}
+#pics0_desc>div>div {
+	float: left;
+	width: 50%;
+	height: 100%;
+	text-align: center;
+}
+#pics0_desc>div>div>p {
+	display: inline;
+	width: 40%;
+	margin-bottom: 0px;
+	color: rgb(64,217,217);
+}
+
+#pics0_desc>div>div>input {
+	width: 50%;
+	height: 70%;
+	background-image: url(elements/input_back.jpg);
+	background-size: cover;
+	color: rgb(1,119,119);
+	text-align: center;
+}
+
+#imgs0 {
+    height: 90%;
+    width: 100%;
+}
+
+#imgs0>img {
+    height: 100%;
+    width: 100%;
+}
+
+#dvc_status {
+    height: 15.5%;
+    width: 100%;
+    /*background-color: rgb(1,111,111);*/
+    background-image: url(elements/patrol_status_back.jpg);
+    color: white;
+}
+
+.desc {
+    /*background-color: rgb(227,227,227);*/
+    background-image: url(elements/pic14_desc.jpg);
+    background-size: cover;
+    width: 100%;
+    height: 11%;
+    text-align: center;
+}
+
+.img {
+    width: 100%;
+    height: 89%;
+}
+
+.img>img {
+    width: 100%;
+    height: 100%;
+}
+
+#records {
+    position: fixed;
+    bottom: 0px;
+    height: 200px;
+    width: 100%;
+    display: none;
+    /*background-color: rgb(234,256,251);*/
+    background-image: url(elements/record_back.jpg);
+    background-size: cover;
+}
+
+#records_tab {
+    height: 20%;
+    width: 100%;
+    background-color: rgb(3, 161, 161);
+}
+
+#records_tab>ul {
+    width: 30%;
+    height: 100%;
+    margin: 0px;
+}
+
+#records_tab>ul>li {
+    width: 33%;
+    height: 100%;
+    list-style: none;
+    float: left;
+    text-align: center;
+}
+
+#records_tab>ul>li>a {
+    color: white;
+    text-decoration: none;
+}
+
+#records_content {
+	height: 80%;
+	width: 100%;
+}
+
+#records_content > table {
+	height: 95%;
+	width: 95%;
+}
+
+#mapArea {
+	width: 85%;
+    height: 100%;
+    float: left;
+}
+
+#mapWrapper {
+	width: 100%;
+	height: 100%;
+}
+
+#mapInput {
+	width: 100%;
+	height: 5%;
+}
+
+#mapInput>input {
+	height: 80%;
+	width: 40%;
+	float: left;
+}
+
+#mapInput>button {
+	height: 80%;
+	width: 10%;
+	float: left;
+}
+
+#map {
+	width: 100%;
+	height: 95%;
+}
+
+#tempArea {
+    width: 85%;
+    height: 100%;
+    float: left;
+}
+
+#historyArea {
+    width: 85%;
+    height: 100%;
+    float: left;
+}
+
+#chartArea {
+    width: 85%;
+    height: 100%;
+    float: left;
+}
+
+#searchHis {
+    width: 8.4%;
+    display: inline-block;
+    background-image: url(elements/tabs.gif);
+    color: white;
+}
+
+#searchTemp {
+    width: 8.4%;
+    display: inline-block;
+    background-image: url(elements/tabs.gif);
+    color: white;
+}

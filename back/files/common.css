@@ -1,0 +1,62 @@
+.navbar-inverse{
+    background-color: rgb(204,204,255);
+}
+
+.navbar-inverse .navbar-brand {
+    color: black;
+}
+.navbar-inverse .navbar-brand:hover {
+    color: black;
+}
+
+.navbar-inverse .container-fluid .navbar-nav>li>a {
+    color: black;
+
+}
+
+.navbar-inverse .navbar-nav>li>a:focus, .navbar-inverse .navbar-nav>li>a:hover {
+    color: black;
+}
+#footer {
+    background-color:rgb(55,154,213);   
+}
+
+#menu2ul>li>a {
+    background-color:rgb(55,154,213);
+    margin-right: 5px;
+    width: 340px;
+    text-align: center;
+    color:white;
+}
+
+#menu2ul>li>a:hover {
+    background-color:rgb(55,154,213);
+    margin-right: 5px;
+    width: 340px;
+    text-align: center;
+    color:white;
+}
+#menu3ul>li>a {
+    /* background-color:rgb(55,154,213); */
+    margin-right: 5px;
+    width:165px;
+    text-align: center;
+    color:white;
+}
+
+#menu3ul>li>a:hover {
+    background-color:rgb(55,154,213);
+    margin-right: 5px;
+    width: 165px;
+    text-align: center;
+    color: white;
+}
+#footer p{
+    color:white;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+
+}

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>输电线路可视化巡检系统--设备管理</title>
+  <link rel="stylesheet" type="text/css" href="test_device.css">
+  <link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="bootstrap-daterangepicker/daterangepicker.css">
+  <!-- <link rel="stylesheet" href="css/smoothzoom.css"> -->
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+  <!-- for slider -->
+<!--   <link rel="stylesheet" href="slider/dist/powerange.css" />
+	<script src="slider/dist/jquery.js"></script>
+	<script src="slider/dist/powerange.js"></script> -->
+
+  <!-- for progressbar -->
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  
+  <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+  <style type="text/css">
+
+  </style>
+</head>
+<body>
+    <div id="nav">
+        <div id="nav_left">
+            <!-- <img src="/elements/logo.gif"> -->
+        </div>
+        <div id="nav_right">
+            <div id="header">
+                <div id="header_left">
+                    <p><b style="font-size: 25px;">输电线路可视化巡检系统</b></p>
+                </div>
+                <div id="header_right">
+                    <ul>
+<!--                         <li><a href="#" id="icon_photo"><span><img src="elements/icon_photo.gif" alt="photo" title="手动拍照"></span></a></li>
+                        <li><a href="#"><span><img src="elements/icon_analysis.gif" alt="photo" title="手动分析"></span></a></li>
+                        <li><a href="#"><span><img src="elements/icon_setting.gif" alt="photo" title="配置设备"></span></a></li>
+                        <li><a href="#" id="icon_map"><span><img src="elements/icon_map.gif" alt="查看地图" title="photo"></span></a></li> -->
+                    </ul>
+                </div>
+            </div>
+            <div id="tabs">
+                <div id="tabs_left">
+                    <ul>
+                        <li class="tabs" style="margin-left: 0px;"><a target="_blank" href="/patrol">巡检</a></li>
+                        <li class="tabs"><a target="_blank" href="/user">用户管理</a></li>
+                        <li class="tabs"><a href="#" id="logout">退出登录</a></li>
+                        <li class="tabs"><a href="#" id="tab_info">设备信息</a></li>
+                        <li class="tabs"><a href="#" id="tab_edit">设备编辑</a></li>
+                        <li class="tabs"><a href="#" id="tab_area">区域设置</a></li>
+                        <li class="tabs"><a href="#" id="tab_line">线路设置</a></li>
+                    </ul>
+                </div>
+                <div id="tabs_right">
+                    <p style="margin-right: 5px">2014年1月1日</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div id="main">
+	<div id="list">
+		<div id="table">
+			<table class="table table-striped table-condensed" style="font-size: 12px;margin-bottom: 0px;">
+				<thead style="">
+					<tr>
+						<th>序号</th>
+						<th>设备名称</th>
+						<th>电话属性</th>
+						<th>版本信息</th>
+						<th>区域属性</th>
+						<th>隶属线路</th>
+						<th>隐患类型</th>
+						<th>状态</th>
+						<th>心跳</th>
+						<th>电压</th>
+						<th>温度</th>
+						<th>日拍照数量</th>
+						<th>月拍照数量</th>
+						<th>经度</th>
+						<th>纬度</th>
+						<th>设备ID</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		<div id="op">
+			<p id = "infoCount" style="float: right;margin-left: 5px;margin-bottom:0px;display: inline;">
+				第xxx页，共xxx页
+			</p>
+			<button type="button" class="" id='infoNext' style='float: right;'>下一页</button>
+			<button type="button" class="" id='infoLast' style='float: right;'>上一页</button>
+		</div>
+	</div>
+	<div id="search">
+		<div style="text-align: center;"><button id="searchSubmit" style="margin-right: 30px;">查询</button><button id="resetSubmit">重置</button></div>
+		<div>
+			<p style="float: left;width: 35%;">区域查询:&nbsp</p>
+				<select class="selectLevel0" style="width: 20%;float: left;"></select>
+				<select class="selectLevel1" style="width: 20%;float: left;"></select>
+				<select class="selectLevel2" style="width: 20%;float: left;"></select>
+		</div>
+		<div>
+			<p style="float: left;width: 35%;">名称查询:&nbsp</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+		</div>
+		<div>
+			<p style="float: left;width: 35%;">电话查询:&nbsp</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+		</div>
+		<div>
+			<p style="float: left;width: 35%;">线路查询:&nbsp</p><select class="selectLine" style="float: left;width: 60%;"><option selected="selected">全部</option></select>
+		</div>
+		<div>
+			<p style="float: left;width: 35%;">隐患查询:&nbsp</p>
+			<!-- <select class="selectDanger"  style="width: 60%;float: left;"></select> -->
+			<select class="selectDanger" style="width: 60%;float: left;">
+				<option value="0">全部</option>
+				<option value="1">线下施工</option>
+				<option value="2">建筑工地</option>
+				<option value="3">塔吊作业</option>
+				<option value="4">线下堆物</option>
+				<option value="5">树木生长</option>
+				<option value="6">野火防范</option>
+				<option value="7">杆塔本体</option>
+				<option value="8">鸟类活动</option>
+				<option value="9">其他类型</option>
+			</select>
+		</div>
+		<div>
+			<p style="float: left;width: 35%;">状态查询:&nbsp</p>
+			<select id="searchStat" style="float: left;width: 60%;">
+				<option value="0">全部</option>
+				<option value="1">在线</option>
+				<option value="2">离线</option>
+			</select>
+		</div>
+		<hr>
+		<div>
+			<p style="float: left;width: 35%;">设备名称:</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+		</div>
+		<div>
+			<p style="float: left;width: 35%;">短信电话:</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+		</div>
+		<div>
+			<p style="float: left;width: 35%;">GPS经度:</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+		</div>
+		<div>
+			<p style="float: left;width: 35%;">GPS纬度:</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+		</div>
+		<div>
+			<p style="float: left;width: 35%;">设备MEID:</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+		</div>
+		<div>
+			<p style="float: left;width: 35%;">隐患类型:</p>
+			<!-- <select class="selectDanger" style="float: left;width: 60%;"></select> -->
+			<select class="selectDanger" style="width: 60%;float: left;">
+				<option value="0">无</option>
+				<option value="1">线下施工</option>
+				<option value="2">建筑工地</option>
+				<option value="3">塔吊作业</option>
+				<option value="4">线下堆物</option>
+				<option value="5">树木生长</option>
+				<option value="6">野火防范</option>
+				<option value="7">杆塔本体</option>
+				<option value="8">鸟类活动</option>
+				<option value="9">其他类型</option>
+			</select>
+		</div>
+		<div style="text-align: center;"><button id="setDanger">设置</button></div>
+	</div>
+</div>
+
+<div id="main2">
+	<div id="main2_header" style="overflow-y: hidden;height: 5%;background-color: rgb(3,161,161)">
+		<div style="float: left;height: 100%;color: white"><p>信息通道配置</p></div>
+		<div style="float: right;">
+			<button type="button" class="" id='addDevice' style=''>通道添加</button>
+			<button type="button" class="" id='editDevice' style=''>修改</button>
+			<button type="button" class="" id='deleteDevice' style=''>删除</button>
+<!-- 			<button type="button" class="" id='' style=''>线路添加</button>
+			<button type="button" class="" id='addDanger' style=''>隐患添加</button> -->
+			<button type="button" class="" id='setPicRef' style=''>图片对比</button>
+			<button type="button" class="" id='settings' style=''>高级参数设置</button>
+			<!-- <button type="button" class="" id='' style=''>自定义协议</button> -->
+			<button type="button" class="" id='update' style=''>升级</button>
+			<button type="button" class="" id='upload' style=''>上传升级文件</button>
+			<button type="button" class="" id='reset' style=''>复位</button>
+		</div>
+	</div>
+	<div id="table2" style="font-size: 12px;height: 90%;">
+		<div id="Layer1" style="display: none; position: absolute; z-index: 100;"></div>
+		<table class="table table-striped table-condensed table-bordered">
+			<thead>
+				<tr>
+					<th><input type="checkbox" name="" id="selectAll"></th>
+					<th>序号</th>
+					<th>设备名称</th>
+					<th>捆绑号码</th>
+					<th>版本信息</th>
+					<th>区域属性</th>
+					<th>隶属线路</th>
+					<th>隐患类型</th>
+					<th>设备ID</th>
+					<th>对比图片</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+			</tbody>
+		</table>
+	</div>
+	<div id="op2" style="height: 5%;">
+		<div style="height: 100%;float: right;width: 10%;">
+			<p id = "infoCount2" style="float: right;margin-left: 5px;display: inline;">
+				第xxx页，共xxx页
+			</p>
+		</div>
+		<div style="height: 100%;float: right;width: 90%;"><button type="button" class="" id='infoNext2' style='float: right;'>下一页</button>
+		<button type="button" class="" id='infoLast2' style='float: right;'>上一页</button></div>
+		
+	</div>
+</div>
+
+<!-- 设备添加配置 -->
+<div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 100px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">设备添加配置</h4>
+            </div>
+            <div class="modal-body" id="modalAdd-body" style="width: 100%">
+            	<div>
+					<p style="width: 35%;float: left;">设备ID:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">设备名称:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">捆绑号码:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div>
+<!-- 				<div>
+					<p style="width: 35%;float: left;">MEID:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div> -->
+				<div>
+					<p style="width: 35%;float: left;">区域选择:&nbsp</p>
+					<select class="selectLevel0" style="width: 20%;float: left;"></select>
+					<select class="selectLevel1" style="width: 20%;float: left;"></select>
+					<select class="selectLevel2" style="width: 20%;float: left;"></select>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">线路选择:&nbsp</p>
+					<select class="selectLine" style="width: 60%;float: left;"></select>
+				</div>
+				<div>
+					<p  style="width: 35%;float: left;">隐患类型:&nbsp</p>
+					<!-- <select class="selectDanger"  style="width: 60%;float: left;"></select> -->
+					<select class="selectDanger" style="width: 60%;float: left;">
+						<option value="0">无</option>
+						<option value="1">线下施工</option>
+						<option value="2">建筑工地</option>
+						<option value="3">塔吊作业</option>
+						<option value="4">线下堆物</option>
+						<option value="5">树木生长</option>
+						<option value="6">野火防范</option>
+						<option value="7">杆塔本体</option>
+						<option value="8">鸟类活动</option>
+						<option value="9">其他类型</option>
+					</select>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+				</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 设备修改配置 -->
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 100px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">设备修改配置</h4>
+            </div>
+            <div class="modal-body" id="modalEdit-body" style="width: 100%">
+            	<!-- <div>
+					<p style="width: 35%;float: left;">设备ID:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div> -->
+            	<div>
+					<p style="width: 35%;float: left;">设备名称:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">捆绑号码:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div>
+<!-- 				<div>
+					<p style="width: 35%;float: left;">MEID:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div> -->
+				<div>
+					<p style="width: 35%;float: left;">区域选择:&nbsp</p>
+					<select class="selectLevel0" style="width: 20%;float: left;"></select>
+					<select class="selectLevel1" style="width: 20%;float: left;"></select>
+					<select class="selectLevel2" style="width: 20%;float: left;"></select>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">线路选择:&nbsp</p>
+					<select class="selectLine" style="width: 60%;float: left;"></select>
+				</div>
+				<div>
+					<p  style="width: 35%;float: left;">隐患类型:&nbsp</p>
+					<!-- <select class="selectDanger"  style="width: 60%;float: left;"></select> -->
+					<select class="selectDanger" style="width: 60%;float: left;">
+						<option value="0">无</option>
+						<option value="1">线下施工</option>
+						<option value="2">建筑工地</option>
+						<option value="3">塔吊作业</option>
+						<option value="4">线下堆物</option>
+						<option value="5">树木生长</option>
+						<option value="6">野火防范</option>
+						<option value="7">杆塔本体</option>
+						<option value="8">鸟类活动</option>
+						<option value="9">其他类型</option>
+					</select>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+				</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 隐患添加 -->
+<div class="modal fade" id="modalDanger" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 100px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">隐患添加</h4>
+            </div>
+            <div class="modal-body" id="modalDanger-body" style="width: 100%">
+            	<table class="table-condensed table">
+            		<thead>
+						<tr>
+							<th>隐患类型</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody style="background-color: #f9f9f9"></tbody>
+            	</table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 线路添加 -->
+<div class="modal fade" id="modalLine" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 100px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">线路添加</h4>
+            </div>
+            <div class="modal-body" id="modalLine-body" style="width: 100%">
+            	<table class="table-condensed table">
+            		<thead>
+						<tr>
+							<th>线路名称</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody style="background-color: #f9f9f9"></tbody>
+            	</table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 图片对比 -->
+<div class="modal fade" id="modalRef" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 100px;">
+        <div class="modal-content" style="width: 670px;">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">图片对比</h4>
+            </div>
+            <div class="modal-body" id="modalRef-body" style="width: 100%;">
+            	<div style="overflow-y:hidden;margin-bottom: 10px;">
+            		<select id="channelSelect">
+            			<option value="1">1号摄像头</option>
+            			<option value="2">2号摄像头</option>
+            			<option value="3">3号摄像头</option>
+            		</select>
+            		<select id="senseSelect">
+            			<option value="0">请选择敏感度</option>
+            			<option value="1">敏感度：1</option>
+            			<option value="2">敏感度：2</option>
+            			<option value="3">敏感度：3</option>
+            			<option value="4">敏感度：4</option>
+            			<option value="5">敏感度：5</option>
+            			<option value="6">敏感度：6</option>
+            			<option value="7">敏感度：7</option>
+            			<option value="8">敏感度：8</option>
+            			<option value="9">敏感度：9</option>
+            			<option value="10">敏感度：10</option>
+            		</select>
+<!--             		<input type="text" id="slider" style="display: none;"> -->
+            	</div>
+            	<div align="center" id="container" style="background:white;position:relative;width: 100%;overflow-x: hidden;">
+				    <canvas id="myCanvas" style="border:1px solid black;background-size: cover;">您的浏览器不支持canvas</canvas>
+				    <div style='border:1px solid red;width:1px;height:1px;position:absolute;display:none;'></div>
+				</div>
+<!-- 				<div class="container">
+					<canvas id = 'canvas' width="640" height="320" style="background-size: cover;"></canvas>
+				</div> -->
+				
+				<div class="control-ops">
+				    <button type="button" class="btn btn-primary" onclick="javascript:clearArea();return false;">清空画板</button>
+				    <!-- Line width : <select id="selWidth">
+				        <option value="1">1</option>
+				        <option value="3">3</option>
+				        <option value="5">5</option>
+				        <option value="7">7</option>
+				        <option value="9" selected="selected">9</option>
+				        <option value="11">11</option>
+				    </select>
+				    Color : <select id="selColor">
+				        <option value="black">black</option>
+				        <option value="blue" selected="selected">blue</option>
+				        <option value="red">red</option>
+				        <option value="green">green</option>
+				        <option value="yellow">yellow</option>
+				        <option value="gray">gray</option>
+				    </select> -->
+				</div>                               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 高级参数配置 -->
+<div class="modal fade" id="modalSetting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 100px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">高级参数配置</h4>
+            </div>
+            <div class="modal-body" id="modalSetting-body" style="width: 100%">
+            	<div>
+					<p style="width: 35%;float: left;">设备名称:&nbsp</p><input type="text" name="deviceName" id="deviceName" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">相机名称/主:&nbsp</p><input type="text" name="channel1Name" id="channel1Name" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">相机名称/2:&nbsp</p><input type="text" name="channel2Name" id="channel2Name" disabled="disabled" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">相机名称/3:&nbsp</p><input type="text" name="channel3Name" id="channel3Name" disabled="disabled" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">工作时间:&nbsp</p>
+					<select id="beginHour" style="width: 10%;float: left;"></select>
+					<p style="width: 5%;float: left;">&nbsp时</p>
+					<select id="beginMin" style="width: 10%;float: left;"></select>
+					<p style="width: 5%;float: left;">&nbsp分&nbsp&nbsp~~&nbsp&nbsp</p>
+					<select id="endHour" style="width: 10%;float: left;"></select>
+					<p style="width: 5%;float: left;">&nbsp时</p>
+					<select id="endMin" style="width: 10%;float: left;"></select>
+					<p style="width: 5%;float: left;">&nbsp分</p>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">图片像素:&nbsp</p>
+					<select id="photoSize" style="width: 60%;float: left;">
+						<option value="200">200万</option>
+						<option value="300">300万</option>
+						<option value="500">500万</option>
+						<option value="800">800万</option>
+						<option value="1000">1000万</option>
+						<option value="1200">1000万</option>
+					</select>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">拍照次数/天:&nbsp</p>
+					<!-- <select id="captureTime" style="width: 60%;float: left;">
+						<option value="30">30</option>
+						<option value="30">30</option>
+						<option value="30">30</option>
+						<option value="30">30</option>
+					</select> -->
+					<input type="" name="" placeholder="请输入1~100" style="width: 60%;float: left;">
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">拍照时间间隔/分钟:&nbsp</p>
+					<select id="capturePeriod" style="width: 60%;float: left;">
+						<option value="30">30</option>
+						<option value="60">60</option>
+						<option value="90">90</option>
+						<option value="120">120</option>
+					</select>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">相机/2:&nbsp</p>
+					<select id="channelNo2" style="width: 60%;float: left;">
+						<option value="0">禁用</option>
+						<option value="1">启用</option>
+					</select>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">相机/3:&nbsp</p>
+					<select id="channelNo3" style="width: 60%;float: left;">
+						<option value="0">禁用</option>
+						<option value="1">启用</option>
+					</select>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">照片分辨率:&nbsp</p>
+					<select id="resolution"  style="width: 60%;float: left;">
+						<option value="2">640*480</option>
+						<option value="8">1920*1080</option>
+					</select>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+				</div>
+				<div>
+					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+				</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<div id="main3">
+	<div>
+		<div id="treeView">
+			<p>区域层级视图</p>
+			<div id="levelTree"></div>
+		</div>
+		<div id="areaSet">
+			<p>区域设置</p>
+			<div>
+				<p>一级区域添加:&nbsp</p><input type="text" name=""></input><button id="addLevel0">添加</button>
+				<p>其他区域添加:&nbsp</p><input type="text" name=""></input><button id="addLevel">添加</button>
+				<p>区域名称修改:&nbsp</p><input type="text" name=""></input><button id="editLevel">修改</button>
+				<p>区域删除:&nbsp</p><input type="text" name=""></input><button id="deleteLevel">删除</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="main4">
+	<div>
+		<div id="lineView">
+			<p>线路视图</p>
+			<div id="lineTree"></div>
+		</div>
+		<div id="lineSet">
+			<p>线路设置</p>
+			<div>
+				<p>线路添加:&nbsp</p><input type="text" name=""></input><button id="addLine">添加</button>
+				<p>线路名称修改:&nbsp</p><input type="text" name=""></input><button id="editLine">修改</button>
+				<p>线路删除:&nbsp</p><input type="text" name=""></input><button id="deleteLine">删除</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 升级-->
+<div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 200px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">选择升级文件</h4>
+            </div>
+            <div class="modal-body" id="modalUpdate-body" style="width: 100%">
+            	<div id="uploader" class="wu-example">
+				    <!--用来存放文件信息-->
+				    <!-- <div id="list" class="uploader-list"></div>
+				    <div class="btns">
+				        <div id="picker">选择文件</div>
+				        <button id="ctlBtn" class="btn btn-default">开始上传</button>
+				    </div> -->
+				    <form>
+					 <input type="file" id="avatar" name="avatar" multiple>
+					</form>
+					<div id="progressbar"></div>
+				</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 升级-->
+<div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 200px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">选择升级文件</h4>
+            </div>
+            <div class="modal-body" id="modalUpload-body" style="width: 100%">
+            	<div id="uploader" class="wu-example">
+				    <!--用来存放文件信息-->
+				    <!-- <div id="list" class="uploader-list"></div>
+				    <div class="btns">
+				        <div id="picker">选择文件</div>
+				        <button id="ctlBtn" class="btn btn-default">开始上传</button>
+				    </div> -->
+				    <form>
+					 <input type="file" id="avatar" name="avatar" multiple>
+					</form>
+					<div id="progressbar"></div>
+				</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 复位-->
+<div class="modal fade" id="modalReset" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="padding-top: 200px">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">装置复位</h4>
+            </div>
+            <div class="modal-body" id="modalReset-body" style="width: 100%">
+            	<input type="radio" name="reset" value="0">重启
+            	<input type="radio" name="reset" value="1">升级模式
+            	<input type="radio" name="reset" value="2">诊断模式
+            	<input type="radio" name="reset" value="3">调试模式
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="">确定</button>
+                <button type="button" class="" data-dismiss="modal">取消</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script src="jquery.min.js"></script>
+<script src="js.cookie.js"></script>
+<script src="bootstrap-treeview.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bootstrap-daterangepicker/moment.js"></script>
+<script type="text/javascript" src="bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="assets/js/vendor/holder.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="assets/js/ie-emulation-modes-warning.js"></script>
+<script src="jquery.rotate.js"></script>
+
+<!-- for slider -->
+
+<!-- for progressbar -->
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="common.js"></script>
+<script src="test_device.js"></script>
+
+</body>
+
+</html>
