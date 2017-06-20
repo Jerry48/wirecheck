@@ -1,5 +1,0 @@
-CCFLab SJTU http server listening on 80
-AccessToken {
-  accessToken: '3tmMmZ1h83hPiY-5AghUn3GwAMKF1wnCkppsxQgMLnQ75-RVsMleDzVUg9ChiPXGA9RVSXTW8Z_dyIy1xuxBtelFxlyL-PVn30fkFg4ZX-NCTjN57vQA9fCVzZqGxHwzLMUiAHAFGO',
-  expireTime: 1497944069697 }
-{ errcode: 0, errmsg: 'ok' }

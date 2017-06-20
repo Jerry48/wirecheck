@@ -24,6 +24,9 @@ var deviceStatusModel = require('../../model/device_status_info');
 var channelModel = require('../../model/channel_info');
 var deviceLineModel = require('../../model/device_line_info');
 var pictureModel = require('../../model/picture_info');
+var userDeviceGroupRModel = require('../../model/user_device_group_r_info');
+var deviceGroupMemModel = require('../../model/device_group_member_info');
+
 
 //helper 
 var logic_helper = require('../../../common/logic_helper');
@@ -33,10 +36,6 @@ var dataHelper = require('../../../common/dataHelper');
 var userLogic = require('./device.logic');
 var fileserverHelper = require('../../../common/fileserverHelper');
 var refModel = {
-	userId:{
-		data: 'userId',
-		rangeCheck: null,
-	},
     size:{
         data: 0,
         rangeCheck: function(data){
@@ -284,36 +283,109 @@ function processRequest(param, fn){
     var index = param.index && Number(param.index) || 0;
     var size = param.size && Number(param.size) || 10;
     var order = param.order && 'deviceID';
+    var userId = param.userId;
+    var userType = (param.userType === undefined) ? 1 : param.userType;
 
 	var info = [];
     var ids = [];
     async.waterfall([
-        function(next){
-            //count all the devices
-            var sqlstr = 'select count(*) as total ';       
-            sqlstr += ' from '+deviceModel.tableName+';';            
-            var query = {
-                sqlstr: sqlstr,
-            };
-            deviceModel.query(query, function(err, rows){
-                if (err) {
-                    var msg = err.msg || err;
-                    console.error(moduleName + msg);
-                    next(err);
-                }else{
-                    if (rows.length==0) {
-                        var msg = 'Err: Failed to find the devices!';
-                        console.error(moduleName+msg);
-                        next({code:errorCode.DB_ERROR, 
-                            msg: msg});
-                    }else {
-                        var data = rows[0];
-                        next(null, data.total);
+    	function(next){
+            if(userType){
+                next(null,0);
+            }else{
+                var match = {
+                    userId: userId,
+                    comment: 'privilege'
+                };
+                var select = {
+                    groupId: 'groupId',
+                };
+                var query = {
+                    select: select,
+                    match: match,
+                };
+                userDeviceGroupRModel.lookup(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+' Err:'+msg);
+                        next(err);
+                    }else{
+                        next(null,rows);
                     }
-                }
-            });
+                });
+            }
         },
-        function(total,next){
+        function(result,next){
+            if(userType){
+                var sqlstr = 'select * from tb_device_info;';
+                var query = {
+                    sqlstr: sqlstr,
+                }
+                deviceModel.query(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+' Err:'+msg);
+                        next(err);
+                    }else{
+                    	for(var i=0;i<rows.length;i++){
+                    		ids.push(rows[i].deviceID)
+                    	}
+                        next(null,ids);
+                    }
+                });
+            }else{
+                var match = {
+                    groupId: result[0].groupId,
+                };
+                var select = {
+                    deviceId: 'deviceId',
+                };
+                var query = {
+                    select: select,
+                    match: match,
+                };
+                deviceGroupMemModel.lookup(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+' Err:'+msg);
+                        next(err);
+                    }else{
+                    	for(var i=0;i<rows.length;i++){
+                    		ids.push(rows[i].deviceId)
+                    	}
+                        next(null,ids);
+                    }
+                });
+            }
+        },
+        // function(ids,next){
+        //     //count all the devices
+        //     var sqlstr = 'select count(*) as total ';       
+        //     sqlstr += ' from '+deviceModel.tableName+';';            
+        //     var query = {
+        //         sqlstr: sqlstr,
+        //     };
+        //     deviceModel.query(query, function(err, rows){
+        //         if (err) {
+        //             var msg = err.msg || err;
+        //             console.error(moduleName + msg);
+        //             next(err);
+        //         }else{
+        //             if (rows.length==0) {
+        //                 var msg = 'Err: Failed to find the devices!';
+        //                 console.error(moduleName+msg);
+        //                 next({code:errorCode.DB_ERROR, 
+        //                     msg: msg});
+        //             }else {
+        //                 var data = rows[0];
+        //                 next(null, data.total);
+        //             }
+        //         }
+        //     });
+        // },
+        function(ids,next){
+        	var total = ids.length;
+        	console.log(ids.length);
             var offset = index * size;
             var limit = size;
             if (offset>total) {
@@ -322,12 +394,15 @@ function processRequest(param, fn){
                 debug('index='+index+', size='+size +',total='+total);
                 return next({code:errorCode.PARAM_INVALID, msg: msg});
             }
+
+            // var tmpids = ids.slice(offset,offset+limit);
             
             var sqlstr = "select deviceID,name,area,lineId,deviceWorkBeginTime,deviceWorkEndTime,photoSize,capturePeriod,resolution,latitude,longitude,version";
-            sqlstr += ' from '+deviceModel.tableName;
-            sqlstr += ' order by '+order+' ASC ';
+            sqlstr += ' from '+deviceModel.tableName + ' where deviceID in("' +ids.join('","')+'")';
+            sqlstr += ' order by deviceID ASC ';
             sqlstr += ' LIMIT ' + offset +', '+limit;
             sqlstr += ' ; ' ;
+            console.log(sqlstr)
             var query = {
                 sqlstr: sqlstr
             }

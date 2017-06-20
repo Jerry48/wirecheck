@@ -17,6 +17,12 @@ $(function() {
         var cookie_createGroup = userDetails.createGroup;
         var cookie_name = userDetails.name;
 
+        if(!cookie_userType) {
+        	$("#tab_edit").parent().hide();
+        	$("#tab_area").parent().hide();
+        	$("#tab_line").parent().hide();
+        }
+
 		$('#nav').css('visibility', 'visible')
     	$('#main').css('visibility', 'visible')
 	}
@@ -197,6 +203,8 @@ $(function() {
 
 	$('#infoLast').click(function() {
 		var data = {
+			'userId': cookie_userId,
+			'userType': cookie_userType,
 			'index': parseInt($('#table').attr('infolist-index')) - 1,
 			'order': 'deviceID',
 		};
@@ -205,6 +213,8 @@ $(function() {
 
 	$('#infoNext').click(function() {
 		var data = {
+			'userId': cookie_userId,
+			'userType': cookie_userType,
 			'index': parseInt($('#table').attr('infolist-index')) + 1,
 			'order': 'deviceID',
 		};
@@ -1081,6 +1091,7 @@ $(function() {
 			'index': inputData.index,
 			'size': ENTRIES,
 			'order': inputData.order,
+			'userType': cookie_userType,
 		};
 		$.ajax({
 			url: '/v1/device/info/list',
@@ -1973,6 +1984,8 @@ $(function() {
 			'danger': inputData.danger,
 			'status': inputData.status,
 			'order': 'deviceID',
+			'userId': cookie_userId,
+			'userType': cookie_userType,
 		}
 		$.ajax({
 			url: '/v1/device/info/search',
@@ -2026,6 +2039,8 @@ $(function() {
 		$('#search input').val('');
 		$('#search select').val('0');
 		var data = {
+			'userId': cookie_userId,
+			'userType': cookie_userType,
 			'index': 0,
 			'order': 'deviceID',
 		}
