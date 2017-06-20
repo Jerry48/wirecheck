@@ -25,6 +25,10 @@ $(function() {
             $("#tabs_left").find('li:eq(2)').hide();
         }
 
+        if(!cookie_userType) {
+            $("#tabs_left").find('li:eq(2)').hide();
+        }
+
         $('#nav').css('visibility', 'visible')
         $('#main').css('visibility', 'visible')
     }
