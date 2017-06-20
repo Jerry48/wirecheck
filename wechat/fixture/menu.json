@@ -1,0 +1,23 @@
+{
+     "button":[
+     {    
+          "name":"用户",
+          "sub_button":[
+            {
+               "type":"view",
+               "name":"绑定账号",
+               "url":"http://www.zskjsdxl.top/login"
+            },
+            {    
+               "type":"view",
+               "name":"修改密码",
+               "url":"http://www.zskjsdxl.top/password"
+            }]
+      },
+
+      {
+          "type": "view",
+           "name":"设备",
+           "url":"http://www.zskjsdxl.top/lineTree"
+      }]
+ }

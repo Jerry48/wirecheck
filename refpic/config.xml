@@ -1,0 +1,19 @@
+<root>
+    <host>59.110.230.87</host>
+    <port>6178</port>
+    <upload_port>6178</upload_port>
+    <upload_port_warning>6178</upload_port_warning>
+    <nx>25</nx>
+    <ny>25</ny>
+    <top>0</top>
+    <left>0</left>
+    <bottom>768</bottom>
+    <right>1280</right>
+    <width>1280</width>
+    <height>1280</height>
+    <sleep>0</sleep>
+    <threshold>4</threshold>
+    <resultPath>output</resultPath>
+    <refPath>test</refPath>
+    <blur>False</blur>
+</root>

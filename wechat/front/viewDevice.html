@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>设备</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" href="css/wechat_web.css">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+      .td {
+        width: 30%;
+      }
+
+      tr {
+        width: 100%;
+      }
+
+      table {
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+  <div style="width: 100%;padding: 5px;">
+    <table class="table table-bordered table-striped table-condensed">
+      <tr>
+        <td class="td">设备名称</td>
+      </tr>
+      <tr>
+        <td class="td">电话属性</td>
+      </tr>
+      <tr>
+        <td class="td">区域属性</td>
+        </tr>
+      <tr>
+        <td class="td">隶属线路</td>
+        </tr>
+      <tr>
+        <td class="td">隐患类型</td>
+        </tr>
+      <tr>
+        <td class="td">状态</td>
+        </tr>
+      <tr>
+        <td class="td">经度</td>
+        </tr>
+      <tr>
+        <td class="td">纬度</td>
+        </tr>
+      <tr>
+        <td class="td">MEID</td>
+      </tr>
+    </table>
+  </div>
+  <button id="back" class="btn btn-primary">返回</button>
+    <!-- <div class="container-fluid">
+        <div class="col-md-7">
+          <br>
+          <label>设备列表</label>
+          <fieldset class="form-group" id="getDevice">
+            <select class="form-control input-height">
+              <option value="default">请选择设备</option>
+            </select>
+          </fieldset>
+        </div>
+        <div class="row" style="padding-left: 15px">
+          <div class="col-md-6">
+            <ul id="myTab" class="nav nav-tabs">
+              <li class="active"><a href="#followup" data-toggle="tab" class="glyphicon glyphicon-thumbs-up">关注</a></li>
+              <li><a href="#check" data-toggle="tab" class="glyphicon glyphicon-search">查看</a></li>
+              <li><a href="#configure" data-toggle="tab" class="glyphicon glyphicon-cog">配置</a></li>
+              <li><a href="#disarm" data-toggle="tab" class="glyphicon glyphicon-time">撤防</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+              <div class="tab-pane fade in active" style="padding-top: 20px" id="followup">
+                <p id="ask" style="display: none">是否关注该设备？</p>
+                <button class="btn btn-primary btn-md btn-main" id="follow" style="display:none">关注</button>
+                <br>
+                <p>您已关注的设备如下：</p>
+                <table class="table table-striped table-bordered table-condensed" >
+                  <thead>
+                    <td style="width: 20%">设备ID</td><td style="width: 80%">设备名</td>
+                  </thead>
+                  <tbody id="getFollowup">
+                    <tr>
+                      
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="check" style="padding-top: 20px">
+                <table class="table table-striped table-bordered table-condensed" id="viewStatus">
+                  <tr id="deviceId">
+                    <td style="width: 30%">设备ID</td>
+                  </tr>
+                  <tr id="batteryVoltage">
+                    <td style="width: 30%">电池电压</td>
+                  </tr>
+                  <tr id="chargeVoltage">
+                    <td style="width: 30%">充电电压</td>
+                  </tr>
+                  <tr id="temperature">
+                    <td style="width: 30%">温度</td>
+                  </tr>
+                  <tr id="alertInfo">
+                    <td style="width: 30%">告警</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="tab-pane fade" id="configure" style="padding-top: 20px">
+                <table class="table table-striped table-condensed table-bordered">
+                  <tr style="height : 20px">
+                    <td>设备ID</td>
+                    <td><p id="editId"></p></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">设备名</td>
+                    <td><input type="text" class="form-control input-height input-height" id="editName"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">昵称</td>
+                    <td><input type="text" class="form-control input-height input-height" id="editNick"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">经度</td>
+                    <td><input type="text" class="form-control input-height" id="editLat"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">纬度</td>
+                    <td><input type="text" class="form-control input-height" id="editLon"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">心跳值</td>
+                    <td><input type="text" class="form-control input-height" id="editBeat"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">照片值</td>
+                    <td><input type="text" class="form-control input-height" id="editPho"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">mac地址</td>
+                    <td><input type="text" class="form-control input-height" id="editMac"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">电池电压低</td>
+                    <td><input type="text" class="form-control input-height" id="bVLow"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">充电电压低</td>
+                    <td><input type="text" class="form-control input-height" id="cVLow"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">温度低</td>
+                    <td><input type="text" class="form-control input-height" id="tLow"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">电池电压高</td>
+                    <td><input type="text" class="form-control input-height" id="bVHigh"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">充电电压高</td>
+                    <td><input type="text" class="form-control input-height" id="cVHigh"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">温度高</td>
+                    <td><input type="text" class="form-control input-height" id="tHigh"></input></td>
+                  </tr>
+                  </table> 
+                  <button class="btn btn-primary btn-md btn-main" id="saveDevice">保存</button>   
+              </div>
+              <div class="tab-pane fade" id="disarm" style="padding-top: 20px">
+                <table class="table table-striped table-condensed table-bordered">
+                  <tr>
+                    <td style="width: 25%">设备ID</td>
+                    <td class="tb-text"><p id="setId"></input>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">层级ID</td>
+                    <td><input type="text" class="form-control input-height" id="setLevel"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">是否禁用</td>
+                    <td><input type="text" class="form-control input-height" placeholder="0-否，1-是" id="isDisable"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">日期</td>
+                    <td><input type="text" class="form-control input-height" id="setDay" placeholder="0-周日，1-周一"></input></td>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">开始时间</td>
+                    <td>
+                      <table>
+                        <tr>
+                          <td style="height:30px">
+                            <p style="float:left;">Hour：</p>
+                            <input type="text" class="form-control input-pos" id="startHour"></input>
+                          </td>
+                          <td>
+                            <p style="float:left;">Minute：</p>
+                            <input type="text" class="form-control input-pos" id="startMinute"></input>
+                          </td>
+                        </tr>
+                      </td>
+                    </table>
+                  </tr>
+                  <tr>
+                    <td style="line-height:30px">结束时间</td>
+                    <td>
+                      <table>
+                        <tr>
+                          <td style="height:30px">
+                            <p style="float:left;">Hour：</p>
+                            <input type="text" class="form-control input-pos" id="endHour"></input>
+                          </td>
+                          <td>
+                            <p style="float:left;">Minute：</p>
+                            <input type="text" class="form-control input-pos" id="endMinute"></input>
+                          </td>
+                        </tr>
+                      </td>
+                    </table>
+                  </tr>
+                </table>
+                <button class="btn btn-primary btn-md btn-main" id="saveDefend">保存</button>
+              </div>
+            </div>
+          </div>
+      </div> -->
+     
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="jquery.min.js"></script>
+    <script src="js.cookie.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="bootstrap-treeview.min.js"></script>
+    <script src="logic/common.js"></script>
+    <script src="logic/viewDevice.js"></script>
+  </body>
+</html>
