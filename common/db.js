@@ -17,7 +17,7 @@ var pool  = mysql.createPool({
     password: config.database.password,
     database: config.database.schema,
 	connectionLimit: 20,
-	queueLimit     : 30
+	queueLimit     : 100
 });
 
 module.exports = pool;

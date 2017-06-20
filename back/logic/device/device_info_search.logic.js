@@ -21,6 +21,8 @@ var is = require('is_js');
 var deviceModel = require('../../model/device_info');
 var deviceProductModel = require('../../model/device_product_info');
 var deviceStatusModel = require('../../model/device_status_info');
+var userDeviceGroupRModel = require('../../model/user_device_group_r_info');
+var deviceGroupMemModel = require('../../model/device_group_member_info');
 
 //helper 
 var logic_helper = require('../../../common/logic_helper');
@@ -141,14 +143,87 @@ function processRequest(param, fn){
     var danger = param.danger || '';
     var status = param.status || 0;
     var order = param.order || 'deviceID';
+    var userId = param.userId;
+    var userType = (param.userType === undefined) ? 1 : param.userType;
 
     var info = [];
+    var tmpids = [];
     var ids = [];
     async.waterfall([
         function(next){
+            if(userType){
+                next(null,0);
+            }else{
+                var match = {
+                    userId: userId,
+                    comment: 'privilege'
+                };
+                var select = {
+                    groupId: 'groupId',
+                };
+                var query = {
+                    select: select,
+                    match: match,
+                };
+                userDeviceGroupRModel.lookup(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+' Err:'+msg);
+                        next(err);
+                    }else{
+                        next(null,rows);
+                    }
+                });
+            }
+        },
+        function(result,next){
+            if(userType){
+                var sqlstr = 'select * from tb_device_info;';
+                var query = {
+                    sqlstr: sqlstr,
+                }
+                deviceModel.query(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+' Err:'+msg);
+                        next(err);
+                    }else{
+                        for(var i=0;i<rows.length;i++){
+                            tmpids.push(rows[i].deviceID)
+                        }
+                        next(null,tmpids);
+                    }
+                });
+            }else{
+                var match = {
+                    groupId: result[0].groupId,
+                };
+                var select = {
+                    deviceId: 'deviceId',
+                };
+                var query = {
+                    select: select,
+                    match: match,
+                };
+                deviceGroupMemModel.lookup(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+' Err:'+msg);
+                        next(err);
+                    }else{
+                        for(var i=0;i<rows.length;i++){
+                            tmpids.push(rows[i].deviceId)
+                        }
+                        next(null,tmpids);
+                    }
+                });
+            }
+        },
+        function(tmpids, next){
             var sqlstr = 'select deviceID,name,area,lineName,danger,latitude,longitude from '+deviceModel.tableName+' where';  
-                sqlstr += ' name like "%'+name+'%" and danger like "%'+danger+'%" and area like "%'+area+'%" and lineId like "%'+lineId+'%";';              
+                sqlstr += ' name like "%'+name+'%" and danger like "%'+danger+'%" and area like "%'+area+'%" and lineId like "%'+lineId+'%" and deviceID in ("' +tmpids.join('","')+'");';              
             
+            console.log(sqlstr);
             var query = {
                 sqlstr: sqlstr,
             };
