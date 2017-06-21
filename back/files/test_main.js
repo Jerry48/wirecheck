@@ -16,6 +16,7 @@ $(function() {
         var cookie_wechatPush = userDetails.wechatPush;
         var cookie_createGroup = userDetails.createGroup;
         var cookie_name = userDetails.name;
+        
         //
         if(!cookie_userType) {
             $("#tabs_left").find('li:eq(2)').hide();

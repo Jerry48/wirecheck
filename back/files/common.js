@@ -76,6 +76,7 @@ function getUserDetails(userName) {
                         'wechatPush': data.result.wechatPush,
                         'createGroup': data.result.createGroup,
                         'name': data.result.name,
+                        'password': data.result.password
                     }
                 }
 

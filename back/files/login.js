@@ -1,4 +1,12 @@
 $(function() {
+    var remember = Cookies.get("password");
+    if(remember != undefined || remember != null){
+        $('input[type=checkbox]').prop('checked',true);
+    }
+    var username = Cookies.get("username");
+    var password = Cookies.get("password");
+    $("#inputUser").val(username);
+    $("#inputPassword").val(password);
     $('#login').click(function() {
         var user = $('#inputUser').val();
         var pwd = $('#inputPassword').val();
@@ -15,7 +23,14 @@ $(function() {
             dataType: "json",
             success: function(data) {
                 if (data.code == 0) {
-                    Cookies.set('sessionId', data.result.sessionId, { expires: 365 });
+                    Cookies.set('sessionId', data.result.sessionId, { maxAge: -1,path: '/' });
+                    Cookies.set('username',$('#inputUser').val(),{expires:7,path:'/'});
+                    if($("input[type=checkbox]").prop("checked")){
+                        Cookies.set('password',$('#inputPassword').val(),{expires:7,path:'/'});
+                    }else{
+                        Cookies.set('password',$('#inputPassword').val(),{maxAge:-1,path:'/'});
+                    }
+                    
                     window.location.href = '/main';
                 } else {
                     alert('错误的用户名或密码');

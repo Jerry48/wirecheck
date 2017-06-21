@@ -49,7 +49,7 @@ app.use(session({
   key: 'wirecheck_wechat_session_cookie',
   secret: 'ccflab.?sjtu@123',
   store: sessionStore,
-  cookie: {path:'/', secure:false, httpOnly:false, maxAge: 24*3600*1000*365,},
+  cookie: {path:'/', secure:false, httpOnly:false, maxAge: 1000*3600*24*180,},
   
 }));
 

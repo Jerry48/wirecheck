@@ -57,6 +57,7 @@ function packageResponseData(inputData){
         userName: inputData.userName,
         gender: inputData.gender,
         mobile: inputData.mobile,
+        password: inputData.password,
         name: inputData.name,
         department: inputData.department,
         userType: inputData.userType,

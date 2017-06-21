@@ -53,7 +53,7 @@ app.use(session({
     key: 'wirecheck_session_cookie',
     secret: 'ccflab.?sjtu@123',
     store: sessionStore,
-    cookie: { path: '/', secure: false, httpOnly: false, maxAge: 24 * 3600 * 1000 * 365, },
+    cookie: { path: '/', secure: false, httpOnly: false, maxAge: -1, },
 }));
 
 /// body parser
