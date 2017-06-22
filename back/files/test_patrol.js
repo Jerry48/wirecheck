@@ -24,42 +24,165 @@ $(function(){
         var cookie_createGroup = userDetails.createGroup;
         var cookie_name = userDetails.name;
 
-        $('#nav').css('visibility', 'visible')
-        $('#main').css('visibility', 'visible')
+        $('#nav').css('visibility', 'visible');
+        $('#main').css('visibility', 'visible');
+
+        // keep 16:9
+        var win_width = parseFloat($(document).width());
+        $('body').css('height', win_width * 1080 / 1920 + 'px');
+        $('p').each(function() {
+            var h = $(this).parent().css('height');
+            $(this).css('line-height', h);
+        })
+
+        $('a').each(function() {
+            var h = $(this).parent().css('height');
+            $(this).css('line-height', h);
+        })
+
+        // adjust logo
+        var w = parseFloat($('#nav_left img').css('width'));
+        var img_h = w * 0.2901;
+        $('#nav_left img').css('height', img_h + 'px');
+        var h = parseFloat($('#nav_left').css('height'));
+        $('#nav_left img').css('margin-top', (h - img_h) / 2 + 'px');
+        $('#nav_left img').css('margin-bottom', (h - img_h) / 2 + 'px');
+
+
+        // welcome
+        var myDate = new Date();
+        var year = myDate.getFullYear();
+        var month = myDate.getMonth() + 1;
+        var day = myDate.getDate();
+        var dayOfWeek = myDate.getDay();
+        var dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
+        $('#tabs_right p').text('欢迎您: ' + cookie_name + ' 今天是' + year + '年' + month + '月' + day + '月' +
+            '   星期' + dayOfWeekName[dayOfWeek]);
+
+        // ````````````````````````````` common use above
+
+        var body_width = parseInt($("body").css("width"));
+        var left_width = parseInt($("#main_left").css("width"));
+        var patrol_width = body_width-left_width -1;
+        console.log(body_width);
+        console.log(left_width);
+        console.log(patrol_width);
+        $('#patrol').css('width',patrol_width+'px');
+        var patrol_height = patrol_width * 1120/1920;
+        $('#patrol').css('height',patrol_height+'px');
+
+
+        //datepicker默认日期
+        var month0 = (month<10)?('0'+month):(month);
+        var day0 = (day<10)?('0'+day):(day);
+        var time = year+'-'+month0+'-'+day0;
+
+        //设备列表
+        // list1
+        var channeltree = channelTree();
+        $('#content1').treeview({
+            data: channeltree,
+            levels: 3,
+            showBorder: false,
+            showCheckbox: false,
+            showTags: false,
+            // emptyIcon: "glyphicon glyphicon-facetime-video",
+            collapseIcon: "glyphicon glyphicon-chevron-down",
+            expandIcon: "glyphicon glyphicon-chevron-right"
+        });
+        $('#content1').addClass('treeSelected');
+        setTreeNodeSelected($('#content1'));
+        // setTreeNodeSelected4x4($('#content1'));
+
+        // content max height
+        var h = parseFloat($('#tree').css('height'));
+        var list_h = parseFloat($('#list1').css('height'));
+        $('.content').css('max-height', h - 3 * list_h + 'px');
+
+        $('.content ul').css('margin', '0px');
+        $('.content ul li').css('background-color', 'rgb(170,247,247)');
+        $('.content ul li').css('padding', '10px');
+        $('.indent').css('margin', '5px');
+
+        var index = 0;
+        var size = 9;
+        var data = {
+            "userId": cookie_userId,
+            "userType": cookie_userType,
+            "index" : index,
+            "size" : size
+        };
+        getAllPics(data);
+
+        var index = 0;
+        var size = 16;
+        var data = {
+            "userId": cookie_userId,
+            "userType": cookie_userType,
+            "index" : index,
+            "size" : size
+        };
+        getAllPics4x4(data);
+
+        if(getSelectedDevice() == -1){
+            intervalIds.getAllPics = setInterval(function() {getAllPics(data);}, INTERVAL);
+            intervalIds.getAllPics4x4 = setInterval(function() {getAllPics4x4(data);}, INTERVAL);
+        }
+
+        $('#list1').click(function() {
+            var channeltree = channelTree();
+            $('#content1').treeview({
+                data: channeltree,
+                levels: 3,
+                showBorder: false,
+                showCheckbox: false,
+                showTags: false,
+                // emptyIcon: "glyphicon glyphicon-facetime-video",
+                collapseIcon: "glyphicon glyphicon-chevron-down",
+                expandIcon: "glyphicon glyphicon-chevron-right"
+            });
+
+            $('#content1').show();
+            $('#content2').hide();
+            $('#content3').hide();
+            $('.content').removeClass('treeSelected');
+            $('#content1').addClass('treeSelected');
+            setTreeNodeSelected($('#content1'));
+            // setTreeNodeSelected4x4($('#content1'));
+        })
+
+        $('#list2').click(function() {
+            var linetree = deviceLineTree();
+            $('#content2').treeview({
+                data: linetree,
+                levels: 3,
+                showBorder: false,
+                showCheckbox: false,
+                showTags: false,
+                // emptyIcon: "glyphicon glyphicon-facetime-video",
+                collapseIcon: "glyphicon glyphicon-chevron-down",
+                expandIcon: "glyphicon glyphicon-chevron-right"
+            });
+            $('#content2').show();
+            $('#content1').hide();
+            $('#content3').hide();
+            $('.content').removeClass('treeSelected');
+            $('#content2').addClass('treeSelected');
+            setTreeNodeSelected($('#content2'));
+            // setTreeNodeSelected4x4($('#content2'));
+        })
+
+        $('#list3').click(function() {
+            $('#content3').show();
+            $('#content2').hide();
+            $('#content1').hide();
+            $('.content').removeClass('treeSelected');
+            $('#content3').addClass('treeSelected');
+            setTreeNodeSelected($('#content3'));
+            // setTreeNodeSelected4x4($('#content3'));
+        })
     }
-    // keep 16:9
-    var win_width = parseFloat($(document).width());
-    $('body').css('height', win_width * 1080 / 1920 + 'px');
-    $('p').each(function() {
-        var h = $(this).parent().css('height');
-        $(this).css('line-height', h);
-    })
 
-    $('a').each(function() {
-        var h = $(this).parent().css('height');
-        $(this).css('line-height', h);
-    })
-
-    // adjust logo
-    var w = parseFloat($('#nav_left img').css('width'));
-    var img_h = w * 0.2901;
-    $('#nav_left img').css('height', img_h + 'px');
-    var h = parseFloat($('#nav_left').css('height'));
-    $('#nav_left img').css('margin-top', (h - img_h) / 2 + 'px');
-    $('#nav_left img').css('margin-bottom', (h - img_h) / 2 + 'px');
-
-
-    // welcome
-    var myDate = new Date();
-    var year = myDate.getFullYear();
-    var month = myDate.getMonth() + 1;
-    var day = myDate.getDate();
-    var dayOfWeek = myDate.getDay();
-    var dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
-    $('#tabs_right p').text('欢迎您: ' + cookie_name + ' 今天是' + year + '年' + month + '月' + day + '月' +
-        '   星期' + dayOfWeekName[dayOfWeek]);
-
-    // ````````````````````````````` common use above
     //页面显示
     //nav
     
@@ -89,64 +212,7 @@ $(function(){
         });
     });
 
-    var body_width = parseInt($("body").css("width"));
-    var left_width = parseInt($("#main_left").css("width"));
-    var patrol_width = body_width-left_width -1;
-    console.log(body_width);
-    console.log(left_width);
-    console.log(patrol_width);
-    $('#patrol').css('width',patrol_width+'px');
-    var patrol_height = patrol_width * 1120/1920;
-    $('#patrol').css('height',patrol_height+'px');
-
     
-
-    // $('body').show();
-    //登录用户
-    if((Cookies.get("sessionId")== null) || (Cookies.get("sessionId")== "")){
-        $('body').hide();
-        window.location.href = 'login';
-    }else{
-        
-        // if(Cookies.get("userType")== 0){
-        //     //reserve
-        //     $('.container-fluid div:eq(3) a:eq(0)').attr('href','/general_user');
-        // }
-        // $('body').show();
-    }
-
-
-    //datepicker默认日期
-    var month0 = (month<10)?('0'+month):(month);
-    var day0 = (day<10)?('0'+day):(day);
-    var time = year+'-'+month0+'-'+day0;
-
-    //设备列表
-    // list1
-    var channeltree = channelTree();
-    $('#content1').treeview({
-        data: channeltree,
-        levels: 3,
-        showBorder: false,
-        showCheckbox: false,
-        showTags: false,
-        // emptyIcon: "glyphicon glyphicon-facetime-video",
-        collapseIcon: "glyphicon glyphicon-chevron-down",
-        expandIcon: "glyphicon glyphicon-chevron-right"
-    });
-    $('#content1').addClass('treeSelected');
-    setTreeNodeSelected($('#content1'));
-    // setTreeNodeSelected4x4($('#content1'));
-
-    // content max height
-    var h = parseFloat($('#tree').css('height'));
-    var list_h = parseFloat($('#list1').css('height'));
-    $('.content').css('max-height', h - 3 * list_h + 'px');
-
-    $('.content ul').css('margin', '0px');
-    $('.content ul li').css('background-color', 'rgb(170,247,247)');
-    $('.content ul li').css('padding', '10px');
-    $('.indent').css('margin', '5px');
 
     $('#tree').click(function() {
         $('.content ul').css('margin', '0px');
@@ -155,58 +221,7 @@ $(function(){
         $('.indent').css('margin', '5px');
     })
 
-    $('#list1').click(function() {
-        var channeltree = channelTree();
-        $('#content1').treeview({
-            data: channeltree,
-            levels: 3,
-            showBorder: false,
-            showCheckbox: false,
-            showTags: false,
-            // emptyIcon: "glyphicon glyphicon-facetime-video",
-            collapseIcon: "glyphicon glyphicon-chevron-down",
-            expandIcon: "glyphicon glyphicon-chevron-right"
-        });
-
-        $('#content1').show();
-        $('#content2').hide();
-        $('#content3').hide();
-        $('.content').removeClass('treeSelected');
-        $('#content1').addClass('treeSelected');
-        setTreeNodeSelected($('#content1'));
-        // setTreeNodeSelected4x4($('#content1'));
-    })
-
-    $('#list2').click(function() {
-        var linetree = deviceLineTree();
-        $('#content2').treeview({
-            data: linetree,
-            levels: 3,
-            showBorder: false,
-            showCheckbox: false,
-            showTags: false,
-            // emptyIcon: "glyphicon glyphicon-facetime-video",
-            collapseIcon: "glyphicon glyphicon-chevron-down",
-            expandIcon: "glyphicon glyphicon-chevron-right"
-        });
-        $('#content2').show();
-        $('#content1').hide();
-        $('#content3').hide();
-        $('.content').removeClass('treeSelected');
-        $('#content2').addClass('treeSelected');
-        setTreeNodeSelected($('#content2'));
-        // setTreeNodeSelected4x4($('#content2'));
-    })
-
-    $('#list3').click(function() {
-        $('#content3').show();
-        $('#content2').hide();
-        $('#content1').hide();
-        $('.content').removeClass('treeSelected');
-        $('#content3').addClass('treeSelected');
-        setTreeNodeSelected($('#content3'));
-        // setTreeNodeSelected4x4($('#content3'));
-    })
+    
 
     // 巡检操作
 
@@ -312,30 +327,7 @@ $(function(){
         $('#hoverContent').hide();
     })
 
-    var index = 0;
-    var size = 9;
-    var data = {
-        "userId": cookie_userId,
-        "userType": cookie_userType,
-        "index" : index,
-        "size" : size
-    };
-    getAllPics(data);
-
-    var index = 0;
-    var size = 16;
-    var data = {
-        "userId": cookie_userId,
-        "userType": cookie_userType,
-        "index" : index,
-        "size" : size
-    };
-    getAllPics4x4(data);
-
-    if(getSelectedDevice() == -1){
-        intervalIds.getAllPics = setInterval(function() {getAllPics(data);}, INTERVAL);
-        intervalIds.getAllPics4x4 = setInterval(function() {getAllPics4x4(data);}, INTERVAL);
-    }
+    
 
     //修改巡检时间间隔
     $('.interval').change(function(){
@@ -453,7 +445,7 @@ $(function(){
                 if (data.code == 0) {
                     rootNode = data.result.data;
                 } else {
-                    alert('获取设备树失败');
+                    console.log('获取设备树失败');
                 }
             }
         })
@@ -477,7 +469,7 @@ $(function(){
                 if (data.code == 0) {
                     rootNode = data.result.data;
                 } else {
-                    alert('获取设备树失败');
+                    console.log('获取设备树失败');
                 }
             }
         })

@@ -1,8 +1,10 @@
 $(function() {
+	$("body").hide();
     var cookie_sessionId = Cookies.get('sessionId');
     if(cookie_sessionId == undefined) {
         window.location.href = '/login';
     }else{
+    	$("body").show();
         var userInfo = getUsersBySession(cookie_sessionId);
         var cookie_userId = userInfo.userId;
         var cookie_userType = parseInt(userInfo.userType);
