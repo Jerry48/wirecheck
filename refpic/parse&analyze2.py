@@ -20,7 +20,7 @@ def parseConfig(xmlPath):
     if xmlPath:
         dom = xml.dom.minidom.parse(xmlPath)
     else:
-        dom = xml.dom.minidom.parse("/home/yzhou51/workspace/yaoyushi/config.xml")
+        dom = xml.dom.minidom.parse("./config.xml")
     root = dom.documentElement
     conf = {}
     conf['host'] = root.getElementsByTagName('host')[0].firstChild.data
@@ -54,7 +54,7 @@ def main():
     # Start analysizing images
     resItem = {}
     warning = {}
-    fileRoot = '/home/yzhou51/workspace/wire_check-dev-yzhou51/picserver/files'
+    fileRoot = '../../files'
     for idx,item in enumerate(imageList):
         # get pic path and ref_pic path
         # print item['picPath'], item['refPicPath']

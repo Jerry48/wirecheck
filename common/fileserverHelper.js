@@ -38,7 +38,7 @@ function fileExist(path){
 }
 
 function getFileServerUrl(param) {
-	debug('calling getFileServerUrl!');
+	// debug('calling getFileServerUrl!');
 
 	var path =  param.path || param;
 	var filePath = fileServerPath + path;
@@ -51,7 +51,7 @@ function getFileServerUrl(param) {
 }
 
 function getFileServerThumbnailUrl(param){
-	debug('calling getFileServerThumbnailUrl');
+	// debug('calling getFileServerThumbnailUrl');
 
 	var path =  param.path || param;
 	var filePath = fileServerPath + path;
@@ -63,7 +63,7 @@ function getFileServerThumbnailUrl(param){
 	var url = pictureServer + repath;
 
 	if (!fileExist(thumbnailPath)) {
-		debug('Try to create the thumbnail image!');
+		// debug('Try to create the thumbnail image!');
 		/*
 		sharp(filePath).resize(
 			wxConstants.THUMBNAIL.WIDTH, null).toFile(

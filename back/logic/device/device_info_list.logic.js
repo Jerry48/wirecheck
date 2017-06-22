@@ -48,6 +48,12 @@ var refModel = {
             return data >=0;
         },
     },
+    userType:{
+        data: 0,
+        rangeCheck: function(data){
+            return data >= 0;
+        },
+    },
 };
 
 function countPicDay(ids, result,fn){
@@ -102,7 +108,6 @@ function countPicMonth(ids, result,fn){
         var sqlstr = "select count(*) as total";
         sqlstr += ' from '+pictureModel.tableName+' where ';
         sqlstr += 'createTime like "'+monthStr+'%" and deviceID = "' + item +'"';
-        console.log(sqlstr);
         var query = {
             sqlstr: sqlstr
         }
@@ -285,6 +290,7 @@ function processRequest(param, fn){
     var order = param.order && 'deviceID';
     var userId = param.userId;
     var userType = (param.userType === undefined) ? 1 : param.userType;
+    console.log("userType: ",userType);
 
 	var info = [];
     var ids = [];
@@ -316,7 +322,9 @@ function processRequest(param, fn){
             }
         },
         function(result,next){
-            if(userType){
+            console.log(userType);
+            if(parseInt(userType)){
+
                 var sqlstr = 'select * from tb_device_info;';
                 var query = {
                     sqlstr: sqlstr,
@@ -330,6 +338,8 @@ function processRequest(param, fn){
                     	for(var i=0;i<rows.length;i++){
                     		ids.push(rows[i].deviceID)
                     	}
+                        console.log("all devices: ");
+                        console.log(ids);
                         next(null,ids);
                     }
                 });
@@ -353,6 +363,8 @@ function processRequest(param, fn){
                     	for(var i=0;i<rows.length;i++){
                     		ids.push(rows[i].deviceId)
                     	}
+                        console.log("privilege devices: ");
+                        console.log(ids);
                         next(null,ids);
                     }
                 });
@@ -384,6 +396,7 @@ function processRequest(param, fn){
         //     });
         // },
         function(ids,next){
+            ids = ids.sort();
         	var total = ids.length;
         	console.log(ids.length);
             var offset = index * size;
@@ -428,7 +441,7 @@ function processRequest(param, fn){
                             lineId: rows[i].lineId,
                             version: rows[i].version,
                         }
-                        ids.push(rows[i].deviceID);
+                        // ids.push(rows[i].deviceID);
                     }
                     var result = {
                         total: total,
@@ -443,9 +456,10 @@ function processRequest(param, fn){
             findLineInfo(result,next);
         },
     	function(result,next){
+            console.log('@@@@@@@@@@@@@@@ product',ids);
     		var sqlstr = "select id,deviceMeid,deviceTele,deviceDangerID";
             sqlstr += ' from '+deviceProductModel.tableName+' where ';
-            sqlstr += 'id in("' + ids.join('","') +'")';
+            sqlstr += 'id in("' + ids.join('","') +'") order by id ASC';
     		var query = {
     			sqlstr: sqlstr
     		}
@@ -460,6 +474,7 @@ function processRequest(param, fn){
                         for(var j=0;j<rows.length;j++){
                             if(ids[i]==rows[j].id){
                                 products.push({
+                                    deviceid: rows[j].id,
                                     deviceTele:rows[j].deviceTele,
                                     deviceMeid:rows[j].deviceMeid,
                                     deviceDangerID:rows[j].deviceDangerID,
@@ -467,6 +482,7 @@ function processRequest(param, fn){
                             }
                         }
                     }
+                    console.log("products:",products);
                     result.products = products;
                     // console.log(products);
                     next(null,result);                		
@@ -474,6 +490,7 @@ function processRequest(param, fn){
 			})
     	},
         function(result,next){
+
             var sqlstr = "select id,status,batteryVoltage,temperature,heartBeatTime";
             sqlstr += ' from '+deviceStatusModel.tableName+' where ';
             sqlstr += 'id in("' + ids.join('","') +'")';

@@ -21,6 +21,7 @@ $(function() {
         	$("#tab_edit").parent().hide();
         	$("#tab_area").parent().hide();
         	$("#tab_line").parent().hide();
+        	$("#tabs_left li:eq(1)").hide();
         }
 
 		$('#nav').css('visibility', 'visible')

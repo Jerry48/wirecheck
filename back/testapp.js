@@ -246,7 +246,7 @@ app.use('/general_user', function(req, res) {
 
 });
 
-var configFile = fs.readFileSync(config.rootdir+'config.json');
+var configFile = fs.readFileSync('../config.json');
 //for pic download
 app.get('/config', function(req, res) {
   res.send(config);

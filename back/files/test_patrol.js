@@ -24,6 +24,10 @@ $(function(){
         var cookie_createGroup = userDetails.createGroup;
         var cookie_name = userDetails.name;
 
+        if(!cookie_userType) {
+            $("#tabs_left li:eq(1)").hide();
+        }
+
         $('#nav').css('visibility', 'visible');
         $('#main').css('visibility', 'visible');
 

@@ -18,6 +18,10 @@ $(function() {
         var cookie_createGroup = userDetails.createGroup;
         var cookie_name = userDetails.name;
 
+        if(!cookie_userType) {
+            $("#tab_set").parent().hide();
+        }
+
         // keep 16:9
         var win_width = parseFloat($(document).width());
         $('body').css('height', win_width * 1080 / 1920 + 'px');
