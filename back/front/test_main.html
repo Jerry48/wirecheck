@@ -28,7 +28,7 @@
 
 <body>
     <div id="nav">
-        <div id="nav_left">
+        <div id="nav_left" style="cursor: pointer;">
             <!-- <img src="/elements/logo.gif"> -->
         </div>
         <div id="nav_right">
@@ -48,17 +48,18 @@
             <div id="tabs">
                 <div id="tabs_left">
                     <ul>
-                        <li class="tabs" style="margin-left: 0px;"><a target="_blank" href="/patrol">巡检</a></li>
-                        <li class="tabs"><a target="_blank" href="/device">设备管理</a></li>
-                        <li class="tabs"><a target="_blank" href="/user">用户管理</a></li>
-                        <li class="tabs"><a href="#" id="logout">退出登录</a></li>
-                        <li class="tabs"><a href="#" id="history">历史图片</a></li>
-                        <li class="tabs"><a href="#" id="temperature">线路测温</a></li>
-                        <li class="tabs"><a href="#">温度曲线</a></li>
+                        <li class="tabs" style="margin-left: 0px;"><a target="_blank" href="/patrol" id="patrol" data-role="href">巡检</a></li>
+                        <li class="tabs"><a target="_blank" href="/device" id="device" data-role="href">设备管理</a></li>
+                        <li class="tabs"><a target="_blank" href="/user" id="user" data-role="href">用户管理</a></li>
+                        
+                        <li class="tabs"><a href="#" id="logout" data-role="href">退出登录</a></li>
+                        <li class="tabs"><a href="#" id="history" data-role="tab">历史图片</a></li>
+                        <li class="tabs"><a href="#" id="temperature" data-role="tab">线路测温</a></li>
+                        <li class="tabs"><a href="#" data-role="tab">温度曲线</a></li>
                     </ul>
                 </div>
                 <div id="tabs_right">
-                    <p style="margin-right: 5px">2014年1月1日</p>
+                    <p style="margin-right: 5px"></p>
                 </div>
             </div>
         </div>
@@ -106,7 +107,7 @@
                         </li>
                     </ul>
                 </div>
-                <div id="buttons_right">
+                <div id="buttons_right" style="padding-right: 30px;" class="text-right">
                     <p style="display: inline;">微信：</p>
                     <p style="display: inline;margin-right: 10px;" id="wechat-status"></p>
                     <p style="display: inline;">设备：</p>
@@ -155,7 +156,7 @@
                                 </div>
                             </div>
                             <div id="pics2" class="pics">
-                                <div id="pic2_desc" class="desc">
+                                <div id="pic2_desc" class="desc  text-center" >
                                     <p>12:00</p>
                                 </div>
                                 <div id="imgs2" class="img">

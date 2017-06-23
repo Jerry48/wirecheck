@@ -1,5 +1,3 @@
-var intervalIds = {};
-
 $(function(){
     var cookie_sessionId = Cookies.get('sessionId');
     if(cookie_sessionId == undefined) {
@@ -101,7 +99,7 @@ $(function(){
         // content max height
         var h = parseFloat($('#tree').css('height'));
         var list_h = parseFloat($('#list1').css('height'));
-        $('.content').css('max-height', h - 3 * list_h + 'px');
+        $('.content').css('max-height', h - 2 * list_h + 'px');
 
         $('.content ul').css('margin', '0px');
         $('.content ul li').css('background-color', 'rgb(170,247,247)');

@@ -1,25 +1,22 @@
-var openid = Cookies.get('openid');
-var accessToken = Cookies.get('access_token');
-var refreshToken = Cookies.get('refresh_token');
-var expiresIn = Cookies.get('expires_in');
-var nickname = Cookies.get('nickname');
-var sex = Cookies.get('sex');
-var language = Cookies.get('language');
-var city = Cookies.get('city');
-var province = Cookies.get('province');
-var country = Cookies.get('country');
-var headimageurl = Cookies.get('headimageurl');
+$(function(){
+    var openid = Cookies.get('openid');
+    var accessToken = Cookies.get('access_token');
+    var refreshToken = Cookies.get('refresh_token');
+    var expiresIn = Cookies.get('expires_in');
+    var nickname = Cookies.get('nickname');
+    var sex = Cookies.get('sex');
+    var language = Cookies.get('language');
+    var city = Cookies.get('city');
+    var province = Cookies.get('province');
+    var country = Cookies.get('country');
+    var headimageurl = Cookies.get('headimageurl');
 
-var ifBind = Cookies.get('ifBind');
-var userId = Cookies.get('userId');
-var userName = Cookies.get('userName');
-var mobile = Cookies.get('mobile');
-var ifClose = Cookies.get('ifClose');
+    var ifBind = Cookies.get('ifBind');
+    var userId = Cookies.get('userId');
+    var userName = Cookies.get('userName');
+    var mobile = Cookies.get('mobile');
+    var ifClose = Cookies.get('ifClose');
 
-function test(){
-    document.addEventListener('WeixinJSBridgeReady', function(){ WeixinJSBridge.call('closeWindow'); }, false);
-}
-$(document).ready(function(){
     if(ifClose == '1'){
         document.addEventListener('WeixinJSBridgeReady', function(){ WeixinJSBridge.call('closeWindow'); }, false);
     }
@@ -120,11 +117,8 @@ $(document).ready(function(){
                 }
             })        
         } 
-    })
-});  
-
-
-function checkBind(data){
+    });
+    function checkBind(data){
     $.ajax({
         url:'/v1/user/ifbind',
         type:"GET",
@@ -166,3 +160,6 @@ function checkBind(data){
         }
     });
 }
+});  
+
+

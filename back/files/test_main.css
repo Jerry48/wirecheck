@@ -285,11 +285,10 @@ a {
 }
 
 #buttons_right {
-    width: 30%;
+    width: 50%;
     height: 100%;
     color: white;
     float: left;
-    margin-left: 30px;
 }
 
 #interval {
