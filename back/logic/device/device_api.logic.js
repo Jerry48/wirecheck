@@ -171,7 +171,4 @@ router.use(api_device_find_update_files.router);
 var api_device_delete_update_files = require('./device_delete_update_files.logic');
 router.use(api_device_delete_update_files.router);
 
-var api_port_check = require('./port_check.logic');
-router.use(api_port_check.router);
-
 module.exports.router = router;

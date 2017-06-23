@@ -60,4 +60,7 @@ router.use(api_query_videoserver_working_logs.router);
 var api_query_pic_download_zip = require('./query_pic_download_zip.logic');
 router.use(api_query_pic_download_zip.router);
 
+var api_query_server_status = require('./query_server_status.logic');
+router.use(api_query_server_status.router);
+
 module.exports.router = router;

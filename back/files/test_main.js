@@ -108,6 +108,50 @@ $(function() {
     $('#historyArea p').css('margin-bottom','0px');
     $('#historyArea').css('overflow-y','auto');
 
+    // server status
+    checkServer();
+    intervalIds.checkServer = setInterval(checkServer,60000);   
+
+    function checkServer() {
+        $.ajax({
+            url: '/v1/query/server/status',
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+                if (data.code == 0) {
+                    var status = data.result.serverStatus;
+                    if(status.wechatserver) {
+                        $("#wechat-status").html("在线");
+                        $("#wechat-status").css("color", "blue")
+                    }else{
+                        $("#wechat-status").html("离线");
+                        $("#wechat-status").css("color", "red")
+                    }
+
+                    if(status.socketserver) {
+                        $("#socket-status").html("在线");
+                        $("#socket-status").css("color", "blue")
+                    }else{
+                        $("#socket-status").html("离线");
+                        $("#socket-status").css("color", "red")
+                    }
+
+                    if(status.fileserver) {
+                        $("#pic-status").html("在线");
+                        $("#pic-status").css("color", "blue")
+                    }else{
+                        $("#pic-status").html("离线");
+                        $("#pic-status").css("color", "red")
+                    }
+                } else {
+                    console.log(data);
+                }
+            }
+        });
+    }
+
     //logout
     $('#logout').click(function() {
 

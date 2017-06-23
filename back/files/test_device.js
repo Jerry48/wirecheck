@@ -890,6 +890,7 @@ $(function() {
 	}
 
 	$('#modalUpload .modal-footer button:eq(0)').click(function() {
+		console.log('test');
 		var formData = new FormData($('form')[0]);
 		$('#progressbar').show();
 		$.ajax({
@@ -1697,8 +1698,6 @@ $(function() {
 			'id': inputData.parentId,
 			'level': inputData.level
 		}
-
-		console.log(data);
 
 		$.ajax({
 			url: '/v1/device/level/childs',
