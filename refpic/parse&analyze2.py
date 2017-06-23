@@ -66,11 +66,11 @@ def main():
         sensitivity = item['sensitivity']
 
         start = time.time()
-        try:
-            salient, salient_loc, resImage = caldiff2.imgSimilarity(img, refImg, rois, conf, sensitivity)
-        except:
-            continue
-        # salient, salient_loc, resImage = caldiff2.imgSimilarity(img, refImg, rois, conf, sensitivity)
+        # try:
+        #     salient, salient_loc, resImage = caldiff2.imgSimilarity(img, refImg, rois, conf, sensitivity)
+        # except:
+        #     continue
+        salient, salient_loc, resImage = caldiff2.imgSimilarity(img, refImg, rois, conf, sensitivity)
 
         end = time.time()
         print 'Time cost: ', end-start

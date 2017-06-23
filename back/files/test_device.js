@@ -226,6 +226,7 @@ $(function() {
 		var data = {
 			'index': parseInt($('#table').attr('infoedit-index')) - 1,
 			'order': 'deviceID',
+			'userType': cookie_userType,
 		};
 		deviceInfoEdit(data);
 	});
@@ -1155,6 +1156,7 @@ $(function() {
 	function deviceInfoEdit(inputData) {
 		var data = {
 			'userId': cookie_userId,
+			'userType': cookie_userType,
 			'index': inputData.index,
 			'size': 50,
 			'order': inputData.order,

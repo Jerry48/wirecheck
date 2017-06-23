@@ -83,6 +83,7 @@ def imgSimilarity(imgPath, refImgPath, roi, conf, senstivity):
     # timg1 = np.array(img1.getdata(), dtype=np.uint8).reshape(img1_width, -1)
     # timg2 = np.array(img2.getdata(), dtype=np.uint8).reshape(img2_width, -1)
     print timg1.shape[1],timg1.shape[0]
+    print timg2.shape[1],timg2.shape[0]
     sub_x, sub_y = timg1.shape[1]/nx, timg1.shape[0]/ny
     print 'sub_x,sub_y:',sub_x,sub_y 
 
@@ -107,6 +108,7 @@ def imgSimilarity(imgPath, refImgPath, roi, conf, senstivity):
             draw.rectangle(((roix[0], roix[1]),(roix[2], roix[3])), outline = "red")
             if contain(patch, roix):
                 #print patch, roi
+                print i ,",",j
                 d = fftMatch(i,j)
                 index.append(c)
                 match.append(d)
