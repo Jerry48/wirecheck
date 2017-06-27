@@ -37,17 +37,16 @@ $(function() {
 	        $(this).css('line-height', h);
 	    })
 
-		$('#buttons_right p').each(function() {
+		$('p').each(function() {
 	        let h = $(this).parent().css('height');
 	        $(this).css('line-height', h);
+            $(this).css("margin-bottom", "0px");
 	    })
 
 	    $('a').each(function() {
 	        let h = $(this).parent().css('height');
 	        $(this).css('line-height', h);
 	    })
-
-	    $("p").css("margin-bottom", "0px");
 
 	    // adjust logo
 	    let w = parseFloat($('#nav_left img').css('width'));
@@ -160,7 +159,10 @@ $(function() {
 	        showTags: false,
 	        collapseIcon: "glyphicon glyphicon-chevron-down",
 	        expandIcon: "glyphicon glyphicon-chevron-right",
-	        selectedColor: "blue",
+            backColor: "rgb(170, 247, 247)",
+            color: "rgb(1, 111, 111)",
+            selectedBackColor: "rgb(1, 111, 111)",
+            selectedColor: "rgb(170, 247, 247)",
 	    });
 	    $('#content1').addClass('treeSelected');
 	    setTreeNodeSelected($('#content1'));
@@ -170,7 +172,6 @@ $(function() {
 	    let list_h = parseFloat($('#list1').css('height'));
 	    $('.content').css('max-height', h - 2 * list_h + 'px');
 	    $('.content ul').css('margin', '0px');
-	    $('.content ul li').css('background-color', 'rgb(170,247,247)');
 	    $('.content ul li').css('padding', '10px');
 	    $('.indent').css('margin', '5px');
 
@@ -331,7 +332,6 @@ $(function() {
 
     $('#tree').click(function() {
         $('.content ul').css('margin', '0px');
-        $('.content ul li').css('background-color', 'rgb(170,247,247)');
         $('.content ul li').css('padding', '10px');
         $('.indent').css('margin', '5px');
     })
@@ -345,7 +345,11 @@ $(function() {
             showCheckbox: false,
             showTags: false,
             collapseIcon: "glyphicon glyphicon-chevron-down",
-            expandIcon: "glyphicon glyphicon-chevron-right"
+            expandIcon: "glyphicon glyphicon-chevron-right",
+            backColor: "rgb(170, 247, 247)",
+            color: "rgb(1, 111, 111)",
+            selectedBackColor: "rgb(1, 111, 111)",
+            selectedColor: "rgb(170, 247, 247)",
         });
 
         $('#content1').show();
@@ -365,7 +369,11 @@ $(function() {
             showCheckbox: false,
             showTags: false,
             collapseIcon: "glyphicon glyphicon-chevron-down",
-            expandIcon: "glyphicon glyphicon-chevron-right"
+            expandIcon: "glyphicon glyphicon-chevron-right",
+            backColor: "rgb(170, 247, 247)",
+            color: "rgb(1, 111, 111)",
+            selectedBackColor: "rgb(1, 111, 111)",
+            selectedColor: "rgb(170, 247, 247)",
         });
         $('#content2').show();
         $('#content1').hide();
@@ -791,18 +799,19 @@ $(function() {
 
         if (chartShowFlag) {
             const searchType = 'day';
+            let label = "";
             switch (searchType) {
                 case 'day':
-                    const label = hourLabels;
+                    label = hourLabels;
                     break;
                 case 'month':
-                    const label = dayLabels;
+                    label = dayLabels;
                     break;
                 case 'year':
-                    const label = monthLabels;
+                    label = monthLabels;
                     break;
                 default:
-                    const label = monthLabels;
+                    label = monthLabels;
                     break;
             }
 

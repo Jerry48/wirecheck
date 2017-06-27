@@ -17,13 +17,13 @@ body {
 
 @media screen and (max-width: 1600px) {
     * {
-        font-size: 12px;
+        font-size: 11px;
     }
 }
 
 @media screen and (min-width: 1600px) {
     * {
-        font-size: 14px;
+        font-size: 13px;
     }
 }
 
