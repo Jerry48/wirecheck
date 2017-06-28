@@ -220,36 +220,35 @@ $(function() {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            async: false,
-            success: function(data) {
-                if (data.code == 0) {
-                    const status = data.result.serverStatus;
-                    if(status.wechatserver) {
-                        $("#wechat-status").html("在线");
-                        $("#wechat-status").css("color", "blue")
-                    }else{
-                        $("#wechat-status").html("离线");
-                        $("#wechat-status").css("color", "red")
-                    }
-
-                    if(status.socketserver) {
-                        $("#socket-status").html("在线");
-                        $("#socket-status").css("color", "blue")
-                    }else{
-                        $("#socket-status").html("离线");
-                        $("#socket-status").css("color", "red")
-                    }
-
-                    if(status.fileserver) {
-                        $("#pic-status").html("在线");
-                        $("#pic-status").css("color", "blue")
-                    }else{
-                        $("#pic-status").html("离线");
-                        $("#pic-status").css("color", "red")
-                    }
-                } else {
-                    console.log(data);
+            async: false
+        }).then(data => {
+            if (!data.code) {
+                const status = data.result.serverStatus;
+                if(status.wechatserver) {
+                    $("#wechat-status").html("在线");
+                    $("#wechat-status").css("color", "blue")
+                }else{
+                    $("#wechat-status").html("离线");
+                    $("#wechat-status").css("color", "red")
                 }
+
+                if(status.socketserver) {
+                    $("#socket-status").html("在线");
+                    $("#socket-status").css("color", "blue")
+                }else{
+                    $("#socket-status").html("离线");
+                    $("#socket-status").css("color", "red")
+                }
+
+                if(status.fileserver) {
+                    $("#pic-status").html("在线");
+                    $("#pic-status").css("color", "blue")
+                }else{
+                    $("#pic-status").html("离线");
+                    $("#pic-status").css("color", "red")
+                }
+            } else {
+                console.log(data);
             }
         });
     }
@@ -270,15 +269,13 @@ $(function() {
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            async: false,
-            success: function(data) {
-                if (data.code == 0) {
-                    window.location.href = 'login';
-                    Cookies.set('sessionId', null);
-                } else {
-                    alert('用户登出失败');
-                    console.log(data);
-                }
+            async: false
+        }).then(data => {
+            if (!data.code) {
+                window.location.href = 'login';
+                Cookies.set('sessionId', null);
+            } else {
+                alert('用户登出失败');
             }
         });
     });
@@ -1480,29 +1477,7 @@ function getAlertRecords(index) {
         }
     }); // end of /v1/query/device/alert/logs ajax
 
-    function checkUser(inputData) {
-	    const data = {
-	        'userName': inputData.userName,
-	        'password': inputData.password,
-	    };
-	    let flag = 0;
-	    $.ajax({
-	        url: '/v1/user/check',
-	        type: "GET",
-	        data: data,
-	        contentType: "application/json; charset=utf-8",
-	        dataType: "json",
-	        async: false,
-	        success: function(data) {
-	            if (data.code != 0) {
-	                alert('用户名或密码有误!');
-	            } else {
-	                flag = 1;
-	            }
-	        }
-	    });
-	    return flag;
-	}
+    
 }
 
 
@@ -1600,8 +1575,30 @@ function addMapControl() {
     map.addControl(ctrl_sca);
 }
 
-function getDevicePicsHistory(data) {
-        // clearInterval(intervalIds.findDevicePic);
+function checkUser(inputData) {
+        const data = {
+            'userName': inputData.userName,
+            'password': inputData.password,
+        };
+        let flag = 0;
+        $.ajax({
+            url: '/v1/user/check',
+            type: "GET",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false
+        }).then(data => {
+            if (data.code) {
+                alert('用户名或密码有误!');
+            } else {
+                flag = 1;
+            }
+        });
+        return flag;
+    }
+
+    function getDevicePicsHistory(data) {
         var outerData = data;
         $.ajax({
             url:'/v1/search/pics/device',
@@ -1610,155 +1607,111 @@ function getDevicePicsHistory(data) {
             contentType:"application/json; charset=utf-8",
             dataType:"json",
             async:false,
-            success: function(data){
-                if (data.code == 0) {
-                    // if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1)
-                    //     $('#next').hide();
-                    // else
-                    //     $('#next').show();
-
-                    // $('body').attr('pic-index',outerData.index);
-                    // $('body').attr('deviceId',outerData.id);
-                    // $('body').attr('channelNo',outerData.channelNo);
-
-                    // if($('body').attr('pic-index') > 0){
-                    //     $('#last').show();
-                    // }else{
-                    //     $('#last').hide();
-                    // }
-
-                    var list = data.result.list;
-
-                    for (var i = 0; i < list.length; ++i) {
-                        if (list[i].picType == 2){
-                                // for ref pic
+        }).then(data => {
+            if (!data.code) {
+                const pics = data.result.list;
+                for (let i in pics) {
+                    const pic = pics[i];
+                    let name = "";
+                    let timeName = "";
+                    if (pic.picType == 2){
+                            // for ref pic
+                    }else{
+                        if (pic.picType == 1){
+                            name = pic.name;
+                            timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
                         }else{
-                            if (list[i].picType == 1){
-                                var name = list[i].name;
-                                var timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
-                                // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 告警图片:"+timeName);
-                            }else{
-                                var name = list[i].name;
-                                var timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
-                                // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 原始图片:"+timeName);
-                            }
-                            var w = $('#hispics img').css('width');
-                            // $('#hispics img').css('height',w);
-                            $('#hispics img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
-                            $('#hispics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#hispics img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#hispics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#hispics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-                            $('#hispics p:eq(' + i + ')').text(list[i].time+' '+list[i].deviceId);
-                            // $('#picCount').text('第'+(outerData.index + 1)+'页 共'+Math.ceil(data.result.total / outerData.size)+'页');
-                        }                    
-                    }
-                    // 进度条
-                    var viewer = new Viewer(document.getElementById('hispics'), {
-                        url: 'data-original',
-                    });
-                 
-                    
-                    // for (var i = 0; i < list.length; ++i) {
-                    //     $('img.magnify:eq(' + (i + 4) + ')').attr('src', list[i].picUrl);
-                    // }
-                } else {
-                    alert('查无图片！');
-                    console.log(data);
+                            name = pic.name;
+                            timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
+                        }
+                        const w = $('#hispics img').css('width');
+                        $('#hispics img:eq(' + i + ')').attr('src', pic.thumbnailPicUrl);
+                        $('#hispics img:eq(' + i + ')').attr('data-original', pic.picUrl);
+                        $('#hispics img:eq(' + i + ')').attr('picId', pic.picId);
+                        $('#hispics img:eq(' + i + ')').attr('channelNo', pic.channelNo);
+                        $('#hispics img:eq(' + i + ')').attr('deviceId', pic.deviceId);
+                        $('#hispics p:eq(' + i + ')').text(pic.time+' '+pic.deviceId);
+                    }                    
                 }
+                const viewer = new Viewer(document.getElementById('hispics'), {
+                    url: 'data-original',
+                });
+            } else {
+                alert('查无图片！');
+                console.log(data);
             }
-        })// end of ajax   
-}
+        });
+    }
 
-
-function getAllPicsHistory(data) {
-    // clearInterval(intervalIds.getAllPics);
-    var outerData = data;
-    $.ajax({
+    function getAllPicsHistory(data) {
+        const outerData = data;
+        $.ajax({
             url: '/v1/search/pics/all',
             type: "GET",
             data: data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            async: false,
-            success: function(data) {
-                if (data.code == 0) {
-                    // $('body').attr('allpic-index', outerData.index);
-                    // $('body').attr('if-all', 1);
-
-                    var list = data.result.list;
-
-                    for (var i = 0; i < list.length; ++i) {
-                        if (list[i].picType == 2){
-                                // for ref pic
-                        }else{
-                            if (list[i].picType == 1){
-                                var name = list[i].name;
-                                var timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
-                                // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 告警图片:"+timeName);
-                            }else{
-                                var name = list[i].name;
-                                var timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
-                                // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 原始图片:"+timeName);
-                            }
-                            var w = $('#hispics img').css('width');
-                            // $('#hispics img').css('height',w);
-                            $('#hispics img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
-                            $('#hispics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#hispics img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#hispics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#hispics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-                            $('#hispics p:eq(' + i + ')').text(list[i].time+' '+list[i].deviceId);
-                            // $('#picCount').text('第'+(outerData.index + 1)+'页 共'+Math.ceil(data.result.total / outerData.size)+'页');
-                        }                    
-                    }
-                    // 进度条
-                    var viewer = new Viewer(document.getElementById('hispics'), {
-                        url: 'data-original',
-                    });
-                } else {
-                    if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) {
-                        console.log('这已经是最后一页！');
-                    }else if ($('body').attr('allpic-index') == 0) {
-                        console.log('这是第一页！');
+            async: false
+        }).then(data => {
+            if (!data.code) {
+                // $('body').attr('allpic-index', outerData.index);
+                // $('body').attr('if-all', 1);
+                const pics = data.result.list;
+                for (let i in pics) {
+                    const pic = pics[i];
+                    let name = "";
+                    let timeName = "";
+                    if (pic.picType == 2){
+                            // for ref pic
                     }else{
-                        console.log('查无图片！');
-                    }
+                        if (pic.picType == 1){
+                            name = pic.name;
+                            timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
+                        }else{
+                            name = pic.name;
+                            timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
+                        }
+                        const w = $('#hispics img').css('width');
+                        $('#hispics img:eq(' + i + ')').attr('src', pic.thumbnailPicUrl);
+                        $('#hispics img:eq(' + i + ')').attr('data-original', pic.picUrl);
+                        $('#hispics img:eq(' + i + ')').attr('picId', pic.picId);
+                        $('#hispics img:eq(' + i + ')').attr('channelNo', pic.channelNo);
+                        $('#hispics img:eq(' + i + ')').attr('deviceId', pic.deviceId);
+                        $('#hispics p:eq(' + i + ')').text(pic.time+' '+pic.deviceId);
+                    }                    
+                }
+                const viewer = new Viewer(document.getElementById('hispics'), {
+                    url: 'data-original',
+                });
+            } else {
+                if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) {
+                    console.log('这已经是最后一页！');
+                }else if ($('body').attr('allpic-index') == 0) {
+                    console.log('这是第一页！');
+                }else{
+                    console.log('查无图片！');
                 }
             }
-        }) // end of ajax   
+        });
+    }
 
-}
-
-function tempDevice(data) {
-    $.ajax({
-        url: '/v1/device/cmd',
-        type: "POST",
-        data: JSON.stringify(data),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        async: false,
-        success: function(data) {
-            if (data.code == 0) {
-                var list = data.result.list;
+    function tempDevice(data) {
+        $.ajax({
+            url: '/v1/device/cmd',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false
+        }).then(data => {
+            if (!data.code) {
+                const temps = data.result.list;
                 $('#tempArea table tbody').empty();
-                for (var i = 0; i < list.length; i++) {
-                    // switch(list[i].status){
-                    //     case 0:
-                    //         var html = '<td style="color:red">离线</td>';
-                    //         break;
-                    //     case 1:
-                    //         var html = '<td style="color:blue">在线</td>';
-                    //         break;
-                    //     default:
-                    //         var html = '<td>离线</td>';
-                    //         break;
-                    // } 
-                    $('#tempArea table tbody').append('<tr id="' + list[i].cmdId + '"><td>' + list[i].cmdId + '</td><td>' + list[i].temperature + '</td><td>' + list[i].time + '</td><td><button>查看</button></td></tr>')
+                for (let temp of temps) {
+                    $('#tempArea table tbody').append('<tr id="' + temp.cmdId + '"><td>' + temp.cmdId + '</td><td>' + temp.temperature + '</td><td>' + temp.time + '</td><td><button>查看</button></td></tr>')
                 }
             } else {
                 console.log('获取设备(组)失败');
             }
-        }
-    });
-}
+        });
+    }
