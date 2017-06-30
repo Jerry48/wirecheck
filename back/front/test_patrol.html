@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <!--引用百度地图API-->
-  <style type="text/css">
-        .iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
-        .iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
-  </style>
-            
-  <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+	<meta charset="utf-8">
+	<!--引用百度地图API-->
+	<style type="text/css">
+		.iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
+		.iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
+	</style>
 
-  <title>输电线路可视化巡检系统</title>
-  <link rel="stylesheet" type="text/css" href="test_patrol.css">
-  <link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="bootstrap-daterangepicker/daterangepicker.css">
-    <!-- 图片查看器 -->
-  <link rel="stylesheet" href="viewer.min.css">
-  <!-- <link rel="stylesheet" href="css/smoothzoom.css"> -->
-  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-  <!-- for progressbar -->
-  <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
-  <!-- <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css"> -->
+	<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+
+	<title>输电线路可视化巡检系统</title>
+	<link rel="stylesheet" type="text/css" href="test_patrol.css">
+	<link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap-daterangepicker/daterangepicker.css">
+	<!-- 图片查看器 -->
+	<link rel="stylesheet" href="viewer.min.css">
+	<!-- <link rel="stylesheet" href="css/smoothzoom.css"> -->
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+	<!-- for progressbar -->
+	<!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+	<!-- <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css"> -->
+	<link rel="stylesheet" type="text/css" href="dashboard.css">
 </head>
 <body>
-
 	<div id="nav">
 		<div id="nav_left">
 			<!-- <img src="/elements/logo.gif"> -->
@@ -58,287 +58,287 @@
 		</div>
 	</div>
 
-<div id="main" style="z-index: -1;">
-	<div id="main_left">
-            <div id="tree">
-                <div id="list1" class="list">
-                    <img src="elements/list_icon.gif">
-                    <p>设备列表</p>
-                    <img src="elements/list_down_arrow.gif">
-                </div>
-                <div id="content1" class="content"></div>
-                <div id="list2" class="list">
-                    <img src="elements/list_icon.gif">
-                    <p>线路列表</p>
-                    <img src="elements/list_down_arrow.gif">
-                </div>
-                <div id="content2" class="content" style="display: none;"></div>
+	<div id="main" style="z-index: -1;">
+		<div id="main_left">
+			<div id="tree">
+				<div id="list1" class="list">
+					<img src="elements/list_icon.gif">
+					<p>设备列表</p>
+					<img src="elements/list_down_arrow.gif">
+				</div>
+				<div id="content1" class="content"></div>
+				<div id="list2" class="list">
+					<img src="elements/list_icon.gif">
+					<p>线路列表</p>
+					<img src="elements/list_down_arrow.gif">
+				</div>
+				<div id="content2" class="content" style="display: none;"></div>
 <!--                 <div id="list3" class="list">
                     <img src="elements/list_icon.gif">
                     <p>巡检分组</p>
                     <img src="elements/list_down_arrow.gif">
                 </div> -->
-<!--                 <div id="content3" class="content" style="display: none;"></div> -->
+                <!--                 <div id="content3" class="content" style="display: none;"></div> -->
             </div>
         </div>
-	<div id="patrol">
-		<div id="pics">
-			<div class="pic13">
-				<div class = 'pics border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics border-bottom' style="float: left;">
-					<img src="">
-				</div>
-			</div>
-			<div class="pic46">
-				<div class = 'pics border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics border-bottom' style="float: left;">
-					<img src="">
-				</div>
-			</div>
-			<div class="pic79">
-				<div class = 'pics border-right' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics border-right' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics' style="float: left;">
-					<img src="">
-				</div>
-			</div>
-		</div>
+        <div id="patrol">
+        	<div id="pics">
+        		<div class="pic13">
+        			<div class = 'pics border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        		</div>
+        		<div class="pic46">
+        			<div class = 'pics border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        		</div>
+        		<div class="pic79">
+        			<div class = 'pics border-right' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics border-right' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics' style="float: left;">
+        				<img src="">
+        			</div>
+        		</div>
+        	</div>
 
-		<div id="pics4x4" style="display: none;">
-			<div class="pic14">
-				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-bottom' style="float: left;">
-					<img src="">
-				</div>
-			</div>
-			<div class="pic58">
-				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-bottom' style="float: left;">
-					<img src="">
-				</div>
-			</div>
-			<div class="pic912">
-				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-bottom' style="float: left;">
-					<img src="">
-				</div>
-			</div>
-			<div class="pic1316">
-				<div class = 'pics4x4 border-right' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-right' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-right' style="float: left;">
-					<img src="">
-				</div>
-				<div class = 'pics4x4 border-bottom' style="float: left;">
-					<img src="">
-				</div>
-			</div>
-		</div>
-		<div id="operations">
-			<button id="fullScreen">全屏</button>
-			<button id="picsNumChange" style="">4x4</button>
-			<select class="interval">
-				<option value="20">20秒</option>
-				<option value="40">40秒</option>
-				<option value="60">1分</option>
-				<option value="300">5分</option>
-			</select>
-			<button class="push" style="">推送</button>
-		</div>
-	</div>
-</div>
+        	<div id="pics4x4" style="display: none;">
+        		<div class="pic14">
+        			<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        		</div>
+        		<div class="pic58">
+        			<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        		</div>
+        		<div class="pic912">
+        			<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        		</div>
+        		<div class="pic1316">
+        			<div class = 'pics4x4 border-right' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-right' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-right' style="float: left;">
+        				<img src="">
+        			</div>
+        			<div class = 'pics4x4 border-bottom' style="float: left;">
+        				<img src="">
+        			</div>
+        		</div>
+        	</div>
+        	<div id="operations">
+        		<button id="fullScreen">全屏</button>
+        		<button id="picsNumChange" style="">4x4</button>
+        		<select class="interval">
+        			<option value="20">20秒</option>
+        			<option value="40">40秒</option>
+        			<option value="60">1分</option>
+        			<option value="300">5分</option>
+        		</select>
+        		<button class="push" style="">推送</button>
+        	</div>
+        </div>
+    </div>
 
-<div id="fullMain" style="display: none;z-index: -1;">
-	<div class="pic13">
-		<div class = 'pics border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics border-bottom' style="float: left;">
-			<img src="">
-		</div>
-	</div>
-	<div class="pic46">
-		<div class = 'pics border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics border-bottom' style="float: left;">
-			<img src="">
-		</div>
-	</div>
-	<div class="pic79">
-		<div class = 'pics border-right' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics border-right' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics' style="float: left;">
-			<img src="">
-		</div>
-	</div>
-</div>
+    <div id="fullMain" style="display: none;z-index: -1;">
+    	<div class="pic13">
+    		<div class = 'pics border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    	</div>
+    	<div class="pic46">
+    		<div class = 'pics border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    	</div>
+    	<div class="pic79">
+    		<div class = 'pics border-right' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics border-right' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics' style="float: left;">
+    			<img src="">
+    		</div>
+    	</div>
+    </div>
 
-<div id="fullMain4x4" style="display: none;">
-	<div class="pic14">
-		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-bottom' style="float: left;">
-			<img src="">
-		</div>
-	</div>
-	<div class="pic58">
-		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-bottom' style="float: left;">
-			<img src="">
-		</div>
-	</div>
-	<div class="pic912">
-		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-bottom' style="float: left;">
-			<img src="">
-		</div>
-	</div>
-	<div class="pic1316">
-		<div class = 'pics4x4 border-right' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-right' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-right' style="float: left;">
-			<img src="">
-		</div>
-		<div class = 'pics4x4 border-bottom' style="float: left;">
-			<img src="">
-		</div>
-	</div>
-</div>
+    <div id="fullMain4x4" style="display: none;">
+    	<div class="pic14">
+    		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    	</div>
+    	<div class="pic58">
+    		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    	</div>
+    	<div class="pic912">
+    		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-right border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    	</div>
+    	<div class="pic1316">
+    		<div class = 'pics4x4 border-right' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-right' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-right' style="float: left;">
+    			<img src="">
+    		</div>
+    		<div class = 'pics4x4 border-bottom' style="float: left;">
+    			<img src="">
+    		</div>
+    	</div>
+    </div>
 
-<div id="hoverArea" style="position: fixed;bottom: 0px; height: 30px;width: 100%; background-color:transparent;z-index: 9999;display: none;overflow-y: hidden;">
-	<div id="hoverContent" style="display: none;">
-		<button id="exitFullScreen" style="">退出全屏</button>
-		
-		<button id="picsNumChangeFull" style="">4x4</button>
-		<select class="interval">
-			<option value="20">20秒</option>
-			<option value="40">40秒</option>
-			<option value="60">1分</option>
-			<option value="300">5分</option>
-		</select>
-		<button class='push' style="">推送</button>
-	</div>
-</div>
+    <div id="hoverArea" style="position: fixed;bottom: 0px; height: 30px;width: 100%; background-color:transparent;z-index: 9999;display: none;overflow-y: hidden;">
+    	<div id="hoverContent" style="display: none;">
+    		<button id="exitFullScreen" style="">退出全屏</button>
 
-<!-- 推送 -->
-<div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="padding-top: 200px">
-        <div class="modal-content">
-            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">图片推送</h4>
-            </div>
-            <div class="modal-body" id="modalPush-body" style="width: 100%">
-            	
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
+    		<button id="picsNumChangeFull" style="">4x4</button>
+    		<select class="interval">
+    			<option value="20">20秒</option>
+    			<option value="40">40秒</option>
+    			<option value="60">1分</option>
+    			<option value="300">5分</option>
+    		</select>
+    		<button class='push' style="">推送</button>
+    	</div>
+    </div>
+
+    <!-- 推送 -->
+    <div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    	<div class="modal-dialog" style="padding-top: 200px">
+    		<div class="modal-content">
+    			<div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+    				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    				<h4 class="modal-title" id="myModalLabel">图片推送</h4>
+    			</div>
+    			<div class="modal-body" id="modalPush-body" style="width: 100%">
+
+    			</div>
+    			<div class="modal-footer">
+    				<button type="button" class="">确定</button>
+    				<button type="button" class="" data-dismiss="modal">取消</button>
+    			</div>
+    		</div><!-- /.modal-content -->
+    	</div><!-- /.modal -->
+    </div>
 
 
-<script src="jquery.min.js"></script>
-<script src="js.cookie.js"></script>
-<script src="bootstrap-treeview.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="bootstrap-daterangepicker/moment.js"></script>
-<script type="text/javascript" src="bootstrap-daterangepicker/daterangepicker.js"></script>
-<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-<script src="assets/js/vendor/holder.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="assets/js/ie10-viewport-bug-workaround.js"></script>
-<script src="assets/js/ie-emulation-modes-warning.js"></script>
-<script type="text/javascript" src="ichart.1.2.min.js"></script>
-<script src="viewer.min.js"></script>
-<script src="jquery.rotate.js"></script>
-<!-- for progressbar -->
+    <script src="jquery.min.js"></script>
+    <script src="js.cookie.js"></script>
+    <script src="bootstrap-treeview.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bootstrap-daterangepicker/moment.js"></script>
+    <script type="text/javascript" src="bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="assets/js/ie-emulation-modes-warning.js"></script>
+    <script type="text/javascript" src="ichart.1.2.min.js"></script>
+    <script src="viewer.min.js"></script>
+    <script src="jquery.rotate.js"></script>
+    <!-- for progressbar -->
 
-<script src="common.js"></script>
-<script src="test_patrol.js"></script>
+    <script src="common.js"></script>
+    <script src="test_patrol.js"></script>
 </body>
 
 </html>

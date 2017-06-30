@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>输电线路可视化巡检系统--用户管理</title>
-  <link rel="stylesheet" type="text/css" href="test_user.css">
-  <link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="bootstrap-daterangepicker/daterangepicker.css">
-  <!-- <link rel="stylesheet" href="css/smoothzoom.css"> -->
-  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-  <!-- for progressbar -->
+	<meta charset="utf-8">
+	<title>输电线路可视化巡检系统--用户管理</title>
+	<link rel="stylesheet" type="text/css" href="test_user.css">
+	<link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap-daterangepicker/daterangepicker.css">
+	<!-- <link rel="stylesheet" href="css/smoothzoom.css"> -->
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+	<!-- for progressbar -->
   <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css"> -->
+  <link rel="stylesheet" type="text/css" href="dashboard.css">
 </head>
-<body style="font-family: Microsoft YaHei;">
+<body>
 
-<div id="nav">
-        <div id="nav_left">
-            <!-- <img src="/elements/logo.gif"> -->
-        </div>
-        <div id="nav_right">
-            <div id="header">
-                <div id="header_left">
-                    <p><b style="font-size: 25px;">输电线路可视化巡检系统</b></p>
-                </div>
-                <div id="header_right">
-                    <ul>
+	<div id="nav">
+		<div id="nav_left">
+			<!-- <img src="/elements/logo.gif"> -->
+		</div>
+		<div id="nav_right">
+			<div id="header">
+				<div id="header_left">
+					<p><b style="font-size: 25px;">输电线路可视化巡检系统</b></p>
+				</div>
+				<div id="header_right">
+					<ul>
 <!--                         <li><a href="#" id="icon_photo"><span><img src="elements/icon_photo.gif" alt="photo" title="手动拍照"></span></a></li>
                         <li><a href="#"><span><img src="elements/icon_analysis.gif" alt="photo" title="手动分析"></span></a></li>
                         <li><a href="#"><span><img src="elements/icon_setting.gif" alt="photo" title="配置设备"></span></a></li>
@@ -34,149 +35,149 @@
                 </div>
             </div>
             <div id="tabs">
-                <div id="tabs_left">
-                    <ul>
-                        <li class="tabs" style="margin-left: 0px;"><a target="_blank" href="/patrol">巡检</a></li>
-                        <li class="tabs"><a target="_blank" href="/device">设备管理</a></li>
-                        <li class="tabs"><a href="#" id="logout">退出登录</a></li>
-                        <li class="tabs"><a href="#" id="tab_info">用户信息</a></li>
-                        <!-- <li class="tabs"><a href="#" id="tab_group">分组查看</a></li> -->
-                        <li class="tabs"><a href="#" id="tab_set">分组设置</a></li>
-                    </ul>
-                </div>
-                <div id="tabs_right">
-                    <p style="margin-right: 5px">2014年1月1日</p>
-                </div>
+            	<div id="tabs_left">
+            		<ul>
+            			<li class="tabs" style="margin-left: 0px;"><a target="_blank" href="/patrol">巡检</a></li>
+            			<li class="tabs"><a target="_blank" href="/device">设备管理</a></li>
+            			<li class="tabs"><a href="#" id="logout">退出登录</a></li>
+            			<li class="tabs"><a href="#" id="tab_info">用户信息</a></li>
+            			<!-- <li class="tabs"><a href="#" id="tab_group">分组查看</a></li> -->
+            			<li class="tabs"><a href="#" id="tab_set">分组设置</a></li>
+            		</ul>
+            	</div>
+            	<div id="tabs_right">
+            		<p style="margin-right: 5px">2014年1月1日</p>
+            	</div>
             </div>
         </div>
     </div>
 
-<div id="main">
-	<div id="main_header" style="overflow-y: hidden;height: 5%;background-color: rgb(3,161,161)">
-		<div style="float: left;height: 100%;color:white"><p>用户列表</p></div>
-		<div style="float: right;">
-			<button type="button" class="" id='addUser' style=''>添加</button>
-			<button type="button" class="" id='editUser' style=''>修改</button>
-			<button type="button" class="" id='deleteUser' style=''>删除</button>
-		</div>
-	</div>
-	<table class="table table-striped table-condensed table-bordered">
-		<thead>
-			<tr>
-				<th><input type="checkbox" name="" id="selectAll"></th>
-				<th>序号</th>
-				<th>姓名</th>
-				<th>用户名</th>
-				<th>用户类型</th>
-				<th>权限组</th>
-				<th>部门</th>
-			</tr>
-		</thead>
-		<tbody>
-			
-		</tbody>
-	</table>
-</div>
+    <div id="main">
+    	<div id="main_header" style="overflow-y: hidden;height: 5%;background-color: rgb(3,161,161)">
+    		<div style="float: left;height: 100%;color:white"><p>用户列表</p></div>
+    		<div style="float: right;">
+    			<button type="button" class="" id='addUser' style=''>添加</button>
+    			<button type="button" class="" id='editUser' style=''>修改</button>
+    			<button type="button" class="" id='deleteUser' style=''>删除</button>
+    		</div>
+    	</div>
+    	<table class="table table-striped table-condensed table-bordered">
+    		<thead>
+    			<tr>
+    				<th><input type="checkbox" name="" id="selectAll"></th>
+    				<th>序号</th>
+    				<th>姓名</th>
+    				<th>用户名</th>
+    				<th>用户类型</th>
+    				<th>权限组</th>
+    				<th>部门</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    			
+    		</tbody>
+    	</table>
+    </div>
 
-<!-- 添加用户 -->
-<div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="padding-top: 100px;">
-        <div class="modal-content">
-            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">添加用户</h4>
-            </div>
-            <div class="modal-body" id="modalAdd-body" style="width: 100%;height: 500px;">
-            	<div>
-					<p style="width: 35%;float: left;">用户名</p><input type="text" name=""  style="width: 60%;float: left;"></input>
-				</div>
-				<div>
-					<p style="width: 35%;float: left;">姓名</p><input type="text" name="" style="width: 60%;float: left;"></input>
-				</div>
-				<div>
-					<p style="width: 35%;float: left;">设置密码</p><input type="password" name="" style="width: 60%;float: left;"></input>
-				</div>
-				<div>
-					<p style="width: 35%;float: left;">重复密码</p><input type="password" name="" style="width: 60%;float: left;"></input>
-				</div>
-            	<div>
-					<p style="width: 35%;float: left;">用户类型</p>
-					<select id="addUserType" style="width: 60%;float: left;">
-						<option value="0">请选择</option>
-						<option value="1">操作员</option>	
-						<option value="2">管理员</option>	
-					</select>
-				</div>
-				<div>
-					<p style="width: 35%;float: left;">手机</p><input type="text" name="" style="width: 60%;float: left;"></input>
-				</div>
-				<div>
-					<p style="width: 35%;float: left;">部门</p><input type="text" name="" style="width: 60%;float: left;"></input>
-				</div>
-				<div>
-					<p style="width: 35%;float: left;">权限组</p>
-					<select id="privilegeGroup" style="width: 60%;float: left;">
-						<option value="0">请选择</option>
-						<option value="1">全部</option>
-					</select>
-				</div>
-				
-				<div>
-					<p>用户权限</p>
-					<div id="privilege">
-						<div>
-							<input type="checkbox" name="" id="pselectAll">全选</input>
-						</div>
-						<div id="pselectOne">
-							<div>
-								<input type="checkbox" name="">用户修改</input>
-							</div>
-							<div>
-								<input type="checkbox" name="">密码修改</input>
-							</div>
-							<div>
-								<input type="checkbox" name="">本地关机、重启</input>
-							</div>
-							<div>
-								<input type="checkbox" name="">通道管理设置</input>
-							</div>
-							<div>
-								<input type="checkbox" name="">微信推送</input>
-							</div>
-							<div>
-								<input type="checkbox" name="">新建组</input>
-							</div>
-						</div>
-					</div>
-				</div>
+    <!-- 添加用户 -->
+    <div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    	<div class="modal-dialog" style="padding-top: 100px;">
+    		<div class="modal-content">
+    			<div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+    				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    				<h4 class="modal-title" id="myModalLabel">添加用户</h4>
+    			</div>
+    			<div class="modal-body" id="modalAdd-body" style="width: 100%;height: 500px;">
+    				<div>
+    					<p style="width: 35%;float: left;">用户名</p><input type="text" name=""  style="width: 60%;float: left;"></input>
+    				</div>
+    				<div>
+    					<p style="width: 35%;float: left;">姓名</p><input type="text" name="" style="width: 60%;float: left;"></input>
+    				</div>
+    				<div>
+    					<p style="width: 35%;float: left;">设置密码</p><input type="password" name="" style="width: 60%;float: left;"></input>
+    				</div>
+    				<div>
+    					<p style="width: 35%;float: left;">重复密码</p><input type="password" name="" style="width: 60%;float: left;"></input>
+    				</div>
+    				<div>
+    					<p style="width: 35%;float: left;">用户类型</p>
+    					<select id="addUserType" style="width: 60%;float: left;">
+    						<option value="0">请选择</option>
+    						<option value="1">操作员</option>	
+    						<option value="2">管理员</option>	
+    					</select>
+    				</div>
+    				<div>
+    					<p style="width: 35%;float: left;">手机</p><input type="text" name="" style="width: 60%;float: left;"></input>
+    				</div>
+    				<div>
+    					<p style="width: 35%;float: left;">部门</p><input type="text" name="" style="width: 60%;float: left;"></input>
+    				</div>
+    				<div>
+    					<p style="width: 35%;float: left;">权限组</p>
+    					<select id="privilegeGroup" style="width: 60%;float: left;">
+    						<option value="0">请选择</option>
+    						<option value="1">全部</option>
+    					</select>
+    				</div>
+    				
+    				<div>
+    					<p>用户权限</p>
+    					<div id="privilege">
+    						<div>
+    							<input type="checkbox" name="" id="pselectAll">全选</input>
+    						</div>
+    						<div id="pselectOne">
+    							<div>
+    								<input type="checkbox" name="">用户修改</input>
+    							</div>
+    							<div>
+    								<input type="checkbox" name="">密码修改</input>
+    							</div>
+    							<div>
+    								<input type="checkbox" name="">本地关机、重启</input>
+    							</div>
+    							<div>
+    								<input type="checkbox" name="">通道管理设置</input>
+    							</div>
+    							<div>
+    								<input type="checkbox" name="">微信推送</input>
+    							</div>
+    							<div>
+    								<input type="checkbox" name="">新建组</input>
+    							</div>
+    						</div>
+    					</div>
+    				</div>
 				<!-- <div>
 					<p>密码:&nbsp</p><input type="password" name=""></input>
 				</div>
 				<div>
 					<p>确认密码:&nbsp</p><input type="password" name=""></input>
 				</div> -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="">确定</button>
+				<button type="button" class="" data-dismiss="modal">取消</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
 </div>
 
 <!-- 修改用户 -->
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="padding-top: 100px;">
-        <div class="modal-content">
-            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">修改用户</h4>
-            </div>
-            <div class="modal-body" id="modalEdit-body" style="width: 100%">
-            	<div>
+	<div class="modal-dialog" style="padding-top: 100px;">
+		<div class="modal-content">
+			<div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">修改用户</h4>
+			</div>
+			<div class="modal-body" id="modalEdit-body" style="width: 100%">
+				<div>
 					<p style="width: 35%;float: left;">用户名</p><input type="text" name="" style="width: 60%;float: left;"></input>
 				</div>
-            	<div>
+				<div>
 					<p style="width: 35%;float: left;">姓名</p><input type="text" name="" style="width: 60%;float: left;"></input>
 				</div>
 				<div>
@@ -185,7 +186,7 @@
 				<div>
 					<p style="width: 35%;float: left;">重复密码</p><input type="password" name="" style="width: 60%;float: left;"></input>
 				</div>
-            	<div>
+				<div>
 					<p style="width: 35%;float: left;">用户类型</p>
 					<select id="editUserType" style="width: 60%;float: left;">
 						<option value="0">操作员</option>	
@@ -195,7 +196,7 @@
 				<div>
 					<p style="width: 35%;float: left;">手机</p><input type="text" name="" style="width: 60%;float: left;"></input>
 				</div>
-            	<div>
+				<div>
 					<p style="width: 35%;float: left;">部门</p><input type="text" name="" style="width: 60%;float: left;"></input>
 				</div>
 				<div>
@@ -207,13 +208,13 @@
 				<div>
 					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name=""></input>
 				</div> -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="">确定</button>
+				<button type="button" class="" data-dismiss="modal">取消</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
 </div>
 
 <div id="main2">
@@ -229,41 +230,41 @@
 			<p style="background-color: #ccc;">组下的设备</p>
 		</div> -->
 		<div id="list">
-		<div id="table">
-			<table class="table table-striped table-condensed" style="font-size: 12px;margin-bottom: 0px;">
-				<thead style="background-color: rgb(3,161,161);color:white;">
-					<tr>
-						<th>序号</th>
-						<th>设备名称</th>
-						<th>电话属性</th>
-						<th>区域属性</th>
-						<th>隶属线路</th>
-						<th>隐患类型</th>
-						<th>状态</th>
-						<th>经度</th>
-						<th>纬度</th>
-						<th>MEID</th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
+			<div id="table">
+				<table class="table table-striped table-condensed" style="font-size: 12px;margin-bottom: 0px;">
+					<thead style="background-color: rgb(3,161,161);color:white;">
+						<tr>
+							<th>序号</th>
+							<th>设备名称</th>
+							<th>电话属性</th>
+							<th>区域属性</th>
+							<th>隶属线路</th>
+							<th>隐患类型</th>
+							<th>状态</th>
+							<th>经度</th>
+							<th>纬度</th>
+							<th>MEID</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div id="op">
+				<span>
+					<p id = "infoCount" style="float: right;margin-left: 5px;">
+						第xxx页，共xxx页
+					</p>
+				</span>
+				<span>
+					<button type="button" class="" id='infoLast' style='float: right;'>上一页</button>
+				</span>
+				<span>
+					<button type="button" class="" id='infoNext' style='float: right;'>下一页</button>
+				</span>
+				
+			</div>
 		</div>
-		<div id="op">
-			<span>
-				<p id = "infoCount" style="float: right;margin-left: 5px;">
-					第xxx页，共xxx页
-				</p>
-			</span>
-			<span>
-				<button type="button" class="" id='infoLast' style='float: right;'>上一页</button>
-			</span>
-			<span>
-				<button type="button" class="" id='infoNext' style='float: right;'>下一页</button>
-			</span>
-			
-		</div>
-	</div>
 	</div>
 </div>
 
@@ -310,86 +311,86 @@
 
 <!-- 添加分组 -->
 <div class="modal fade" id="modalAddGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="padding-top: 100px;">
-        <div class="modal-content">
-            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">添加分组</h4>
-            </div>
-            <div class="modal-body" id="modalAddGroup-body" style="width: 100%">
-            	<div>
+	<div class="modal-dialog" style="padding-top: 100px;">
+		<div class="modal-content">
+			<div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">添加分组</h4>
+			</div>
+			<div class="modal-body" id="modalAddGroup-body" style="width: 100%">
+				<div>
 					分组名称<input type="text" name=""></input>
 				</div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="">确定</button>
+				<button type="button" class="" data-dismiss="modal">取消</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
 </div>
 
 <!-- 添加温度分组 -->
 <div class="modal fade" id="modalAddTemGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="padding-top: 100px;">
-        <div class="modal-content">
-            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">添加分组</h4>
-            </div>
-            <div class="modal-body" id="modalAddTemGroup-body" style="width: 100%">
-            	<div>
+	<div class="modal-dialog" style="padding-top: 100px;">
+		<div class="modal-content">
+			<div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">添加分组</h4>
+			</div>
+			<div class="modal-body" id="modalAddTemGroup-body" style="width: 100%">
+				<div>
 					<p>分组名称</p><input type="text" name=""></input>
 				</div>
-            </div> 
-            <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+			</div> 
+			<div class="modal-footer">
+				<button type="button" class="">确定</button>
+				<button type="button" class="" data-dismiss="modal">取消</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
 </div>
 
 <!-- 修改分组 -->
 <div class="modal fade" id="modalEditGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="padding-top: 100px;">
-        <div class="modal-content">
-            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">修改分组</h4>
-            </div>
-            <div class="modal-body" id="modalEditGroup-body" style="width: 100%">
-            	<div>
+	<div class="modal-dialog" style="padding-top: 100px;">
+		<div class="modal-content">
+			<div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">修改分组</h4>
+			</div>
+			<div class="modal-body" id="modalEditGroup-body" style="width: 100%">
+				<div>
 					<p>分组名称</p><input type="text" name=""></input>
 				</div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="">确定</button>
+				<button type="button" class="" data-dismiss="modal">取消</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
 </div>
 
 <!-- 修改分组 -->
 <div class="modal fade" id="modalEditTemGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="padding-top: 100px;">
-        <div class="modal-content">
-            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">修改分组</h4>
-            </div>
-            <div class="modal-body" id="modalEditTemGroup-body" style="width: 100%">
-            	<div>
+	<div class="modal-dialog" style="padding-top: 100px;">
+		<div class="modal-content">
+			<div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">修改分组</h4>
+			</div>
+			<div class="modal-body" id="modalEditTemGroup-body" style="width: 100%">
+				<div>
 					<p>分组名称</p><input type="text" name=""></input>
 				</div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="">确定</button>
+				<button type="button" class="" data-dismiss="modal">取消</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
 </div>
 
 <script src="jquery.min.js"></script>

@@ -1,151 +1,157 @@
-/*
- * Base structure
- */
-
-/* Move down content because we have a fixed navbar that is 50px tall */
-
-
-body { 
-  padding: 0px;    
-  font-size: 10px;
+html,
+body {
+    height: 100%;
+    overflow-y: auto;
 }
 
-.color {
-  background-color:rgb(176,196,222);
+@media screen and (max-width: 1200px) {
+    html {
+        width: 1200px;
+        overflow-x: auto;
+    }
 }
 
-.fixed {
-  position: fixed;
-  top: 90px;
+@media screen and (max-width: 1600px) {
+    * {
+        font-size: 12px;
+    }
 }
 
-.absolute {
-  position: absolute;
+@media screen and (min-width: 1600px) {
+    * {
+        font-size: 13px;
+    }
 }
 
-.sidebar-fixed {
-  position: fixed;
-  top: 115px;
-  left: 0px;
-  bottom: 0px;
-  white-space:nowrap;
-  overflow-x: auto;
-  overflow-y: auto;
-  background-color: #f5f5f5;
+* {
+    padding: 0px;
+    margin: 0px;
+    /*overflow-x: hidden;
+  overflow-y: hidden;*/
+    font-family: 'SimSun';
 }
 
-.right-fixed {
-  position: fixed;
-  border: 1px solid grey;
-  height: 100px;
-  overflow-y: auto;
+a {
+    text-decoration: none;
+    color: white;
 }
 
-.right-fixed p{
-  margin-bottom:1px;
+#nav {
+    width: 100%;
+    height: 11%;
+    /*background-color: rgb(170,247,247);*/
+    /*background-image: url(elements/nav.jpg);*/
+    background-color: rgb(0,105,101);
+    background-size: cover;
+    visibility: hidden;
+    color: white;
 }
 
-#tabTree a {
-  padding: 4px;
+#main {
+    width: 100%;
+    height: 89%;
+    visibility: hidden;
 }
 
-#tree li {
-  padding: 3px;
+#nav_left {
+    width: 15%;
+    height: 100%;
+    float: left;
+    text-align: center;
 }
 
-/*
- * Global add-ons
- * NOT USE
- */
-
-.sub-header {
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+#nav_left > img {
+    width: 90%;
+    height: 70%;
 }
 
-/*
- * Top navigation
- * Hide default border to remove 1px line.
- */
-.navbar-fixed-top {
-  border: 0;
+#nav_left > img:hover {
+    cursor: pointer;
 }
 
-/*
- * Sidebar
- */
-
-/* Hide for mobile, show later */
-.sidebar {
-  display: none;
+#nav_right {
+    width: 85%;
+    height: 100%;
+    float: left;
 }
 
-@media (min-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 51px;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    display: block;
-    padding: 20px;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
-    border-right: 1px solid #eee;
-  }
+#header {
+    width: 100%;
+    height: 70%;
+    font-size: 25px;
+    /*color: rgb(1, 111, 111);*/
+
 }
 
-/* Sidebar navigation */
-.nav-sidebar {
-  margin-right: -21px; /* 20px padding + 1px border */
-  margin-bottom: 20px;
-  margin-left: -20px;
-}
-.nav-sidebar > li > a {
-  padding-right: 20px;
-  padding-left: 20px;
-}
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-  color: #fff;
-  background-color: #428bca;
+#header>div {
+    width: 50%;
+    height: 100%;
+    float: left;
 }
 
-
-/*
- * Main content
- */
-
-.main {
-  padding: 20px;
-}
-@media (min-width: 768px) {
-  .main {
-    padding-right: 40px;
-    padding-left: 40px;
-  }
-}
-.main .page-header {
-  margin-top: 0;
+#header_right {
+    float: right;
 }
 
+#header_right>ul {
+    height: 50%;
+    float: right;
+}
 
-/*
- * Placeholder dashboard ideas
- */
+#header_right>ul>li {
+    height: 100%;
+    float: left;
+    list-style: none;
+    padding: 5px;
+    margin-left: 10px;
+}
 
-.placeholders {
-  margin-bottom: 30px;
-  text-align: center;
+#header_right>ul>li>a,
+#header_right>ul>li>a>span,
+#header_right>ul>li>a>span>img {
+    height: 100%;
 }
-.placeholders h4 {
-  margin-bottom: 0;
+
+#tabs {
+    width: 100%;
+    height: 30%;
 }
-.placeholder {
-  margin-bottom: 20px;
+
+#tabs_left {
+    width: 70%;
+    height: 100%;
+    float: left;
 }
-.placeholder img {
-  display: inline-block;
-  border-radius: 50%;
+
+#tabs_left>ul {
+    height: 100%;
+}
+
+#tabs_left>ul>li {
+    height: 100%;
+    width: 90px;
+    float: left;
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    /*background-color: rgb(1,111,111);*/
+    background-image: url(elements/tabs.gif);
+    background-size: 100% 100%;
+    margin-left: 10px;
+    text-align: center;
+}
+
+#tabs_left>ul>li>a {
+    color: white;
+    text-decoration: none;
+}
+
+#tabs_right {
+    width: 30%;
+    height: 100%;
+    float: left;
+}
+
+#tabs_right>p {
+    float: right;
 }
