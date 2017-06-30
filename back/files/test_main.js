@@ -1,5 +1,5 @@
 $(function() {
-	$("body").hide();
+    $("body").hide();
     const cookie_sessionId = Cookies.get('sessionId');
     let cookie_userId = "";
     let cookie_userType = 0;
@@ -9,8 +9,8 @@ $(function() {
     if(cookie_sessionId === undefined) {
         window.location.href = "/login";
     }else{
-    	$("body").show();
-    	const userInfo = getUsersBySession(cookie_sessionId);
+        $("body").show();
+        const userInfo = getUsersBySession(cookie_sessionId);
         cookie_userId = userInfo.userId;
         cookie_userType = parseInt(userInfo.userType);
         cookie_userName = userInfo.userName;
@@ -28,190 +28,190 @@ $(function() {
     }
 
     function initialize() {
-    	// keep 16:9
-	    let win_width = parseFloat($(document).width());
-	    $('body').css('height', win_width * 1080 / 1920 + 'px');
-	    
-	    $('#pics14 p').each(function() {
-	        let h = $(this).parent().css('height');
-	        $(this).css('line-height', h);
-	    })
+        // keep 16:9
+        let win_width = parseFloat($(document).width());
+        $('body').css('height', win_width * 1080 / 1920 + 'px');
+        
+        $('#pics14 p').each(function() {
+            let h = $(this).parent().css('height');
+            $(this).css('line-height', h);
+        })
 
-		$('p').each(function() {
-	        let h = $(this).parent().css('height');
-	        $(this).css('line-height', h);
+        $('p').each(function() {
+            let h = $(this).parent().css('height');
+            $(this).css('line-height', h);
             $(this).css("margin-bottom", "0px");
-	    })
+        })
 
-	    $('a').each(function() {
-	        let h = $(this).parent().css('height');
-	        $(this).css('line-height', h);
-	    })
+        $('a').each(function() {
+            let h = $(this).parent().css('height');
+            $(this).css('line-height', h);
+        })
 
-	    // adjust logo
-	    let w = parseFloat($('#nav_left img').css('width'));
-	    let img_h = w * 0.2901;
-	    $('#nav_left img').css('height', img_h + 'px');
-	    let h = parseFloat($('#nav_left').css('height'));
-	    $('#nav_left img').css('margin-top', (h - img_h) / 2 + 'px');
-	    $('#nav_left img').css('margin-bottom', (h - img_h) / 2 + 'px');
+        // adjust logo
+        let w = parseFloat($('#nav_left img').css('width'));
+        let img_h = w * 0.2901;
+        $('#nav_left img').css('height', img_h + 'px');
+        let h = parseFloat($('#nav_left').css('height'));
+        $('#nav_left img').css('margin-top', (h - img_h) / 2 + 'px');
+        $('#nav_left img').css('margin-bottom', (h - img_h) / 2 + 'px');
 
-	    // welcome
-	    const myDate = new Date();
-	    const year = myDate.getFullYear();
-	    const month = myDate.getMonth() + 1;
-	    const day = myDate.getDate();
-	    const dayOfWeek = myDate.getDay();
-	    const dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
-	    $('#tabs_right p').text('欢迎您: ' + cookie_name + ' 今天是' + year + '年' + month + '月' + day + '月' +
-	        '   星期' + dayOfWeekName[dayOfWeek]);
+        // welcome
+        const myDate = new Date();
+        const year = myDate.getFullYear();
+        const month = myDate.getMonth() + 1;
+        const day = myDate.getDate();
+        const dayOfWeek = myDate.getDay();
+        const dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
+        $('#tabs_right p').text('欢迎您: ' + cookie_name + ' 今天是' + year + '年' + month + '月' + day + '月' +
+            '   星期' + dayOfWeekName[dayOfWeek]);
 
-	    // ````````````````````````````` common use above
+        // ````````````````````````````` common use above
 
-	    // adjust pics0 & pics14
-	    w = parseFloat($('#picss').css('width')) - 8 * 2 - 4 - 1;
-	    $('#pics0').css('width', w * 0.55 + 'px');
-	    $('#pics14').css('width', w * 0.45 + 'px');
+        // adjust pics0 & pics14
+        w = parseFloat($('#picss').css('width')) - 8 * 2 - 4 - 1;
+        $('#pics0').css('width', w * 0.55 + 'px');
+        $('#pics14').css('width', w * 0.45 + 'px');
 
-	    //  adjust pics0
-	    h = parseFloat($('#pics0').css('height'));
-	    w = parseFloat($('#pics0').css('width'));
-	    $('#imgs0').css('height', w * 0.9 + 'px');
-	    $('#pics0_desc').css('height', h - w * 0.9 + 'px');
+        //  adjust pics0
+        h = parseFloat($('#pics0').css('height'));
+        w = parseFloat($('#pics0').css('width'));
+        $('#imgs0').css('height', w * 0.9 + 'px');
+        $('#pics0_desc').css('height', h - w * 0.9 + 'px');
 
-	    // adjust pic1 ...
-	    w = parseFloat($('#pics14').css('width')) - 1 - 4;
-	    $('.pics').css('width', w / 2 + 'px');
-	    w = parseFloat($('#pics14').css('width'));
+        // adjust pic1 ...
+        w = parseFloat($('#pics14').css('width')) - 1 - 4;
+        $('.pics').css('width', w / 2 + 'px');
+        w = parseFloat($('#pics14').css('width'));
 
-	    // status_3
-	    $('#dvc_status p').css('line-height', '20px');
-	    
-	    // adjust interval
-	    h = parseFloat($('#interval').parent().css('height'));
-	    let i_h = parseFloat($('#interval').css('height'));
-	    $('#interval').css('margin-top',(h-i_h)/2+'px');
-	    $('#interval').css('margin-bottom',(h-i_h)/2+'px');
+        // status_3
+        $('#dvc_status p').css('line-height', '20px');
+        
+        // adjust interval
+        h = parseFloat($('#interval').parent().css('height'));
+        let i_h = parseFloat($('#interval').css('height'));
+        $('#interval').css('margin-top',(h-i_h)/2+'px');
+        $('#interval').css('margin-bottom',(h-i_h)/2+'px');
 
-	    // adjust pic0 desc
-	    h = parseFloat($('#pics0_desc').css('height'));
-	    $('#pics0_desc div:eq(0)').css('margin-top',h*0.1+'px');
-	    $('#pics0_desc div:eq(1)').css('margin-bottom',h*0.1+'px');
+        // adjust pic0 desc
+        h = parseFloat($('#pics0_desc').css('height'));
+        $('#pics0_desc div:eq(0)').css('margin-top',h*0.1+'px');
+        $('#pics0_desc div:eq(1)').css('margin-bottom',h*0.1+'px');
 
-	    // adjust history p
-	    $('#historyArea p').css('line-height','20px');
-	    $('#historyArea p').css('margin-bottom','0px');
-	    $('#historyArea').css('overflow-y','auto');
+        // adjust history p
+        $('#historyArea p').css('line-height','20px');
+        $('#historyArea p').css('margin-bottom','0px');
+        $('#historyArea').css('overflow-y','auto');
 
-	    // adjust records
-	    h = parseFloat($('#records').css('height'));
-	    $('#records a').css('line-height', h * 0.3 + 'px');
+        // adjust records
+        h = parseFloat($('#records').css('height'));
+        $('#records a').css('line-height', h * 0.3 + 'px');
 
-	    // daterangepicker
-	    $('input[name="daterange"]').daterangepicker({
-	        singleDatePicker: true,
-	        showDropdowns: true,
-	        autoUpdateInput: true,
-	        autoApply: true,
+        // daterangepicker
+        $('input[name="daterange"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            autoUpdateInput: true,
+            autoApply: true,
 
-	        locale: {
-	            cancelLabel: '清除',
-	            applyLabel: '确定',
-	            format: 'YYYY-MM-DD',
-	            "daysOfWeek": [
-	                "周日",
-	                "周一",
-	                "周二",
-	                "周三",
-	                "周四",
-	                "周五",
-	                "周六"
-	            ],
-	            "monthNames": [
-	                "一月",
-	                "二月",
-	                "三月",
-	                "四月",
-	                "五月",
-	                "六月",
-	                "七月",
-	                "八月",
-	                "九月",
-	                "十月",
-	                "十一月",
-	                "十二月"
-	            ],
-	            "firstDay": 1,
-	        },
-	    });
-	    $('input[name="daterange"]').val('');
-	    $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
-	        $(this).val(picker.startDate.format('YYYY-MM-DD'));
-	    });
+            locale: {
+                cancelLabel: '清除',
+                applyLabel: '确定',
+                format: 'YYYY-MM-DD',
+                "daysOfWeek": [
+                    "周日",
+                    "周一",
+                    "周二",
+                    "周三",
+                    "周四",
+                    "周五",
+                    "周六"
+                ],
+                "monthNames": [
+                    "一月",
+                    "二月",
+                    "三月",
+                    "四月",
+                    "五月",
+                    "六月",
+                    "七月",
+                    "八月",
+                    "九月",
+                    "十月",
+                    "十一月",
+                    "十二月"
+                ],
+                "firstDay": 1,
+            },
+        });
+        $('input[name="daterange"]').val('');
+        $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD'));
+        });
 
-	    // list1
-	    const channeltree = channelTree();
-	    $('#content1').treeview({
-	        data: channeltree,
-	        levels: 3,
-	        showBorder: false,
-	        showCheckbox: false,
-	        showTags: false,
-	        collapseIcon: "glyphicon glyphicon-chevron-down",
-	        expandIcon: "glyphicon glyphicon-chevron-right",
+        // list1
+        const channeltree = channelTree();
+        $('#content1').treeview({
+            data: channeltree,
+            levels: 3,
+            showBorder: false,
+            showCheckbox: false,
+            showTags: false,
+            collapseIcon: "glyphicon glyphicon-chevron-down",
+            expandIcon: "glyphicon glyphicon-chevron-right",
             backColor: "rgb(170, 247, 247)",
             color: "rgb(1, 111, 111)",
             selectedBackColor: "rgb(1, 111, 111)",
             selectedColor: "rgb(170, 247, 247)",
-	    });
-	    $('#content1').addClass('treeSelected');
-	    setTreeNodeSelected($('#content1'));
+        });
+        $('#content1').addClass('treeSelected');
+        setTreeNodeSelected($('#content1'));
 
-	    // content max height
-	    h = parseFloat($('#tree').css('height'));
-	    let list_h = parseFloat($('#list1').css('height'));
-	    $('.content').css('max-height', h - 2 * list_h + 'px');
-	    $('.content ul').css('margin', '0px');
-	    $('.content ul li').css('padding', '10px');
-	    $('.indent').css('margin', '5px');
+        // content max height
+        h = parseFloat($('#tree').css('height'));
+        let list_h = parseFloat($('#list1').css('height'));
+        $('.content').css('max-height', h - 2 * list_h + 'px');
+        $('.content ul').css('margin', '0px');
+        $('.content ul li').css('padding', '10px');
+        $('.indent').css('margin', '5px');
 
-	    // pics
-	    $('body').attr('allpic-index', 0);
-	    $('body').attr('if-all', 1);
+        // pics
+        $('body').attr('allpic-index', 0);
+        $('body').attr('if-all', 1);
 
-	    // server status
-	    checkServer();
-	    intervalIds.checkServer = setInterval(checkServer,60000);
+        // server status
+        checkServer();
+        intervalIds.checkServer = setInterval(checkServer,60000);
 
-	    // patrol pics
-	    let data = {
-	        "userId": cookie_userId,
-	        "userType": cookie_userType,
-	        "size": 5,
-	        "index": 0,
-	        "startTime": "1970-01-01 00:00:00",
-	        "endTime": "2900-01-01 23:59:59"
-	    }
-	    getAllPics(data);
+        // patrol pics
+        let data = {
+            "userId": cookie_userId,
+            "userType": cookie_userType,
+            "size": 5,
+            "index": 0,
+            "startTime": "1970-01-01 00:00:00",
+            "endTime": "2900-01-01 23:59:59"
+        }
+        getAllPics(data);
 
-	    // records
-	    getAlertRecords(0)
+        // records
+        getAlertRecords(0)
 
-	    // interval things
-	    intervalIds.getAllPics = setInterval(
-	    	function() {
-	    		var index = parseInt($('body').attr('allpic-index'));
-	    		if (index == 0) {
-	    			getAllPics(data);
-	    		}
-	    	},INTERVAL
-		);
+        // interval things
+        intervalIds.getAllPics = setInterval(
+            function() {
+                var index = parseInt($('body').attr('allpic-index'));
+                if (index == 0) {
+                    getAllPics(data);
+                }
+            },INTERVAL
+        );
 
-	    intervalIds.heartBeatRecords = setInterval(
-	    	function() {
-	    		getAlertRecords(0);
-	    	}, INTERVAL
-	    );
+        intervalIds.heartBeatRecords = setInterval(
+            function() {
+                getAlertRecords(0);
+            }, INTERVAL
+        );
     }
 
     function checkServer() {
@@ -221,7 +221,7 @@ $(function() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false
-        }).then(data => {
+        }).then(function(data){
             if (!data.code) {
                 const status = data.result.serverStatus;
                 if(status.wechatserver) {
@@ -270,7 +270,7 @@ $(function() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false
-        }).then(data => {
+        }).then(function(data){
             if (!data.code) {
                 window.location.href = 'login';
                 Cookies.set('sessionId', null);
@@ -758,6 +758,7 @@ $(function() {
         $('#tabs_left a:eq(6)').parent().css('background-color','white');
         $('#tabs_left a:eq(6)').css('color','rgb(1,111,111)');
         $('#tempArea').hide();
+        $('#chartArea').show();
         const inputData = {
             cmdID: cmdId,
             time: '2017-02-01',
@@ -766,7 +767,7 @@ $(function() {
     });
 
     function searchTemp(inputData) {
-    	let value = [];
+        let value = [];
         let chartShowFlag = 1;
         $.ajax({
             url: '/v1/cmd/temp/chart',
@@ -1048,7 +1049,7 @@ $(function() {
         selector.data().treeview.options.multiSelect = false;
         selector.unbind('nodeSelected');
         selector.on('nodeSelected', function(event, data) {
-        	$("#pics img").parent().css('border', '0px');
+            $("#pics img").parent().css('border', '0px');
             let type = selector.treeview('getSelected')[0].type;
             const tmp = selector.treeview('getSelected')[0].id;
             const tmpData = tmp.split('_');
@@ -1588,7 +1589,7 @@ function checkUser(inputData) {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false
-        }).then(data => {
+        }).then(function(data){
             if (data.code) {
                 alert('用户名或密码有误!');
             } else {
@@ -1607,10 +1608,10 @@ function checkUser(inputData) {
             contentType:"application/json; charset=utf-8",
             dataType:"json",
             async:false,
-        }).then(data => {
+        }).then(function(data){
             if (!data.code) {
                 const pics = data.result.list;
-                for (let i in pics) {
+                for (let i=0;i<pics.length;i++) {
                     const pic = pics[i];
                     let name = "";
                     let timeName = "";
@@ -1652,12 +1653,12 @@ function checkUser(inputData) {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false
-        }).then(data => {
+        }).then(function(data){
             if (!data.code) {
                 // $('body').attr('allpic-index', outerData.index);
                 // $('body').attr('if-all', 1);
                 const pics = data.result.list;
-                for (let i in pics) {
+                for (let i=0;i<pics.length;i++) {
                     const pic = pics[i];
                     let name = "";
                     let timeName = "";
@@ -1703,12 +1704,12 @@ function checkUser(inputData) {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false
-        }).then(data => {
+        }).then(function(data){
             if (!data.code) {
                 const temps = data.result.list;
                 $('#tempArea table tbody').empty();
-                for (let temp of temps) {
-                    $('#tempArea table tbody').append('<tr id="' + temp.cmdId + '"><td>' + temp.cmdId + '</td><td>' + temp.temperature + '</td><td>' + temp.time + '</td><td><button>查看</button></td></tr>')
+                for (let i=0;i<temps.length;i++) {
+                    $('#tempArea table tbody').append('<tr id="' + temps[i].cmdId + '"><td>' + temps[i].cmdId + '</td><td>' + temps[i].temperature + '</td><td>' + temps[i].time + '</td><td><button>查看</button></td></tr>')
                 }
             } else {
                 console.log('获取设备(组)失败');
