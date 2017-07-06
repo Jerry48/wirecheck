@@ -58,11 +58,17 @@ function getFileServerThumbnailUrl(param){
 	var tmp = [];
 	tmp = path.split("/");
 	var repath = tmp[0]+'/'+tmp[1]+'/ss/'+tmp[2];
+	var sspath =  fileServerPath + tmp[0]+'/'+tmp[1]+'/ss/'
 
 	var thumbnailPath = fileServerPath + repath;
 	var url = pictureServer + repath;
+	debug(sspath);
+	if(!fs.existsSync(sspath)) {
+		fs.mkdirSync(sspath);
+	}
 
 	if (!fileExist(thumbnailPath)) {
+
 		// debug('Try to create the thumbnail image!');
 		/*
 		sharp(filePath).resize(
