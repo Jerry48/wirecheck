@@ -1,3 +1,4 @@
+const PIC_SERVER = "http://www.zskjsdxl.top:9090/"
 $(function() {
 	var cookie_sessionId = Cookies.get('sessionId');
 	if(cookie_sessionId == undefined) {
