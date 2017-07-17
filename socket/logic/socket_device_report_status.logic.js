@@ -90,7 +90,9 @@ function processPayload(dataBuf){
         total_working_time : dataBuf.readUInt32LE(17),
         working_time : dataBuf.readUInt32LE(21),
         connection_state : dataBuf.readUInt8(25),
-        reserve : dataBuf.slice(26,26+30).toString('ascii').trim(), 
+        battery_solar_voltage : parseInt(dataBuf.slice(26,26+4).toString('ascii').trim()), 
+        capacity_voltage : parseInt(dataBuf.slice(30,30+4).toString('ascii').trim()), 
+        network_signal : parseInt(dataBuf.slice(34,34+4).toString('ascii').trim()), 
     };
     
     debug('time_stamp:'+pldata.time_stamp);
@@ -98,6 +100,9 @@ function processPayload(dataBuf){
     debug('working_time:'+pldata.working_time);
     debug('connection_state:'+ pldata.connection_state);
     debug('the battery_voltage:' + pldata.battery_voltage);
+    debug('the battery_solar_voltage:' + pldata.battery_solar_voltage);
+    debug('the capacity_voltage:' + pldata.capacity_voltage);
+    debug('the network_signal:' + pldata.network_signal);
     return pldata;
 }
 
@@ -123,6 +128,9 @@ function processRequest(packet, fn){
                temperature : pldata.operation_temperature,
                batteryVoltage : pldata.battery_voltage,
                batteryCapacity : pldata.battery_capacity,
+               capacityVoltage: pldata.capacity_voltage,
+               batterSolarVoltage: pldata.battery_solar_voltage,
+               networkSignal: pldata.network_signal
             }
             var query = {
                 update:update,

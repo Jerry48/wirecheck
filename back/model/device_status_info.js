@@ -29,8 +29,9 @@ var refModel = {
     batterySolarVoltage: 1,
     batteryWindVoltage: 1,
     batteryVoltage: 1,
-    batteryCapacity: 1,
+    capacityVoltage: 1,
     chargeVoltage: 1,
+    batteryCapacity: 1,
     boardTemperature: 1,
     networkSignal: 1,
     createTime: new Date(), //

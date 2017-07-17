@@ -812,6 +812,7 @@ $(function(){
         selector.data().treeview.options.multiSelect=false;
         selector.unbind('nodeSelected');
         selector.on('nodeSelected', function(event, data) {
+            $("img").css('border', '0px');
             var type = selector.treeview('getSelected')[0].type;
             var tmp = selector.treeview('getSelected')[0].id;
             var deviceId = tmp.slice(0,17);

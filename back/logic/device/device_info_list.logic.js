@@ -200,6 +200,9 @@ function packageResponseData(inputData){
             status: status.status,
             batteryVoltage: status.batteryVoltage,
             temperature: status.temperature,
+            batterySolarVoltage: status.batterySolarVoltage,
+            capacityVoltage: status.capacityVoltage,
+            networkSignal: status.networkSignal,
             heartBeatTime: time,
             
             channelNo1: channel1.channelNo1,
@@ -491,7 +494,7 @@ function processRequest(param, fn){
     	},
         function(result,next){
 
-            var sqlstr = "select id,status,batteryVoltage,temperature,heartBeatTime";
+            var sqlstr = "select id,status,batteryVoltage,temperature,heartBeatTime,batterySolarVoltage,capacityVoltage,networkSignal";
             sqlstr += ' from '+deviceStatusModel.tableName+' where ';
             sqlstr += 'id in("' + ids.join('","') +'")';
             var query = {
@@ -512,6 +515,9 @@ function processRequest(param, fn){
                                     batteryVoltage:rows[j].batteryVoltage,
                                     temperature:rows[j].temperature,
                                     heartBeatTime:rows[j].heartBeatTime,
+                                    batterySolarVoltage:rows[j].batterySolarVoltage,
+                                    capacityVoltage:rows[j].capacityVoltage,
+                                    networkSignal:rows[j].networkSignal,
                                 });
                             }
                         }

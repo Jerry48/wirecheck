@@ -1149,8 +1149,9 @@ $(function() {
 
 						$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist' devicedangerid='" + dangerID + "' lineid='" 
 							+ list[i].lineId + "'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>" + list[i].version + "</td><td>" 
-							+ list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>" + list[i].batteryVoltage + "</td><td>" + list[i].temperature + "</td><td>" + list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" 
-							+ list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
+							+ list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>"
+							+ list[i].batteryVoltage + "</td><td>" + list[i].temperature + "</td><td>" + list[i].batterySolarVoltage + "</td><td>" + list[i].capacityVoltage + "</td><td>" + list[i].networkSignal + "</td><td>"
+							+ list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
 					}
 				} else {
 					console.log('获取设备信息列表失败');
