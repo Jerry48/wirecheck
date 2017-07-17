@@ -248,6 +248,13 @@ app.use('/general_user', function(req, res) {
 
 var configFile = fs.readFileSync('../config.json');
 //for pic download
+app.get('/download', function(req, res) {
+  // var filepath = req.query.filepath;
+  var filepath =  '../../backup/backup.sql';
+  res.download(filepath);
+});
+
+
 app.get('/config', function(req, res) {
   res.send(config);
   res.end();

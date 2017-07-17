@@ -865,6 +865,12 @@ $(function() {
 		});
 	});
 
+	//`backup
+	$('#backup').click(function() {
+		window.location.href = "http://www.zskjsdxl.top:6178/download";
+	})
+
+
 	//`upload
 	$('#upload').click(function() {
 		$('#progressbar').hide();
@@ -1224,7 +1230,7 @@ $(function() {
 							+ "' beginMinutes='" + list[i].beginMinutes + "' endHour='" + list[i].endHour + "' endMinutes='" + list[i].endMinutes 
 							+ "' photoSize='" + list[i].photoSize + "' capturePeriod='" + list[i].capturePeriod + "' resolution='" + list[i].resolution 
 							+ "' devicedangerid='" + dangerID + "' lineid='" + list[i].lineId + "' class='infolist'><td><input type='checkbox' name=''></td><td>" + (i + 1) + "</td><td>"
-							 + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>0</td><td>" + list[i].area + "</td><td>" + list[i].lineName + "</td><td>" 
+							 + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>"+list[i].version+"</td><td>" + list[i].area + "</td><td>" + list[i].lineName + "</td><td>" 
 							 + dangerType[dangerID] + "</td><td>" + list[i].deviceId + "</td><td>" + htmls + "</td></tr>");
 					}
 				} else {

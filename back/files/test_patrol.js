@@ -51,6 +51,10 @@ $(function(){
         $('#nav_left img').css('margin-bottom', (h - img_h) / 2 + 'px');
 
 
+        // pics
+        $('body').attr('allpic-index', 0);
+        $('body').attr('if-all', 1);
+
         // welcome
         var myDate = new Date();
         var year = myDate.getFullYear();
@@ -66,9 +70,11 @@ $(function(){
         var body_width = parseInt($("body").css("width"));
         var left_width = parseInt($("#main_left").css("width"));
         var patrol_width = body_width-left_width -1;
-        console.log(body_width);
-        console.log(left_width);
-        console.log(patrol_width);
+        // console.log(body_width);
+        // console.log(left_width);
+        // console.log(patrol_width);
+
+        
         $('#patrol').css('width',patrol_width+'px');
         var patrol_height = patrol_width * 1120/1920;
         $('#patrol').css('height',patrol_height+'px');
@@ -90,7 +96,11 @@ $(function(){
             showTags: false,
             // emptyIcon: "glyphicon glyphicon-facetime-video",
             collapseIcon: "glyphicon glyphicon-chevron-down",
-            expandIcon: "glyphicon glyphicon-chevron-right"
+            expandIcon: "glyphicon glyphicon-chevron-right",
+            backColor: "rgb(170, 247, 247)",
+            color: "rgb(1, 111, 111)",
+            selectedBackColor: "rgb(1, 111, 111)",
+            selectedColor: "rgb(170, 247, 247)",
         });
         $('#content1').addClass('treeSelected');
         setTreeNodeSelected($('#content1'));
@@ -102,7 +112,7 @@ $(function(){
         $('.content').css('max-height', h - 2 * list_h + 'px');
 
         $('.content ul').css('margin', '0px');
-        $('.content ul li').css('background-color', 'rgb(170,247,247)');
+        // $('.content ul li').css('background-color', 'rgb(170,247,247)');
         $('.content ul li').css('padding', '10px');
         $('.indent').css('margin', '5px');
 
@@ -141,7 +151,11 @@ $(function(){
                 showTags: false,
                 // emptyIcon: "glyphicon glyphicon-facetime-video",
                 collapseIcon: "glyphicon glyphicon-chevron-down",
-                expandIcon: "glyphicon glyphicon-chevron-right"
+                expandIcon: "glyphicon glyphicon-chevron-right",
+                backColor: "rgb(170, 247, 247)",
+                color: "rgb(1, 111, 111)",
+                selectedBackColor: "rgb(1, 111, 111)",
+                selectedColor: "rgb(170, 247, 247)",
             });
 
             $('#content1').show();
@@ -163,7 +177,11 @@ $(function(){
                 showTags: false,
                 // emptyIcon: "glyphicon glyphicon-facetime-video",
                 collapseIcon: "glyphicon glyphicon-chevron-down",
-                expandIcon: "glyphicon glyphicon-chevron-right"
+                expandIcon: "glyphicon glyphicon-chevron-right",
+                backColor: "rgb(170, 247, 247)",
+                color: "rgb(1, 111, 111)",
+                selectedBackColor: "rgb(1, 111, 111)",
+                selectedColor: "rgb(170, 247, 247)",
             });
             $('#content2').show();
             $('#content1').hide();
@@ -188,6 +206,116 @@ $(function(){
     //页面显示
     //nav
     
+    // buttons
+    $('#picLast').click(function() {
+        if ($('body').attr('if-all') == 1) {
+            const index = parseInt($('body').attr('allpic-index'));
+            const size = 9;
+            const data = {
+                "userId": cookie_userId,
+                "userType": cookie_userType,
+                "index": index - 1,
+                "size": size,
+                "startTime": "1970-01-01 00:00:00",
+                "endTime": "2900-01-01 23:59:59"
+            };
+            getAllPics(data);
+            data.size = 16;
+            getAllPics4x4(data);
+        } else {
+            const id = $('body').attr('pic-deviceId');
+            const channelNo = parseInt($('body').attr('pic-channelNo'));
+            const size = 9;
+            const index = parseInt($('body').attr('pic-index'));
+            const type = 0;
+            const data = {
+                "channelNo": channelNo,
+                "id": id,
+                "size": size,
+                "type": type,
+                "index": index - 1,
+                "startTime": "1900-01-01 00:00:00",
+                "endTime": "2900-01-01 00:00:00"
+            }
+            getNextPage(data);
+            data.size = 16;
+            getNextPage4x4(data);
+        }
+    });
+
+    $('#picNext').click(function() {
+        console.log('adf');
+        if ($('body').attr('if-all') == 1) {
+            const index = parseInt($('body').attr('allpic-index'));
+            const size = 9;
+            const data = {
+                "userId": cookie_userId,
+                "userType": cookie_userType,
+                "index": index + 1,
+                "size": size,
+                "startTime": "1970-01-01 00:00:00",
+                "endTime": "2900-01-01 23:59:59"
+            };
+            getAllPics(data);
+            data.size = 16;
+            getAllPics4x4(data);
+        } else {
+            const id = $('body').attr('pic-deviceId');
+            const channelNo = parseInt($('body').attr('pic-channelNo'));
+            const size = 9;
+            const index = parseInt($('body').attr('pic-index'));
+            const type = 0;
+            const data = {
+                "channelNo": channelNo,
+                "id": id,
+                "size": size,
+                "type": type,
+                "index": index + 1,
+                "startTime": "1900-01-01 00:00:00",
+                "endTime": "2900-01-01 00:00:00"
+            }
+            getNextPage(data);
+            data.size = 16;
+            getNextPage4x4(data);
+        }
+    });
+
+    $('#refresh').click(function() {
+        if ($('body').attr('if-all') == 1) {
+            const index = parseInt($('body').attr('pic-index'));
+            const size = 9;
+            const data = {
+                "userId": cookie_userId,
+                "userType": cookie_userType,
+                "index": 0,
+                "size": size,
+                "startTime": "1970-01-01 00:00:00",
+                "endTime": "2900-01-01 23:59:59"
+            };
+            getAllPics(data);
+            data.size = 16;
+            getAllPics4x4(data);
+        } else {
+            const id = $('body').attr('pic-deviceId');
+            const channelNo = parseInt($('body').attr('pic-channelNo'));
+            const size = 9;
+            const index = parseInt($('body').attr('pic-index'));
+            const type = 0;
+            const data = {
+                "channelNo": channelNo,
+                "id": id,
+                "size": size,
+                "type": type,
+                "index": 0,
+                "startTime": "1900-01-01 00:00:00",
+                "endTime": "2900-01-01 00:00:00"
+            }
+            getNextPage(data);
+            data.size = 16;
+            getNextPage4x4(data);
+        }
+    })
+
     //logout
     $('#logout').click(function(){
 
@@ -218,7 +346,7 @@ $(function(){
 
     $('#tree').click(function() {
         $('.content ul').css('margin', '0px');
-        $('.content ul li').css('background-color', 'rgb(170,247,247)');
+        // $('.content ul li').css('background-color', 'rgb(170,247,247)');
         $('.content ul li').css('padding', '10px');
         $('.indent').css('margin', '5px');
     })
@@ -358,7 +486,7 @@ $(function(){
         
     })
 
-    $('.push').click(function(){
+    $('#push').click(function(){
         if($('body').attr('selectedPic')==''||$('body').attr('selectedPic')==undefined){
             alert('请选择图片！');
         }else{
@@ -492,17 +620,20 @@ $(function(){
                 if (data.code == 0) {
                     var list = data.result.list;
 
+                    $('body').attr('allpic-index', outerData.index);
+                    $('body').attr('if-all', 1);
+
                     for (var i = 0; i < list.length; ++i) {
                         if (list[i].picType == 2){
                                 // for ref pic
                         }else{
-                            $('#pics img:eq(' + i + ')').attr('src', list[i].picUrl);
+                            $('#pics img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
                             $('#pics img:eq(' + i + ')').attr('picId', list[i].picId);
                             $('#pics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
                             $('#pics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
                             $('#pics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
 
-                            $('#fullMain img:eq(' + i + ')').attr('src', list[i].picUrl);
+                            $('#fullMain img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
                             $('#fullMain img:eq(' + i + ')').attr('picId', list[i].picId);
                             $('#fullMain img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
                             $('#fullMain img:eq(' + i + ')').attr('data-original', list[i].picUrl);
@@ -538,19 +669,22 @@ $(function(){
             async:false,
             success: function(data){
                 if (data.code == 0) {
-                 
+                    $('body').attr('pic-index', outerData.index);
+                    $('body').attr('pic-deviceId', outerData.id);
+                    $('body').attr('if-all', 0);
+
                     var list = data.result.list;
                     for (var i = 0; i < list.length; ++i) {
                         if (list[i].picType == 2){
                                 // for ref pic
                         }else{
-                            $('#pics img:eq(' + i + ')').attr('src', list[i].picUrl);
+                            $('#pics img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
                             $('#pics img:eq(' + i + ')').attr('picId', list[i].picId);
                             $('#pics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
                             $('#pics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
                             $('#pics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
 
-                            $('#fullMain img:eq(' + i + ')').attr('src', list[i].picUrl);
+                            $('#fullMain img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
                             $('#fullMain img:eq(' + i + ')').attr('picId', list[i].picId);
                             $('#fullMain img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
                             $('#fullMain img:eq(' + i + ')').attr('data-original', list[i].picUrl);
@@ -590,13 +724,13 @@ $(function(){
                         if (list[i].picType == 2){
                                 // for ref pic
                         }else{
-                            $('#pics4x4 img:eq(' + i + ')').attr('src', list[i].picUrl);
+                            $('#pics4x4 img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
                             $('#pics4x4 img:eq(' + i + ')').attr('picId', list[i].picId);
                             $('#pics4x4 img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
                             $('#pics4x4 img:eq(' + i + ')').attr('data-original', list[i].picUrl);
                             $('#pics4x4 img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
 
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('src', list[i].picUrl);
+                            $('#fullMain4x4 img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
                             $('#fullMain4x4 img:eq(' + i + ')').attr('picId', list[i].picId);
                             $('#fullMain4x4 img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
                             $('#fullMain4x4 img:eq(' + i + ')').attr('data-original', list[i].picUrl);
@@ -638,13 +772,13 @@ $(function(){
                         if (list[i].picType == 2){
                                 // for ref pic
                         }else{
-                            $('#pics4x4 img:eq(' + i + ')').attr('src', list[i].picUrl);
+                            $('#pics4x4 img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
                             $('#pics4x4 img:eq(' + i + ')').attr('picId', list[i].picId);
                             $('#pics4x4 img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
                             $('#pics4x4 img:eq(' + i + ')').attr('data-original', list[i].picUrl);
                             $('#pics4x4 img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
 
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('src', list[i].picUrl);
+                            $('#fullMain4x4 img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
                             $('#fullMain4x4 img:eq(' + i + ')').attr('picId', list[i].picId);
                             $('#fullMain4x4 img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
                             $('#fullMain4x4 img:eq(' + i + ')').attr('data-original', list[i].picUrl);
@@ -683,6 +817,8 @@ $(function(){
             var deviceId = tmp.slice(0,17);
             var channelNo = tmp.slice(18,19);
             var name = selector.treeview('getSelected')[0].text;
+            $('body').attr('pic-deviceId',deviceId);
+            $('body').attr('pic-channelNo',channelNo);
             if ($('#devices ul li').filter('.chosen').text() == '设备列表') {
                 $('input[name="daterange"]').val('');
                 if (type == 3){

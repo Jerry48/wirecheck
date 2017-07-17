@@ -4,6 +4,9 @@
   color: white;
 }
 
+table>tbody>tr>td>a {
+	color: blue;
+}
 
 /*设备信息*/
 #main {
