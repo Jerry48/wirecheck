@@ -31,7 +31,7 @@
         <div id="nav_right">
             <div id="header">
                 <div id="header_left">
-                    <p style="cursor: pointer;"><b style="font-size: 25px;">输电线路可视化巡检系统</b></p>
+                    <p><a href="/main" id="home"><b style="font-size: 25px;">输电线路可视化巡检系统</b></a></p>
                 </div>
                 <div id="header_right">
                     <ul>
@@ -76,10 +76,10 @@
 						<th>隐患类型</th>
 						<th>状态</th>
 						<th>心跳</th>
-						<th>电压</th>
 						<th>温度</th>
-						<th>太阳能电压</th>
-						<th>超级电容电压</th>
+						<th>电池</th>
+						<th>太阳能</th>
+						<th>超级电容</th>
 						<th>信号强度</th>
 						<th>日拍照数量</th>
 						<th>月拍照数量</th>
@@ -104,23 +104,27 @@
 		<div style="text-align: center;"><button id="searchSubmit" style="margin-right: 30px;">查询</button><button id="resetSubmit">重置</button></div>
 		<div>
 			<p style="float: left;width: 35%;">区域查询:&nbsp</p>
-				<select class="selectLevel0" style="width: 20%;float: left;"></select>
-				<select class="selectLevel1" style="width: 20%;float: left;"></select>
-				<select class="selectLevel2" style="width: 20%;float: left;"></select>
+			<select id="selectLevel0" style="width: 65%;float: left;"></select>
+		</div>
+		<div class="hide">
+			<select id="selectLevel1" style="width: 65%;float: right;"></select>
+		</div>
+		<div class="hide">
+			<select id="selectLevel2" style="width: 65%;float: right;"></select>
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">名称查询:&nbsp</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+			<p style="float: left;width: 35%;">名称查询:&nbsp</p><input type="text" name="" style="float: left;width: 65%;"></input> 
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">电话查询:&nbsp</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+			<p style="float: left;width: 35%;">电话查询:&nbsp</p><input type="text" name="" style="float: left;width: 65%;"></input> 
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">线路查询:&nbsp</p><select class="selectLine" style="float: left;width: 60%;"><option selected="selected">全部</option></select>
+			<p style="float: left;width: 35%;">线路查询:&nbsp</p><select class="selectLine" style="float: left;width: 65%;"><option selected="selected">全部</option></select>
 		</div>
 		<div>
 			<p style="float: left;width: 35%;">隐患查询:&nbsp</p>
-			<!-- <select class="selectDanger"  style="width: 60%;float: left;"></select> -->
-			<select class="selectDanger" style="width: 60%;float: left;">
+			<!-- <select class="selectDanger"  style="width: 65%;float: left;"></select> -->
+			<select class="selectDanger" style="width: 65%;float: left;">
 				<option value="0">全部</option>
 				<option value="1">线下施工</option>
 				<option value="2">建筑工地</option>
@@ -135,7 +139,7 @@
 		</div>
 		<div>
 			<p style="float: left;width: 35%;">状态查询:&nbsp</p>
-			<select id="searchStat" style="float: left;width: 60%;">
+			<select id="searchStat" style="float: left;width: 65%;">
 				<option value="0">全部</option>
 				<option value="1">在线</option>
 				<option value="2">离线</option>
@@ -143,24 +147,24 @@
 		</div>
 		<hr>
 		<div>
-			<p style="float: left;width: 35%;">设备名称:</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+			<p style="float: left;width: 35%;">设备名称:</p><input type="text" name="" style="float: left;width: 65%;"></input> 
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">短信电话:</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+			<p style="float: left;width: 35%;">短信电话:</p><input type="text" name="" style="float: left;width: 65%;"></input> 
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">GPS经度:</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+			<p style="float: left;width: 35%;">GPS经度:</p><input type="text" name="" style="float: left;width: 65%;"></input> 
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">GPS纬度:</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+			<p style="float: left;width: 35%;">GPS纬度:</p><input type="text" name="" style="float: left;width: 65%;"></input> 
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">设备MEID:</p><input type="text" name="" style="float: left;width: 60%;"></input> 
+			<p style="float: left;width: 35%;">设备MEID:</p><input type="text" name="" style="float: left;width: 65%;"></input> 
 		</div>
 		<div>
 			<p style="float: left;width: 35%;">隐患类型:</p>
-			<!-- <select class="selectDanger" style="float: left;width: 60%;"></select> -->
-			<select class="selectDanger" style="width: 60%;float: left;">
+			<!-- <select class="selectDanger" style="float: left;width: 65%;"></select> -->
+			<select class="selectDanger" style="width: 65%;float: left;">
 				<option value="0">无</option>
 				<option value="1">线下施工</option>
 				<option value="2">建筑工地</option>
@@ -239,31 +243,35 @@
             </div>
             <div class="modal-body" id="modalAdd-body" style="width: 100%">
             	<div>
-					<p style="width: 35%;float: left;">设备ID:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">设备ID:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">设备名称:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">设备名称:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">捆绑号码:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">捆绑号码:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 <!-- 				<div>
-					<p style="width: 35%;float: left;">MEID:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">MEID:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div> -->
 				<div>
 					<p style="width: 35%;float: left;">区域选择:&nbsp</p>
-					<select class="selectLevel0" style="width: 20%;float: left;"></select>
-					<select class="selectLevel1" style="width: 20%;float: left;"></select>
-					<select class="selectLevel2" style="width: 20%;float: left;"></select>
+					<select class="selectLevel0" style="width: 65%;float: left;"></select>
+				</div>
+				<div class="hide">
+					<select class="selectLevel1" style="width: 65%;float: right;"></select>
+				</div>
+				<div class="hide">
+					<select class="selectLevel2" style="width: 65%;float: right;"></select>
 				</div>
 				<div>
 					<p style="width: 35%;float: left;">线路选择:&nbsp</p>
-					<select class="selectLine" style="width: 60%;float: left;"></select>
+					<select class="selectLine" style="width: 65%;float: left;"></select>
 				</div>
 				<div>
 					<p  style="width: 35%;float: left;">隐患类型:&nbsp</p>
-					<!-- <select class="selectDanger"  style="width: 60%;float: left;"></select> -->
-					<select class="selectDanger" style="width: 60%;float: left;">
+					<!-- <select class="selectDanger"  style="width: 65%;float: left;"></select> -->
+					<select class="selectDanger" style="width: 65%;float: left;">
 						<option value="0">无</option>
 						<option value="1">线下施工</option>
 						<option value="2">建筑工地</option>
@@ -277,13 +285,13 @@
 					</select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 65%;float: left;"></input>
 				</div>
             </div>
             <div class="modal-footer">
@@ -307,28 +315,32 @@
 					<p style="width: 35%;float: left;">设备ID:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
 				</div> -->
             	<div>
-					<p style="width: 35%;float: left;">设备名称:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">设备名称:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">捆绑号码:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">捆绑号码:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 <!-- 				<div>
-					<p style="width: 35%;float: left;">MEID:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">MEID:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div> -->
 				<div>
 					<p style="width: 35%;float: left;">区域选择:&nbsp</p>
-					<select class="selectLevel0" style="width: 20%;float: left;"></select>
-					<select class="selectLevel1" style="width: 20%;float: left;"></select>
-					<select class="selectLevel2" style="width: 20%;float: left;"></select>
+					<select class="selectLevel0" style="width: 65%;float: left;"></select>
+				</div>
+				<div class="hide">
+					<select class="selectLevel1" style="width: 65%;float: right;"></select>
+				</div>
+				<div class="hide">
+					<select class="selectLevel2" style="width: 65%;float: right;"></select>
 				</div>
 				<div>
 					<p style="width: 35%;float: left;">线路选择:&nbsp</p>
-					<select class="selectLine" style="width: 60%;float: left;"></select>
+					<select class="selectLine" style="width: 65%;float: left;"></select>
 				</div>
 				<div>
 					<p  style="width: 35%;float: left;">隐患类型:&nbsp</p>
-					<!-- <select class="selectDanger"  style="width: 60%;float: left;"></select> -->
-					<select class="selectDanger" style="width: 60%;float: left;">
+					<!-- <select class="selectDanger"  style="width: 65%;float: left;"></select> -->
+					<select class="selectDanger" style="width: 65%;float: left;">
 						<option value="0">无</option>
 						<option value="1">线下施工</option>
 						<option value="2">建筑工地</option>
@@ -342,13 +354,13 @@
 					</select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 65%;float: left;"></input>
 				</div>
             </div>
             <div class="modal-footer">

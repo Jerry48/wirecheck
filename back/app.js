@@ -24,16 +24,16 @@ app.use(cookieParser());
 /// cookie session
 //var cookieSession = require('cookie-session');
 //app.use(cookieSession({
-//	name: 'allpapapa',
-//	keys: ['allpapapa150508', 'catosoft.com'],
+//  name: 'allpapapa',
+//  keys: ['allpapapa150508', 'catosoft.com'],
 //
-//	// cookie option, '/' path, httponly, no secure
-//	maxAge  : 7*24*3600*1000,        // one week expired
-//	override: true,
-//	path    : '/',                   // '/' path
-//	///domain  : '.7walker.cn', // specific domain
-//	httpOnly: false,                 // don't allow only http method
-//	secure  : false                  // no secure
+//  // cookie option, '/' path, httponly, no secure
+//  maxAge  : 7*24*3600*1000,        // one week expired
+//  override: true,
+//  path    : '/',                   // '/' path
+//  ///domain  : '.7walker.cn', // specific domain
+//  httpOnly: false,                 // don't allow only http method
+//  secure  : false                  // no secure
 //}));
 
 var session = require('express-session');
@@ -41,19 +41,24 @@ var MySQLStore = require('express-mysql-session')(session);
 var sqlOptions = {
     host: 'localhost',
     port: 3306,
-    user     : 'ccflab',
-    password : 'CCFLabSJTUB06',
+    user: 'ccflab',
+    password: 'CCFLabSJTUB06',
     database: 'wirecheck',
     useConnectionPooling: true,
 };
 var sessionStore = new MySQLStore(sqlOptions);
 
 app.use(session({
-  unset:'destroy',
-  key: 'wirecheck_session_cookie',
-  secret: 'ccflab.?sjtu@123',
-  store: sessionStore,
-  cookie: {path:'/', secure:false, httpOnly:false, maxAge: 24*60*1000*60,},
+    unset: 'destroy',
+    key: 'wirecheck_session_cookie',
+    secret: 'ccflab.?sjtu@123',
+    store: sessionStore,
+    cookie: {
+        path: '/',
+        secure: false,
+        httpOnly: false,
+        maxAge: 24 * 60 * 1000 * 60,
+    },
 }));
 
 /// body parser
@@ -68,65 +73,67 @@ app.use(morgan('combined'));
 //multer upload
 var multer = require('multer');
 app.use(multer({
-  dest: './uploads/',
-  putSingleFilesInArray: true,
+    dest: './uploads/',
+    putSingleFilesInArray: true,
 
-  changeDest: function(dest, req, res){
-    debug('changeDest dest:'+dest);
-    debug('changeDest req.url:%j', req.url);
+    changeDest: function(dest, req, res) {
+        debug('changeDest dest:' + dest);
+        debug('changeDest req.url:%j', req.url);
 
-    var filepath = dest;
-    var parentPath = dataHelper.createParentPath(new Date());
-    switch(req.url){
-      case '/api/upload/voice':
-          filepath = constantHelper.SERVER.VOICEROOT + parentPath;
-        break;
-      case '/api/upload/portrait':
-          filepath = constantHelper.SERVER.PORTRAITROOT + parentPath;
-        break;
-      case '/api/upload/ios':
-          filepath = constantHelper.SERVER.DOWNLOADROOT ;
-          break;
-      case '/api/upload/android':
-          filepath = constantHelper.SERVER.DOWNLOADROOT ;
-          break;
-      case '/api/upload/update':
-          filepath = './uploads/update/' ;
-          break;
-      default:
-        break;
+        var filepath = dest;
+        var parentPath = dataHelper.createParentPath(new Date());
+        switch (req.url) {
+            case '/api/upload/voice':
+                filepath = constantHelper.SERVER.VOICEROOT + parentPath;
+                break;
+            case '/api/upload/portrait':
+                filepath = constantHelper.SERVER.PORTRAITROOT + parentPath;
+                break;
+            case '/api/upload/ios':
+                filepath = constantHelper.SERVER.DOWNLOADROOT;
+                break;
+            case '/api/upload/android':
+                filepath = constantHelper.SERVER.DOWNLOADROOT;
+                break;
+            case '/api/upload/update':
+                filepath = './uploads/update/';
+                break;
+            default:
+                break;
+        }
+        debug('changeDest filepath:%j', filepath);
+
+        if (!fs.existsSync(filepath)) {
+            fs.mkdirSync(filepath);
+        }
+
+        return filepath;
+    },
+
+    rename: function(fieldname, filename, req, res) {
+        debug('rename: fieldname:' + fieldname);
+        debug('rename: filename:' + filename);
+
+        var newName = filename;
+
+        debug('rename: new Name:' + newName);
+
+        return newName;
+    },
+
+    onFileUploadStart: function(file, req, res) {
+
+        debug('onFileUploadStart file: %j', file);
+
+    },
+
+    onFileUploadComplete: function(file, req, res) {
+        debug('onFileUploadComplete file: %j', file);
+        res.json({
+            flag: 1
+        });
+        debug(res.json);
     }
-    debug('changeDest filepath:%j', filepath);
-   
-    if (!fs.existsSync(filepath)) {
-		  fs.mkdirSync(filepath);		
-	  }
-
-    return filepath;
-  },
-
-  rename: function(fieldname, filename, req, res){
-    debug('rename: fieldname:'+fieldname);
-    debug('rename: filename:'+filename);
-    
-    var newName = filename;
-
-    debug('rename: new Name:'+newName);
-    
-    return newName;
-  },
-
-  onFileUploadStart: function(file, req, res){
-   
-    debug('onFileUploadStart file: %j',file);
-
-  },
-
-  onFileUploadComplete: function(file, req, res){
-     debug('onFileUploadComplete file: %j', file);
-     res.json({flag:1});
-     debug(res.json);
-  }
 }));
 
 // Login logic
@@ -187,165 +194,176 @@ app.use(express.static(__dirname + '/files'));
 // front
 
 
-var api_front_main = fs.readFileSync(__dirname+'/front/main4.html');
-app.use('/main', function(req, res){
-  console.log('req.session:%j', req.session);
-  console.log('+++++++++++++',sessionExist(req.cookies.sessionId));
-  console.log('asdfasdfasdfasdreq.cookies:%j',req.cookies.sessionId);
-  if((req.cookies.sessionId==undefined)||(req.cookies.sessionId=='null')){
-      res.redirect('/login');
-    }else{
-      var sqlstr = 'select * from sessions where session_id = "'+req.cookies.sessionId+'";';
-      var query = {sqlstr:sqlstr,};
-      userModel.query(query, function(err, rows) {
-        if(err){
-          console.log(err);
-        }else{
-          if(rows.length==0){
-            res.redirect('/login');
-          }else{
-            res.set('Content-Type', 'text/html');
-            res.write(api_front_main);
-            res.end();
-          }
-        } 
-      });
-    }
-});
-
-var api_front_patrol = fs.readFileSync(__dirname+'/front/patrol4.html');
-app.use('/patrol', function(req, res){
-  console.log('req.session:%j', req.session);
-  if((req.cookies.sessionId==undefined)||(req.cookies.sessionId=='null')){
-      res.redirect('/login');
-    }else{
-      var sqlstr = 'select * from sessions where session_id = "'+req.cookies.sessionId+'";';
-      var query = {sqlstr:sqlstr,};
-      userModel.query(query, function(err, rows) {
-        if(err){
-          console.log(err);
-        }else{
-          if(rows.length==0){
-            res.redirect('/login');
-          }else{
-            res.set('Content-Type', 'text/html');
-            res.write(api_front_patrol);
-            res.end();
-          }
-        } 
-      });
-    }
-});
-
-var api_front_device = fs.readFileSync(__dirname+'/front/device4.html');
-app.use('/device', function(req, res){
-  console.log('req.session:%j', req.session);
-  if((req.cookies.sessionId==undefined)||(req.cookies.sessionId=='null')){
-      res.redirect('/login');
-    }else{
-      var sqlstr = 'select * from sessions where session_id = "'+req.cookies.sessionId+'";';
-      var query = {sqlstr:sqlstr,};
-      userModel.query(query, function(err, rows) {
-        if(err){
-          console.log(err);
-        }else{
-          if(rows.length==0){
-            res.redirect('/login');
-          }else{
-            res.set('Content-Type', 'text/html');
-            res.write(api_front_device);
-            res.end();
-          }
-        } 
-      });
-    }
-});
-
-var api_front_login = fs.readFileSync(__dirname+'/front/login.html');
-app.use('/login', function(req, res){
-  console.log('req.session:%j', req.session);
-
-  res.set('Content-Type', 'text/html');
-  res.write(api_front_login);
-  res.end();
-  
-});
-
-
-var api_front_user = fs.readFileSync(__dirname+'/front/user4.html');
-app.use('/user', function(req, res){
+var api_front_main = fs.readFileSync(__dirname + '/front/main4.html');
+app.use('/main', function(req, res) {
     console.log('req.session:%j', req.session);
-    if((req.cookies.sessionId==undefined)||(req.cookies.sessionId=='null')){
-      res.redirect('/login');
-    }else{
-      var sqlstr = 'select * from sessions where session_id = "'+req.cookies.sessionId+'";';
-      var query = {sqlstr:sqlstr,};
-      userModel.query(query, function(err, rows) {
-        if(err){
-          console.log(err);
-        }else{
-          if(rows.length==0){
-            res.redirect('/login');
-          }else{
-            res.set('Content-Type', 'text/html');
-            res.write(api_front_user);
-            res.end();
-          }
-        } 
-      });
+    console.log('+++++++++++++', sessionExist(req.cookies.sessionId));
+    console.log('req.cookies:%j', req.cookies.sessionId);
+    if ((req.cookies.sessionId == undefined) || (req.cookies.sessionId == 'null')) {
+        res.redirect('/login');
+    } else {
+        var sqlstr = 'select * from sessions where session_id = "' + req.cookies.sessionId + '";';
+        var query = {
+            sqlstr: sqlstr,
+        };
+        userModel.query(query, function(err, rows) {
+            if (err) {
+                console.log(err);
+            } else {
+                if (rows.length == 0) {
+                    res.redirect('/login');
+                } else {
+                    res.set('Content-Type', 'text/html');
+                    res.write(api_front_main);
+                    res.end();
+                }
+            }
+        });
     }
-    
 });
 
-var api_front_general_user = fs.readFileSync(__dirname+'/front/general_user.html');
-app.use('/general_user', function(req, res){
+var api_front_patrol = fs.readFileSync(__dirname + '/front/patrol4.html');
+app.use('/patrol', function(req, res) {
+    console.log('req.session:%j', req.session);
+    if ((req.cookies.sessionId == undefined) || (req.cookies.sessionId == 'null')) {
+        res.redirect('/login');
+    } else {
+        var sqlstr = 'select * from sessions where session_id = "' + req.cookies.sessionId + '";';
+        var query = {
+            sqlstr: sqlstr,
+        };
+        userModel.query(query, function(err, rows) {
+            if (err) {
+                console.log(err);
+            } else {
+                if (rows.length == 0) {
+                    res.redirect('/login');
+                } else {
+                    res.set('Content-Type', 'text/html');
+                    res.write(api_front_patrol);
+                    res.end();
+                }
+            }
+        });
+    }
+});
+
+var api_front_device = fs.readFileSync(__dirname + '/front/device4.html');
+app.use('/device', function(req, res) {
+    console.log('req.session:%j', req.session);
+    if ((req.cookies.sessionId == undefined) || (req.cookies.sessionId == 'null')) {
+        res.redirect('/login');
+    } else {
+        var sqlstr = 'select * from sessions where session_id = "' + req.cookies.sessionId + '";';
+        var query = {
+            sqlstr: sqlstr,
+        };
+        userModel.query(query, function(err, rows) {
+            if (err) {
+                console.log(err);
+            } else {
+                if (rows.length == 0) {
+                    res.redirect('/login');
+                } else {
+                    res.set('Content-Type', 'text/html');
+                    res.write(api_front_device);
+                    res.end();
+                }
+            }
+        });
+    }
+});
+
+var api_front_login = fs.readFileSync(__dirname + '/front/login.html');
+app.use('/login', function(req, res) {
+    console.log('req.session:%j', req.session);
+
+    res.set('Content-Type', 'text/html');
+    res.write(api_front_login);
+    res.end();
+
+});
+
+
+var api_front_user = fs.readFileSync(__dirname + '/front/user4.html');
+app.use('/user', function(req, res) {
+    console.log('req.session:%j', req.session);
+    if ((req.cookies.sessionId == undefined) || (req.cookies.sessionId == 'null')) {
+        res.redirect('/login');
+    } else {
+        var sqlstr = 'select * from sessions where session_id = "' + req.cookies.sessionId + '";';
+        var query = {
+            sqlstr: sqlstr,
+        };
+        userModel.query(query, function(err, rows) {
+            if (err) {
+                console.log(err);
+            } else {
+                if (rows.length == 0) {
+                    res.redirect('/login');
+                } else {
+                    res.set('Content-Type', 'text/html');
+                    res.write(api_front_user);
+                    res.end();
+                }
+            }
+        });
+    }
+
+});
+
+var api_front_general_user = fs.readFileSync(__dirname + '/front/general_user.html');
+app.use('/general_user', function(req, res) {
     console.log('req.session:%j', req.session);
 
     res.set('Content-Type', 'text/html');
     res.write(api_front_general_user);
     res.end();
-    
+
 });
 
 //for pic download
 app.get('/download', function(req, res) {
-  var filepath = req.query.filepath;
-  var filepath =  '../picserver/files/'+filepath;
-  res.download(filepath);
+    var filepath = req.query.filepath;
+    var filepath = '../picserver/files/' + filepath;
+    res.download(filepath);
 });
 
 
 // SPA portal
-app.use(function(req, res){
-  if(req.originalUrl=='/api/upload/update'){
+app.use(function(req, res) {
+    if (req.originalUrl == '/api/upload/update') {
 
-  }else{
-    debug('req.url'+req.originalUrl);
-    console.log('req.session:%j', req.session);
+    } else {
+        debug('req.url' + req.originalUrl);
+        console.log('req.session:%j', req.session);
 
-    res.set('Content-Type', 'text/html');
-    res.send('科霖智能 wire check service, no view');
-  }
+        res.set('Content-Type', 'text/html');
+        res.send('科霖智能 wire check service, no view');
+    }
 });
 
 
 app.listen(port);
-console.log('CCFLab SJTU http server listening on '+port);
+console.log('CCFLab SJTU http server listening on ' + port);
 
 
-function sessionExist(sessionId){
-  console.log('$$$$$$$$$$$$$$$$$$$$$$$$');
-  var flag=0;
-  var sqlstr = 'select * from sessions where session_id = "'+sessionId+'";';
-  var query = {sqlstr:sqlstr,};
-  userModel.query(query, function(err, rows) {
-    if(err){next(err);}else{
-      if(rows.length==0){
-        var flag=0;
-      }else{
-        var flag=1;
-      } 
-    }
-  });
-  return flag;
+function sessionExist(sessionId) {
+    var flag = 0;
+    var sqlstr = 'select * from sessions where session_id = "' + sessionId + '";';
+    var query = {
+        sqlstr: sqlstr,
+    };
+    userModel.query(query, function(err, rows) {
+        if (err) {
+            next(err);
+        } else {
+            if (rows.length == 0) {
+                var flag = 0;
+            } else {
+                var flag = 1;
+            }
+        }
+    });
+    return flag;
 }

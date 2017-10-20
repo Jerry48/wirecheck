@@ -1,70 +1,59 @@
 $(function() {
-    $("body").hide();
     const cookie_sessionId = Cookies.get('sessionId');
-    let cookie_userId = "";
-    let cookie_userType = 0;
-    let cookie_userName = "";
-    let cookie_name = "";
+    const userInfo = getUsersBySession(cookie_sessionId);
+    const cookie_userId = userInfo.userId;
+    const cookie_userType = parseInt(userInfo.userType);
+    const cookie_userName = userInfo.userName;
+    const userDetails = getUserDetails(cookie_userName);
+    const cookie_name = userDetails.name;
 
-    if(cookie_sessionId === undefined) {
-        window.location.href = "/login";
-    }else{
-        $("body").show();
-        const userInfo = getUsersBySession(cookie_sessionId);
-        cookie_userId = userInfo.userId;
-        cookie_userType = parseInt(userInfo.userType);
-        cookie_userName = userInfo.userName;
-
-        const userDetails = getUserDetails(cookie_userName);
-        cookie_name = userDetails.name;
-        
-        if(!cookie_userType) {
-            $("#user").hide();
-        }
-
-        $('#nav').css('visibility', 'visible')
-        $('#main').css('visibility', 'visible')
-        initialize();
+    if (!cookie_userType) {
+        $("#user").hide();
     }
+
+    initialize();
+    $("#nav").css("visibility", "visible");
+    $("#main").css("visibility", "visible");
 
     function initialize() {
         // keep 16:9
-        let win_width = parseFloat($(document).width());
+        var win_width = parseFloat($(document).width());
         $('body').css('height', win_width * 1080 / 1920 + 'px');
-        
+
         $('#pics14 p').each(function() {
-            let h = $(this).parent().css('height');
+            var h = $(this).parent().css('height');
             $(this).css('line-height', h);
         })
 
         $('p').each(function() {
-            let h = $(this).parent().css('height');
+            var h = $(this).parent().css('height');
             $(this).css('line-height', h);
             $(this).css("margin-bottom", "0px");
         })
 
         $('a').each(function() {
-            let h = $(this).parent().css('height');
+            var h = $(this).parent().css('height');
             $(this).css('line-height', h);
         })
 
         // adjust logo
-        let w = parseFloat($('#nav_left img').css('width'));
-        let img_h = w * 0.2901;
+        var w = parseFloat($('#nav_left img').css('width'));
+        var img_h = w * 0.2901;
         $('#nav_left img').css('height', img_h + 'px');
-        let h = parseFloat($('#nav_left').css('height'));
+        var h = parseFloat($('#nav_left').css('height'));
         $('#nav_left img').css('margin-top', (h - img_h) / 2 + 'px');
         $('#nav_left img').css('margin-bottom', (h - img_h) / 2 + 'px');
 
         // welcome
-        const myDate = new Date();
-        const year = myDate.getFullYear();
-        const month = myDate.getMonth() + 1;
-        const day = myDate.getDate();
-        const dayOfWeek = myDate.getDay();
-        const dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
-        $('#tabs_right p').text('欢迎您: ' + cookie_name + ' 今天是' + year + '年' + month + '月' + day + '月' +
-            '   星期' + dayOfWeekName[dayOfWeek]);
+        var myDate = new Date();
+        var year = myDate.getFullYear();
+        var month = myDate.getMonth() + 1;
+        var day = myDate.getDate();
+        var dayOfWeek = myDate.getDay();
+        var dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
+        $('#tabs_right p').css("white-space", "pre");
+        $('#tabs_right p').text('欢迎您, ' + cookie_name + '!  今天是' + year + '年' + month + '月' + day + '月' +
+            '  星期' + dayOfWeekName[dayOfWeek]);
 
         // ````````````````````````````` common use above
 
@@ -84,24 +73,21 @@ $(function() {
         $('.pics').css('width', w / 2 + 'px');
         w = parseFloat($('#pics14').css('width'));
 
-        // status_3
-        $('#dvc_status p').css('line-height', '20px');
-        
         // adjust interval
         h = parseFloat($('#interval').parent().css('height'));
-        let i_h = parseFloat($('#interval').css('height'));
-        $('#interval').css('margin-top',(h-i_h)/2+'px');
-        $('#interval').css('margin-bottom',(h-i_h)/2+'px');
+        var i_h = parseFloat($('#interval').css('height'));
+        $('#interval').css('margin-top', (h - i_h) / 2 + 'px');
+        $('#interval').css('margin-bottom', (h - i_h) / 2 + 'px');
 
         // adjust pic0 desc
         h = parseFloat($('#pics0_desc').css('height'));
-        $('#pics0_desc div:eq(0)').css('margin-top',h*0.1+'px');
-        $('#pics0_desc div:eq(1)').css('margin-bottom',h*0.1+'px');
+        $('#pics0_desc div:eq(0)').css('margin-top', h * 0.1 + 'px');
+        $('#pics0_desc div:eq(1)').css('margin-bottom', h * 0.1 + 'px');
 
         // adjust history p
-        $('#historyArea p').css('line-height','20px');
-        $('#historyArea p').css('margin-bottom','0px');
-        $('#historyArea').css('overflow-y','auto');
+        $('#historyArea p').css('line-height', '20px');
+        $('#historyArea p').css('margin-bottom', '0px');
+        $('#historyArea').css('overflow-y', 'auto');
 
         // adjust records
         h = parseFloat($('#records').css('height'));
@@ -150,7 +136,7 @@ $(function() {
         });
 
         // list1
-        const channeltree = channelTree();
+        var channeltree = channelTree();
         $('#content1').treeview({
             data: channeltree,
             levels: 3,
@@ -169,7 +155,7 @@ $(function() {
 
         // content max height
         h = parseFloat($('#tree').css('height'));
-        let list_h = parseFloat($('#list1').css('height'));
+        var list_h = parseFloat($('#list1').css('height'));
         $('.content').css('max-height', h - 2 * list_h + 'px');
         $('.content ul').css('margin', '0px');
         $('.content ul li').css('padding', '10px');
@@ -181,10 +167,10 @@ $(function() {
 
         // server status
         checkServer();
-        intervalIds.checkServer = setInterval(checkServer,60000);
+        intervalIds.checkServer = setInterval(checkServer, 60000);
 
         // patrol pics
-        let data = {
+        var data = {
             "userId": cookie_userId,
             "userType": cookie_userType,
             "size": 5,
@@ -204,7 +190,7 @@ $(function() {
                 if (index == 0) {
                     getAllPics(data);
                 }
-            },INTERVAL
+            }, INTERVAL
         );
 
         intervalIds.heartBeatRecords = setInterval(
@@ -221,29 +207,29 @@ $(function() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false
-        }).then(function(data){
+        }).then((data) => {
             if (!data.code) {
-                const status = data.result.serverStatus;
-                if(status.wechatserver) {
+                var status = data.result.serverStatus;
+                if (status.wechatserver) {
                     $("#wechat-status").html("在线");
                     $("#wechat-status").css("color", "blue")
-                }else{
+                } else {
                     $("#wechat-status").html("离线");
                     $("#wechat-status").css("color", "red")
                 }
 
-                if(status.socketserver) {
+                if (status.socketserver) {
                     $("#socket-status").html("在线");
                     $("#socket-status").css("color", "blue")
-                }else{
+                } else {
                     $("#socket-status").html("离线");
                     $("#socket-status").css("color", "red")
                 }
 
-                if(status.fileserver) {
+                if (status.fileserver) {
                     $("#pic-status").html("在线");
                     $("#pic-status").css("color", "blue")
-                }else{
+                } else {
                     $("#pic-status").html("离线");
                     $("#pic-status").css("color", "red")
                 }
@@ -254,13 +240,13 @@ $(function() {
     }
 
     // logo click
-    $('#nav_left').click(function(){
+    $('#nav_left').click(function() {
         window.location.href = '/main';
     })
 
     //logout
     $('#logout').click(function() {
-        const data = {
+        var data = {
             'userId': cookie_userId
         }
         $.ajax({
@@ -270,7 +256,7 @@ $(function() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false
-        }).then(function(data){
+        }).then(function(data) {
             if (!data.code) {
                 window.location.href = 'login';
                 Cookies.set('sessionId', null);
@@ -279,17 +265,17 @@ $(function() {
             }
         });
     });
-    
-    $('#searchHis').click(function(){
-        let startDate = $('#historyArea input[name=daterange]:eq(0)').val();
-        let endDate = $('#historyArea input[name=daterange]:eq(1)').val();
-        startDate = (startDate == '') ? '1970-01-01' : startDate;
-        endDate = (endDate == '') ? '2970-01-01' : endDate; 
 
-        if(parseInt($('body').attr('if-all'))){
-            const index = parseInt($('body').attr('allpic-index'));
-            const size = 9;
-            const data = {
+    $('#searchHis').click(function() {
+        var startDate = $('#historyArea input[name=daterange]:eq(0)').val();
+        var endDate = $('#historyArea input[name=daterange]:eq(1)').val();
+        startDate = (startDate == '') ? '1970-01-01' : startDate;
+        endDate = (endDate == '') ? '2970-01-01' : endDate;
+
+        if (parseInt($('body').attr('if-all'))) {
+            var index = parseInt($('body').attr('allpic-index'));
+            var size = 9;
+            var data = {
                 "userId": cookie_userId,
                 "userType": cookie_userType,
                 "index": 0,
@@ -298,16 +284,16 @@ $(function() {
                 "endTime": endDate + " 23:59:59"
             };
             getAllPicsHistory(data);
-        }else{
-            const deviceId = $('body').attr('pic-deviceId');
-            const index = parseInt($('body').attr('pic-index'));
-            const channelNo = parseInt($('body').attr('pic-channelNo'));
-            const size = 9;
-            const type = 1;
-            const data = {
-                "channelNo":channelNo,
+        } else {
+            var deviceId = $('body').attr('pic-deviceId');
+            var index = parseInt($('body').attr('pic-index'));
+            var channelNo = parseInt($('body').attr('pic-channelNo'));
+            var size = 9;
+            var type = 1;
+            var data = {
+                "channelNo": channelNo,
                 "type": 0,
-                "id":  deviceId,
+                "id": deviceId,
                 "size": 9,
                 "index": 0,
                 "startTime": startDate + " 00:00:00",
@@ -318,14 +304,14 @@ $(function() {
     })
 
 
-    $('#home').click(function(){
-        $('#chartArea').hide();
-        $('#tempArea').hide();
-        $('#historyArea').hide();
-        $('#tabs_left a').parent().css('background-image',"url(elements/tabs.gif)");
-        $('#tabs_left a').css('color','white');
-        $('#main_right').show();
-    })
+    // $('#home').click(function(){
+    //     $('#chartArea').hide();
+    //     $('#tempArea').hide();
+    //     $('#historyArea').hide();
+    //     $('#tabs_left a').parent().css('background-image',"url(elements/tabs.gif)");
+    //     $('#tabs_left a').css('color','white');
+    //     $('#main_right').show();
+    // })
 
     $('#tree').click(function() {
         $('.content ul').css('margin', '0px');
@@ -334,7 +320,7 @@ $(function() {
     })
 
     $('#list1').click(function() {
-        const channeltree = channelTree();
+        var channeltree = channelTree();
         $('#content1').treeview({
             data: channeltree,
             levels: 3,
@@ -358,7 +344,7 @@ $(function() {
     })
 
     $('#list2').click(function() {
-        const linetree = deviceLineTree();
+        var linetree = deviceLineTree();
         $('#content2').treeview({
             data: linetree,
             levels: 3,
@@ -392,9 +378,9 @@ $(function() {
     // buttons
     $('#picLast').click(function() {
         if ($('body').attr('if-all') == 1) {
-            const index = parseInt($('body').attr('allpic-index'));
-            const size = 5;
-            const data = {
+            var index = parseInt($('body').attr('allpic-index'));
+            var size = 5;
+            var data = {
                 "userId": cookie_userId,
                 "userType": cookie_userType,
                 "index": index - 1,
@@ -404,12 +390,12 @@ $(function() {
             };
             getAllPics(data);
         } else {
-            const id = $('body').attr('pic-deviceId');
-            const channelNo = parseInt($('body').attr('pic-channelNo'));
-            const size = 5;
-            const index = parseInt($('body').attr('pic-index'));
-            const type = 0;
-            const data = {
+            var id = $('body').attr('pic-deviceId');
+            var channelNo = parseInt($('body').attr('pic-channelNo'));
+            var size = 5;
+            var index = parseInt($('body').attr('pic-index'));
+            var type = 0;
+            var data = {
                 "channelNo": channelNo,
                 "id": id,
                 "size": size,
@@ -421,12 +407,12 @@ $(function() {
             getDevicePics(data);
         }
     });
-    
+
     $('#picNext').click(function() {
         if ($('body').attr('if-all') == 1) {
-            const index = parseInt($('body').attr('allpic-index'));
-            const size = 5;
-            const data = {
+            var index = parseInt($('body').attr('allpic-index'));
+            var size = 5;
+            var data = {
                 "userId": cookie_userId,
                 "userType": cookie_userType,
                 "index": index + 1,
@@ -436,12 +422,12 @@ $(function() {
             };
             getAllPics(data);
         } else {
-            const id = $('body').attr('pic-deviceId');
-            const channelNo = parseInt($('body').attr('pic-channelNo'));
-            const size = 5;
-            const index = parseInt($('body').attr('pic-index'));
-            const type = 0;
-            const data = {
+            var id = $('body').attr('pic-deviceId');
+            var channelNo = parseInt($('body').attr('pic-channelNo'));
+            var size = 5;
+            var index = parseInt($('body').attr('pic-index'));
+            var type = 0;
+            var data = {
                 "channelNo": channelNo,
                 "id": id,
                 "size": size,
@@ -456,9 +442,9 @@ $(function() {
 
     $('#refresh').click(function() {
         if ($('body').attr('if-all') == 1) {
-            const index = parseInt($('body').attr('pic-index'));
-            const size = 5;
-            const data = {
+            var index = parseInt($('body').attr('pic-index'));
+            var size = 5;
+            var data = {
                 "userId": cookie_userId,
                 "userType": cookie_userType,
                 "index": 0,
@@ -468,12 +454,12 @@ $(function() {
             };
             getAllPics(data);
         } else {
-            const id = $('body').attr('pic-deviceId');
-            const channelNo = parseInt($('body').attr('pic-channelNo'));
-            const size = 5;
-            const index = parseInt($('body').attr('pic-index'));
-            const type = 0;
-            const data = {
+            var id = $('body').attr('pic-deviceId');
+            var channelNo = parseInt($('body').attr('pic-channelNo'));
+            var size = 5;
+            var index = parseInt($('body').attr('pic-index'));
+            var type = 0;
+            var data = {
                 "channelNo": channelNo,
                 "id": id,
                 "size": size,
@@ -490,20 +476,20 @@ $(function() {
         $('#records').hide();
         $('#pics img').parent().css('border', '');
         $(this).parent().css('border', '2px solid red');
-        const picId = $(this).attr('picId');
-        const deviceId = $(this).attr('deviceId');
-        const channelNo = $(this).attr('channelNo');
+        var picId = $(this).attr('picId');
+        var deviceId = $(this).attr('deviceId');
+        var channelNo = $(this).attr('channelNo');
         $('body').attr('selectedPic', picId);
         $('body').attr('selectedPic-deviceId', deviceId);
         $('body').attr('selectedPic-channelNo', channelNo);
     })
 
     $('#setRef').click(function() {
-        const tmp = getSelectedDevice();
+        var tmp = getSelectedDevice();
         if (tmp == -1) {
             alert('请选择一个设备');
         } else {
-            const picId = $('body').attr('selectedPic');
+            var picId = $('body').attr('selectedPic');
             if (picId == undefined) {
                 alert('请选择图片');
             } else {
@@ -514,24 +500,24 @@ $(function() {
     });
 
     $('#modalPwd .modal-footer button:eq(0)').click(function() {
-        const div = $('#modalPwd .modal-body');
-        const userName = div.find('div:eq(0) input').val();
-        const password = div.find('div:eq(1) input').val();
-        const rePassword = div.find('div:eq(2) input').val();
+        var div = $('#modalPwd .modal-body');
+        var userName = div.find('div:eq(0) input').val();
+        var password = div.find('div:eq(1) input').val();
+        var rePassword = div.find('div:eq(2) input').val();
         if (userName == '' || password == '' || rePassword == '') {
             alert('请输入完整信息!');
         } else if (password != rePassword) {
             alert('两次输入的密码不一致!');
         } else {
-            const data = {
+            var data = {
                 'userName': userName,
                 'password': password,
             }
             if (checkUser(data) != 0) {
-                const picId = $('body').attr('selectedPic');
-                const deviceId = $('body').attr('selectedPic-deviceId');
-                const channelNo = $('body').attr('selectedPic-channelNo');
-                const data = {
+                var picId = $('body').attr('selectedPic');
+                var deviceId = $('body').attr('selectedPic-deviceId');
+                var channelNo = $('body').attr('selectedPic-channelNo');
+                var data = {
                     "deviceId": deviceId,
                     "picId": picId,
                     "channelNo": channelNo
@@ -565,9 +551,9 @@ $(function() {
         if ($('body').attr('selectedPic') == undefined || $('body').attr('selectedPic') == '') {
             alert('请选择图片！');
         } else {
-            const picId = $('body').attr('selectedPic');
-            const deviceId = $('body').attr('selectedPic-deviceId');
-            const data = {
+            var picId = $('body').attr('selectedPic');
+            var deviceId = $('body').attr('selectedPic-deviceId');
+            var data = {
                 "deviceId": deviceId,
                 "userId": cookie_userId,
             }
@@ -581,9 +567,9 @@ $(function() {
                     success: function(data) {
                         $('#modalPush .modal-body').empty();
                         if (data.code == 0) {
-                            const list = data.result.list;
-                            for (let i = 0; i < list.length; ++i) {
-                                const $ctrl = '<div><input userId="' + list[i].userId + '" type="checkbox">' + list[i].userName + '___微信：' + list[i].nickname + '</div>';
+                            var list = data.result.list;
+                            for (var i = 0; i < list.length; ++i) {
+                                var $ctrl = '<div><input userId="' + list[i].userId + '" type="checkbox">' + list[i].userName + '___微信：' + list[i].nickname + '</div>';
                                 $('#modalPush .modal-body').append($ctrl);
                             }
 
@@ -599,19 +585,19 @@ $(function() {
     })
 
     $('#modalPush .modal-footer button:eq(0)').click(function() {
-        const picId = $('body').attr('selectedPic');
-        const deviceId = $('body').attr('selectedPic-deviceId');
-        const picIds = [];
+        var picId = $('body').attr('selectedPic');
+        var deviceId = $('body').attr('selectedPic-deviceId');
+        var picIds = [];
         picIds.push({
             'picId': picId
         });
-        let userIds = [];
+        var userIds = [];
         $('#modalPush input:checked').each(function() {
             userIds.push({
                 'userId': $(this).attr('userId')
             });
         });
-        const data = {
+        var data = {
             "userId": cookie_userId,
             "deviceId": deviceId,
             "picIds": picIds,
@@ -637,19 +623,19 @@ $(function() {
     }); // end of click
 
     $('#interval').change(function() {
-        const val = $(this).val();
+        var val = $(this).val();
         $('#interval').val(val);
         INTERVAL = parseInt(val) * 1000;
         clearInterval(intervalIds.getAllPics);
         clearInterval(intervalIds.findDevicePic);
         intervalIds.findDevicePic = setInterval(function() {
-            const deviceId = $('body').attr('pic-deviceId');
-            const index = parseInt($('body').attr('pic-index'));
-            const channelNo = parseInt($('body').attr('pic-channelNo'));
-            const size = 5;
-            const type = 1;
+            var deviceId = $('body').attr('pic-deviceId');
+            var index = parseInt($('body').attr('pic-index'));
+            var channelNo = parseInt($('body').attr('pic-channelNo'));
+            var size = 5;
+            var type = 1;
 
-            const data = {
+            var data = {
                 "channelNo": channelNo,
                 "type": type,
                 "id": deviceId,
@@ -665,9 +651,9 @@ $(function() {
         }, INTERVAL);
         intervalIds.getAllPics = setInterval(
             function() {
-                const index = parseInt($('body').attr('allpic-index'));
-                const size = 5;
-                const data = {
+                var index = parseInt($('body').attr('allpic-index'));
+                var size = 5;
+                var data = {
                     "userId": cookie_userId,
                     "userType": cookie_userType,
                     "index": index,
@@ -681,15 +667,15 @@ $(function() {
     })
 
     // temperature
-    $('#temperature').click(function(){
-        $('body').attr('if-temperature',1);
-        const tmp = getSelectedDevice();
+    $('#temperature').click(function() {
+        $('body').attr('if-temperature', 1);
+        var tmp = getSelectedDevice();
         if (tmp == -1) {
             alert('请选择一个设备');
 
-        }else{
-            const deviceId = $('body').attr('pic-deviceId');
-            let newData = {};
+        } else {
+            var deviceId = $('body').attr('pic-deviceId');
+            var newData = {};
 
             newData.deviceIds = [];
             newData.id = [];
@@ -703,15 +689,15 @@ $(function() {
     })
 
     // history
-    $('#history').click(function(){
-        $('body').attr('if-history',1);
+    $('#history').click(function() {
+        $('body').attr('if-history', 1);
         $('#tempArea').hide();
         $('#chartArea').hide();
         $('#main_right').hide();
-        if(parseInt($('body').attr('if-all'))){
-            const index = parseInt($('body').attr('allpic-index'));
-            const size = 9;
-            const data = {
+        if (parseInt($('body').attr('if-all'))) {
+            var index = parseInt($('body').attr('allpic-index'));
+            var size = 9;
+            var data = {
                 "userId": cookie_userId,
                 "userType": cookie_userType,
                 "index": 0,
@@ -720,16 +706,16 @@ $(function() {
                 "endTime": "2900-01-01 23:59:59"
             };
             getAllPicsHistory(data);
-        }else{
-            const deviceId = $('body').attr('pic-deviceId');
-            const index = parseInt($('body').attr('pic-index'));
-            const channelNo = parseInt($('body').attr('pic-channelNo'));
-            const size = 9;
-            const type = 1;
-            const data = {
-                "channelNo":channelNo,
+        } else {
+            var deviceId = $('body').attr('pic-deviceId');
+            var index = parseInt($('body').attr('pic-index'));
+            var channelNo = parseInt($('body').attr('pic-channelNo'));
+            var size = 9;
+            var type = 1;
+            var data = {
+                "channelNo": channelNo,
                 "type": 0,
-                "id":  deviceId,
+                "id": deviceId,
                 "size": 9,
                 "index": 0,
                 "startTime": "1970-01-01 00:00:00",
@@ -740,26 +726,26 @@ $(function() {
         $('#historyArea').show();
     })
 
-    $('#tabs_left a[data-role=tab]').click(function(){
-        $('#tabs_left a').parent().css('background-image',"url(elements/tabs.gif)");
-        $('#tabs_left a').css('color','white');
-        $(this).parent().css('background-image','url()');
-        $(this).parent().css('background-color','white');
-        $(this).css('color','rgb(1,111,111)');
+    $('#tabs_left a[data-role=tab]').click(function() {
+        $('#tabs_left a').parent().css('background-image', "url(elements/tabs.gif)");
+        $('#tabs_left a').css('color', 'white');
+        $(this).parent().css('background-image', 'url()');
+        $(this).parent().css('background-color', 'white');
+        $(this).css('color', 'rgb(1,111,111)');
     })
 
-    $('#tempArea table').on('click','button',function(){
-        const tr = $(this).parent().parent();
-        const cmdId = tr.attr('id');
-        $('body').attr('cmdId',cmdId);
-        $('#tabs_left a').parent().css('background-image',"url(elements/tabs.gif)");
-        $('#tabs_left a').css('color','white');
-        $('#tabs_left a:eq(6)').parent().css('background-image','url()');
-        $('#tabs_left a:eq(6)').parent().css('background-color','white');
-        $('#tabs_left a:eq(6)').css('color','rgb(1,111,111)');
+    $('#tempArea table').on('click', 'button', function() {
+        var tr = $(this).parent().parent();
+        var cmdId = tr.attr('id');
+        $('body').attr('cmdId', cmdId);
+        $('#tabs_left a').parent().css('background-image', "url(elements/tabs.gif)");
+        $('#tabs_left a').css('color', 'white');
+        $('#tabs_left a:eq(6)').parent().css('background-image', 'url()');
+        $('#tabs_left a:eq(6)').parent().css('background-color', 'white');
+        $('#tabs_left a:eq(6)').css('color', 'rgb(1,111,111)');
         $('#tempArea').hide();
         $('#chartArea').show();
-        const inputData = {
+        var inputData = {
             cmdID: cmdId,
             time: '2017-02-01',
         };
@@ -767,8 +753,8 @@ $(function() {
     });
 
     function searchTemp(inputData) {
-        let value = [];
-        let chartShowFlag = 1;
+        var value = [];
+        var chartShowFlag = 1;
         $.ajax({
             url: '/v1/cmd/temp/chart',
             type: "POST",
@@ -791,13 +777,13 @@ $(function() {
                 }
             }
         });
-        const pics_width = parseInt($('#chartArea').css('width'));
-        const height = parseInt($('#main').css('height'));
+        var pics_width = parseInt($('#chartArea').css('width'));
+        var height = parseInt($('#main').css('height'));
         // console.log(pics_width);
 
         if (chartShowFlag) {
-            const searchType = 'day';
-            let label = "";
+            var searchType = 'day';
+            var label = "";
             switch (searchType) {
                 case 'day':
                     label = hourLabels;
@@ -813,18 +799,18 @@ $(function() {
                     break;
             }
 
-            const data = [{
+            var data = [{
                 name: '北京',
                 value: value,
                 color: '#1f7e92',
                 line_width: 3
             }];
-            const chart = new iChart.LineBasic2D({
+            var chart = new iChart.LineBasic2D({
                 render: 'canvasDiv',
                 data: data,
                 title: inputData.time + ' 温度实况',
                 width: pics_width,
-                height: height*0.9,
+                height: height * 0.9,
                 coordinate: {
                     height: '90%',
                     background_color: '#f6f9fa'
@@ -839,10 +825,10 @@ $(function() {
         }
     }
 
-    $('#searchTemp').click(function(){
-        const time = $('#chartArea input[name=daterange]').val();
-        const cmdId = $('body').attr('cmdId');
-        const inputData = {
+    $('#searchTemp').click(function() {
+        var time = $('#chartArea input[name=daterange]').val();
+        var cmdId = $('body').attr('cmdId');
+        var inputData = {
             cmdID: cmdId,
             time: time,
         };
@@ -851,8 +837,8 @@ $(function() {
 
 
     $('#showAlert').click(function() {
-        const records = $('#records');
-        const stat = records.css('display');
+        var records = $('#records');
+        var stat = records.css('display');
         if (stat == 'none') {
             records.css('display', 'block');
         } else {
@@ -867,34 +853,156 @@ $(function() {
         $(this).css('background-color', 'rgb(228,241,250)');
     })
 
-    $('#records tbody tr').click(function(){
-        $('#records tbody tr').css('background-color','rgb(228,241,250)');
-        $(this).css('background-color','rgb(3,161,161)');
-        $('#modal_refpic').attr('src',$(this).attr('refPicUrl'));
-        $('#modal_alertpic').attr('src',$(this).attr('processedPicUrl'));
+    $('#records tbody tr').click(function() {
+        $('#records tbody tr').css('background-color', 'rgb(228,241,250)');
+        $(this).css('background-color', 'rgb(3,161,161)');
+        $('#modal_refpic').attr('src', $(this).attr('refPicUrl'));
+        $('#modal_alertpic').attr('src', $(this).attr('processedPicUrl'));
         $('#modalAlert').modal();
     })
 
 
     // `map
-    $('#icon_map').click(function(){
+    $('#icon_map').click(function() {
         $('#main_right').hide();
         $('#mapArea').show();
         initMap();
+        var ggPoint = new BMap.Point(121.506377,31.245105);
+        var markergg = new BMap.Marker(ggPoint);
+        map.addOverlay(markergg); //添加GPS marker
+        var labelgg = new BMap.Label("未转换的GPS坐标（错误）",{offset:new BMap.Size(20,-10)});
+        markergg.setLabel(labelgg); //添加GPS label
+    })
+
+    $('#mapInput button:eq(1)').click(function() {
+        var address = $('#mapInput input:eq(0)').val();
+        var radius = $('#mapInput input:eq(1)').val();
+        var url = 'http://api.map.baidu.com/geocoder/v2/?address=' + address + '&output=json&ak=fr2k1GxnZbBxXalKYdcQUNBM';
+
+        $.ajax({    
+            url: url,
+            dataType: 'jsonp',
+            success: function(data) {
+                if (data.status == 0) {
+                    address = data.result.location;
+                    var data = {
+                        'latitude': parseFloat(address.lat),
+                        'longitude': parseFloat(address.lng),
+                        'radius': parseFloat(radius)
+                    }
+                    $.ajax({
+                        url: '/v1/device/query/map2',
+                        type: "GET",
+                        data: data,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        async: false,
+                        success: function(data) {
+                            if (data.code == 0) {
+                                map.clearOverlays();
+                                var list = data.result.list;
+                                var data_info = [];
+
+                                var contentTemplte =
+                                    "<div style='width:100%;height:100%;'id='tmpid'>" +
+                                    "<div style='float:left;width:30%;'><h5 style='margin:0px;'>名字</h5><p style='margin:0px;'>电压</p><p style='margin:0px;'>充电电压</p><p style='margin:0px;'>温度</p><p style='margin:0px;'>警报</p><p style='margin:0px;'>状态</p></div>" +
+                                    "<div id='pics' style='float:left;width:70%; height:50px;'><img id='imgDemo' width='350' height='200' src='thumbnail' data-original='url' title='告警图片'/><button type='button' class='mapLastPic'>上一张</button><button type='button' class='mapNextPic'>下一张</button></div>" +
+                                    "</div>"
+
+                                var contents = [];
+                                for (var i = 0; i < list.length; ++i) {
+                                    data_info[i] = {}
+                                    data_info[i].id = list[i].deviceID;
+                                    data_info[i].name = list[i].name;
+                                    data_info[i].latitude = list[i].latitude;
+                                    data_info[i].longitude = list[i].longitude;
+                                    data_info[i].batteryVoltage = list[i].batteryVoltage;
+                                    data_info[i].chargeVoltage = list[i].chargeVoltage;
+                                    data_info[i].temperature = list[i].temperature;
+                                    data_info[i].alert = list[i].alert;
+                                    data_info[i].alertId = list[i].alertId;
+                                    data_info[i].status = list[i].status;
+                                    data_info[i].thumbnailPicUrl = list[i].thumbnailPicUrl;
+                                    data_info[i].picUrl = list[i].picUrl;
+                                    contents[i] = contentTemplte;
+                                    contents[i] = contents[i].replace('tmpid', list[i].deviceID);
+                                    contents[i] = contents[i].replace('名字', list[i].name);
+                                    contents[i] = contents[i].replace('电压', '电压:' + list[i].batteryVoltage);
+                                    contents[i] = contents[i].replace('充电电压', '充电电压:' + list[i].chargeVoltage);
+                                    contents[i] = contents[i].replace('温度', '温度:' + list[i].temperature);
+                                    contents[i] = contents[i].replace('警报', '警报:' + list[i].alert);
+                                    contents[i] = contents[i].replace('thumbnail', list[i].picUrl);
+                                    contents[i] = contents[i].replace('url', list[i].picUrl);
+                                    if (list[i].status == 0) {
+                                        var status = '离线'
+                                    } else {
+                                        var status = '在线'
+                                    }
+                                    contents[i] = contents[i].replace('状态', '状态:' + status);
+                                }
+                                console.log(contents);
+                                var viewer = new Viewer(document.getElementById('pics'), {
+                                    url: 'data-original'
+                                });
+                                var points = [];　　　　
+                                for (var i = 0; i < data_info.length; i++) {
+                                    var status = data_info[i].status; // 是否在线
+                                    var lon = data_info[i].longitude;
+                                    var lat = data_info[i].latitude;
+                                    var point = new BMap.Point(lon, lat);
+                                    // points.push(point);
+                                    if (status === 1) {
+                                        var marker = new BMap.Marker(point); // 创建标注
+                                    } else {
+                                        var iconImg = createIcon();
+                                        var marker = new BMap.Marker(point, {
+                                            icon: iconImg
+                                        }); // 创建标注
+                                    }
+                                    var label = new BMap.Label(data_info[i].name, {
+                                        "offset": new BMap.Size(colorIcons.red.lb - colorIcons.red.x + 10, -20)
+                                    });
+
+                                    map.addOverlay(marker); // 将标注添加到地图中
+                                    marker.setLabel(label);
+                                    label.setStyle({
+                                        borderColor: "#808080",
+                                        color: "#333",
+                                        cursor: "pointer",
+                                        borderWidth: '0px',
+                                        backgroundColor: 'transparent'
+                                    });
+                                    addClickHandler(contents[i], marker);
+                                }
+                                map.setViewport(points);　
+                            } else {
+                                alert('按地图获取设备列表失败');
+                                console.log(data);
+                            }
+                        }
+                    }) // end of ajax
+                } else {
+                    alert('获取指定地址经纬度失败');
+                    console.log(data);
+                }
+            }
+        })
     })
 
     // `setting
-    $('#icon_setting').click(function(){
-        const tmp = getSelectedDevice();
+    $('#icon_setting').click(function() {
+        var tmp = getSelectedDevice();
         if (tmp == -1) {
             alert('请选择一个设备');
         } else {
-            const tmpData = tmp.split('_');
-            const deviceId = tmpData[0];
+            var tmpData = tmp.split('_');
+            var deviceId = tmpData[0];
             $.ajax({
                     url: '/v1/command/setdevice',
                     type: "POST",
-                    data: JSON.stringify({"deviceId":deviceId}),
+                    data: JSON.stringify({
+                        "deviceId": deviceId
+                    }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function(data) {
@@ -906,22 +1014,22 @@ $(function() {
                             alert('设备配置失败！');
                         }
                     }
-            }) // end of ajax
-            // $('#modalSetting').modal();
+                }) // end of ajax
+                // $('#modalSetting').modal();
         }
     })
 
 
     // `photo
-    $('#icon_photo').click(function(){
-        const tmp = getSelectedDevice();
+    $('#icon_photo').click(function() {
+        var tmp = getSelectedDevice();
         if (tmp == -1) {
             alert('请选择一个设备');
         } else {
-            const tmpData = tmp.split('_');
-            const deviceId = tmpData[0];
-            const channelNo = tmpData[1];
-            const data = {
+            var tmpData = tmp.split('_');
+            var deviceId = tmpData[0];
+            var channelNo = tmpData[1];
+            var data = {
                 "deviceId": deviceId,
                 "channelNo": channelNo,
             };
@@ -940,9 +1048,9 @@ $(function() {
                             alert('拍照失败！');
                         }
                     }
-            }) // end of ajax
+                }) // end of ajax
         }
-    }) 
+    })
 
     function channelTree() {
         var data = {
@@ -1045,26 +1153,50 @@ $(function() {
         return $('.treeSelected').treeview('getSelected')[0].id;
     }
 
+
+    function getStatus(deviceId) {
+        // console.log(deviceId);
+        $.ajax({
+            url: '/v1/device/details',
+            type: "POST",
+            data: JSON.stringify({id: deviceId}),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {
+            	var status = data.result.status === 1 ? "在线" : "离线";
+                if (data.code == 0) {
+                    $('#dvc_status div').empty();
+                    $('#dvc_status div:eq(0)').append("<p><b>状态：&nbsp;&nbsp;</b></p><p><b>温度：&nbsp;&nbsp;</b>${data.result.temperature}</p>");
+                    $('#dvc_status div:eq(1)').append("<p><b>电压：&nbsp;&nbsp;</b>" + data.result.batteryVoltage + "</p><p><b>隐患类型：&nbsp;&nbsp;</b>" + dangerType[data.result.deviceDangerID] + "</p>");
+                } else {
+                    console.log('failed at alert/process');
+                }
+            }
+        }) // end of ajax
+    }
+
     function setTreeNodeSelected(selector) {
         selector.data().treeview.options.multiSelect = false;
         selector.unbind('nodeSelected');
         selector.on('nodeSelected', function(event, data) {
             $("#pics img").parent().css('border', '0px');
-            let type = selector.treeview('getSelected')[0].type;
-            const tmp = selector.treeview('getSelected')[0].id;
-            const tmpData = tmp.split('_');
-            const deviceId = tmpData[0];
-            const channelNo = tmpData[1];
-            $('body').attr('pic-deviceId',deviceId);
-            $('body').attr('pic-channelNo',channelNo);
-            const name = selector.treeview('getSelected')[0].text;
+            var type = selector.treeview('getSelected')[0].type;
+            var tmp = selector.treeview('getSelected')[0].id;
+            var tmpData = tmp.split('_');
+            var deviceId = tmpData[0];
+            var channelNo = tmpData[1];
+            $('body').attr('pic-deviceId', deviceId);
+            $('body').attr('pic-channelNo', channelNo);
+            var name = selector.treeview('getSelected')[0].text;
             if ($('#devices ul li').filter('.chosen').text() == '设备列表') {
                 if (type == 3) {
                     type = 0;
                     $.ajax({
                         url: '/v1/device/find/parents',
                         type: "POST",
-                        data: JSON.stringify({deviceId: deviceId}),
+                        data: JSON.stringify({
+                            deviceId: deviceId
+                        }),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function(data) {
@@ -1075,7 +1207,7 @@ $(function() {
                                     parentsName = parentsName + parents[parents.length - 1 - i] + " / "
                                 }
                                 parentsName += name;
-                                        // $('#header p').text(parentsName);
+                                // $('#header p').text(parentsName);
                             } else {
                                 console.log('failed at alert/process');
                             }
@@ -1092,78 +1224,54 @@ $(function() {
                 }
             }
 
-            $.ajax({
-                url: '/v1/device/details',
-                type: "POST",
-                data: JSON.stringify({id: deviceId}),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function(data) {
-                    if (data.code == 0) {
-                        $('#dvc_status p').empty();
-                        if(data.result.status){
-                            var status = '在线';
-                        }else{
-                            var status = '离线';
-                        }
-
-
-                        $('#dvc_status p:eq(0)').append('<b>状态：</b>'+status);
-                        $('#dvc_status p:eq(1)').append('<b>温度：</b>'+data.result.temperature);
-                        $('#dvc_status p:eq(2)').append('<b>电压：</b>'+data.result.batteryVoltage);
-                        $('#dvc_status p:eq(3)').append('<b>隐患类型：</b>'+dangerType[data.result.deviceDangerID]);
-                    } else {
-                        console.log('failed at alert/process');
-                    }
-                }
-            }) // end of ajx
+            getStatus(deviceId);
 
             $('body').attr('pic-index', 0);
             $('body').attr('pic-channelNo', channelNo);
-            if(parseInt($('body').attr('if-history'))){
+            if (parseInt($('body').attr('if-history'))) {
                 // var deviceId = $('body').attr('pic-deviceId');
-                const index = parseInt($('body').attr('pic-index'));
-                const channelNo = parseInt($('body').attr('pic-channelNo'));
-                const size = 9;
-                const type = 1;
-                const data = {
-                    "channelNo":channelNo,
+                var index = parseInt($('body').attr('pic-index'));
+                var channelNo = parseInt($('body').attr('pic-channelNo'));
+                var size = 9;
+                var type = 1;
+                var data = {
+                    "channelNo": channelNo,
                     "type": 0,
-                    "id":  deviceId,
+                    "id": deviceId,
                     "size": 9,
                     "index": 0,
                     "startTime": "1970-01-01 00:00:00",
                     "endTime": "2970-01-01 23:59:59"
                 }
                 getDevicePicsHistory(data);
-            }else if(parseInt($('body').attr('if-temperature'))){
-                let newData = {};
+            } else if (parseInt($('body').attr('if-temperature'))) {
+                var newData = {};
 
                 newData.deviceIds = [];
                 newData.id = [];
                 newData.type = 0;
                 newData.deviceIds.push(deviceId);
                 tempDevice(newData);
-            }else{
-                const size = 5;
-                const index = parseInt($('body').attr('pic-index'));
-                const data = {
-                    "channelNo": channelNo,
-                    "type": type,
-                    "id": deviceId,
-                    "size": size,
-                    "index": index,
-                    "startTime": "1900-01-01 00:00:00",
-                    "endTime": "2900-01-01 00:00:00"
-                }
+            } else {
+                var size = 5;
+                var index = parseInt($('body').attr('pic-index'));
+                var data = {
+                        "channelNo": channelNo,
+                        "type": type,
+                        "id": deviceId,
+                        "size": size,
+                        "index": index,
+                        "startTime": "1900-01-01 00:00:00",
+                        "endTime": "2900-01-01 00:00:00"
+                    }
                     // setDeviceStatus();
                 clearInterval(intervalIds.getAllPics);
                 clearInterval(intervalIds.findDevicePic);
                 getDevicePics(data);
                 intervalIds.findDevicePic = setInterval(function() {
-                    const index = parseInt($('body').attr('pic-index'));
+                    var index = parseInt($('body').attr('pic-index'));
                     if (index == 0) {
-                            getDevicePics(data);
+                        getDevicePics(data);
                     }
                 }, INTERVAL);
             }
@@ -1230,9 +1338,9 @@ $(function() {
                             $('#pics img:eq(' + i + ')').attr('picId', list[i].picId);
                             $('#pics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
                             $('#pics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-                            if(i>0){
-                                $('.pics:eq(' + (i-1) + ') p').text(list[i].time + ' ' + list[i].deviceId);
-                            }else {
+                            if (i > 0) {
+                                $('.pics:eq(' + (i - 1) + ') p').text(list[i].time + ' ' + list[i].deviceId);
+                            } else {
                                 $('#pics0_desc input:eq(0)').val(list[i].time);
                                 $('#pics0_desc input:eq(1)').val(list[i].deviceId);
                                 $('#pics0_desc input:eq(2)').val(list[i].deviceTele);
@@ -1264,112 +1372,110 @@ $(function() {
         // clearInterval(intervalIds.getAllPics);
         var outerData = data;
         $.ajax({
-                url: '/v1/search/pics/all',
-                type: "GET",
-                data: data,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: false,
-                success: function(data) {
-                    if (data.code == 0) {
-                        $('body').attr('allpic-index', outerData.index);
-                        $('body').attr('if-all', 1);
+            url: '/v1/search/pics/all',
+            type: "GET",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+                if (data.code == 0) {
+                    $('body').attr('allpic-index', outerData.index);
+                    $('body').attr('if-all', 1);
 
-                        var list = data.result.list;
+                    var list = data.result.list;
 
-                        $('#pics img').removeAttr('data-original');
-                        $('#pics img').removeAttr('src');
-                        $('#pics img').removeAttr('picId');
-                        $('#pics img').removeAttr('channelNo');
-                        $('.pics p').text('');
+                    $('#pics img').removeAttr('data-original');
+                    $('#pics img').removeAttr('src');
+                    $('#pics img').removeAttr('picId');
+                    $('#pics img').removeAttr('channelNo');
+                    $('.pics p').text('');
 
-                        for (var i = 0; i < list.length; ++i) {
-                            if (list[i].picType == 2) {
-                                // for ref pic
+                    for (var i = 0; i < list.length; ++i) {
+                        if (list[i].picType == 2) {
+                            // for ref pic
+                        } else {
+                            if (list[i].picType == 1) {
+                                var name = list[i].name;
+                                var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
+                                // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 告警图片:"+timeName);
                             } else {
-                                if (list[i].picType == 1) {
-                                    var name = list[i].name;
-                                    var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
-                                    // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 告警图片:"+timeName);
-                                } else {
-                                    var name = list[i].name;
-                                    var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
-                                    // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 原始图片:"+timeName);
-                                }
-                                if (list[i].width > list[i].height) {
-                                    horPicCss(i, list[i].width, list[i].height);
-                                } else {
-                                    verPicCss(i, list[i].width, list[i].height);
-                                }
-                                
-                                $('#pics img:eq(' + i + ')').attr('src', list[i].picUrl);
-                                $('#pics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                                $('#pics img:eq(' + i + ')').attr('picId', list[i].picId);
-                                $('#pics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                                $('#pics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-
-                                if(i>0){
-                                    $('.pics:eq(' + (i-1) + ') p').text(list[i].time + ' ' + list[i].deviceId);
-                                }else {
-                                    $('#pics0_desc input:eq(0)').val(list[i].time);
-                                    $('#pics0_desc input:eq(1)').val(list[i].deviceId);
-                                    $('#pics0_desc input:eq(2)').val(list[i].deviceTele);
-                                    $('#pics0_desc input:eq(3)').val(list[i].deviceId);
-                                }
-                                $('#picCount').text('第' + (outerData.index + 1) + '页 共' + Math.ceil(data.result.total / outerData.size) + '页');
+                                var name = list[i].name;
+                                var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
+                                // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 原始图片:"+timeName);
                             }
-                        }
+                            if (list[i].width > list[i].height) {
+                                horPicCss(i, list[i].width, list[i].height);
+                            } else {
+                                verPicCss(i, list[i].width, list[i].height);
+                            }
 
-                        var viewer = new Viewer(document.getElementById('pics'), {
-                            url: 'data-original',
-                        });
-                    } else {
-                        if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) {
-                            console.log('这已经是最后一页！');
-                        }else if ($('body').attr('allpic-index') == 0) {
-                            console.log('这是第一页！');
-                        }else{
-                            console.log('查无图片！');
+                            $('#pics img:eq(' + i + ')').attr('src', list[i].picUrl);
+                            $('#pics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
+                            $('#pics img:eq(' + i + ')').attr('picId', list[i].picId);
+                            $('#pics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
+                            $('#pics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
+
+                            if (i > 0) {
+                                $('.pics:eq(' + (i - 1) + ') p').text(list[i].time + ' ' + list[i].deviceId);
+                            } else {
+                                $('#pics0_desc input:eq(0)').val(list[i].time);
+                                $('#pics0_desc input:eq(1)').val(list[i].deviceId);
+                                $('#pics0_desc input:eq(2)').val(list[i].deviceTele);
+                                $('#pics0_desc input:eq(3)').val(list[i].deviceId);
+                            }
+                            $('#picCount').text('第' + (outerData.index + 1) + '页 共' + Math.ceil(data.result.total / outerData.size) + '页');
                         }
                     }
+
+                    var viewer = new Viewer(document.getElementById('pics'), {
+                        url: 'data-original',
+                    });
+                } else {
+                    if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) {
+                        console.log('这已经是最后一页！');
+                    } else if ($('body').attr('allpic-index') == 0) {
+                        console.log('这是第一页！');
+                    } else {
+                        console.log('查无图片！');
+                    }
                 }
-            }) // end of ajax   
+            }
+        }) // end of ajax   
     }
 
-    function horPicCss(i, w, h) {   
-        const img = $("#pics img:eq(" + i + ")");
-        img.css('height','100%');
-        const div_w = parseFloat(img.parent().css('width'));
-        const img_h = parseFloat(img.css('height'));
-        const img_w = w/h*img_h;
-        img.css('width',img_w+'px');
+    function horPicCss(i, w, h) {
+        var img = $("#pics img:eq(" + i + ")");
+        img.css('height', '100%');
+        var div_w = parseFloat(img.parent().css('width'));
+        var img_h = parseFloat(img.css('height'));
+        var img_w = w / h * img_h;
+        img.css('width', img_w + 'px');
 
-        img.css('top','');
-        img.css('bottom','');
+        img.css('top', '');
+        img.css('bottom', '');
 
         img.css('position', 'relative');
-        img.css('left',-(img_w-div_w)/2+'px');
-        img.css('right',-(img_w-div_w)/2+'px');
+        img.css('left', -(img_w - div_w) / 2 + 'px');
+        img.css('right', -(img_w - div_w) / 2 + 'px');
     }
 
-    function verPicCss(i,w,h) {
-        const img = $("#pics img:eq(" + i + ")");
-        img.css('width','100%');
-        const div_h = parseFloat(img.parent().css('height'));
-        const img_w = parseFloat(img.css('width'));
-        const img_h = h/w*img_w;
-        img.css('height',img_h+'px');
+    function verPicCss(i, w, h) {
+        var img = $("#pics img:eq(" + i + ")");
+        img.css('width', '100%');
+        var div_h = parseFloat(img.parent().css('height'));
+        var img_w = parseFloat(img.css('width'));
+        var img_h = h / w * img_w;
+        img.css('height', img_h + 'px');
 
-        img.css('left','');
-        img.css('right','');
+        img.css('left', '');
+        img.css('right', '');
 
         img.css('position', 'relative');
-        img.css('top',-(img_h-div_h)/2+'px');
-        img.css('bottom',-(img_h-div_h)/2+'px');
+        img.css('top', -(img_h - div_h) / 2 + 'px');
+        img.css('bottom', -(img_h - div_h) / 2 + 'px');
     }
 });
-
-
 
 function getAlertRecords(index) {
     index = index || 0;
@@ -1417,6 +1523,8 @@ function getAlertRecords(index) {
                         default:
                             break;
                     }
+
+                    let html;
 
                     switch (list[i].processStatus) {
                         case 0:
@@ -1476,22 +1584,20 @@ function getAlertRecords(index) {
                 alert('获取设备告警记录失败');
             }
         }
-    }); // end of /v1/query/device/alert/logs ajax
-
-    
+    }); // end of ajax
 }
 
 
 //`MAP things
 
-const opts = {
+var opts = {
     width: 500, // 信息窗口宽度
     height: 250, // 信息窗口高度
     title: "", // 信息窗口标题
     enableMessage: true //设置允许信息窗发送短息
 };
 
-const colorIcons = {
+var colorIcons = {
     green: {
         w: 21,
         h: 21,
@@ -1530,7 +1636,7 @@ function initMap() {
 //创建地图函数：
 function createMap() {
     var map = new BMap.Map("map"); //在百度地图容器中创建一个地图
-    var point = new BMap.Point(121.440386, 31.205185); //定义一个中心点坐标
+    var point = new BMap.Point(121.506377,31.245105); //定义一个中心点坐标
     map.centerAndZoom(point, 18); //设定地图的中心点和坐标并将地图显示在地图容器中
     window.map = map; //将map变量存储在全局
 }
@@ -1577,142 +1683,142 @@ function addMapControl() {
 }
 
 function checkUser(inputData) {
-        const data = {
-            'userName': inputData.userName,
-            'password': inputData.password,
-        };
-        let flag = 0;
-        $.ajax({
-            url: '/v1/user/check',
-            type: "GET",
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false
-        }).then(function(data){
-            if (data.code) {
-                alert('用户名或密码有误!');
-            } else {
-                flag = 1;
-            }
-        });
-        return flag;
-    }
+    var data = {
+        'userName': inputData.userName,
+        'password': inputData.password,
+    };
+    var flag = 0;
+    $.ajax({
+        url: '/v1/user/check',
+        type: "GET",
+        data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: false
+    }).then(function(data) {
+        if (data.code) {
+            alert('用户名或密码有误!');
+        } else {
+            flag = 1;
+        }
+    });
+    return flag;
+}
 
-    function getDevicePicsHistory(data) {
-        var outerData = data;
-        $.ajax({
-            url:'/v1/search/pics/device',
-            type:"GET",
-            data: data,
-            contentType:"application/json; charset=utf-8",
-            dataType:"json",
-            async:false,
-        }).then(function(data){
-            if (!data.code) {
-                const pics = data.result.list;
-                for (let i=0;i<pics.length;i++) {
-                    const pic = pics[i];
-                    let name = "";
-                    let timeName = "";
-                    if (pic.picType == 2){
-                            // for ref pic
-                    }else{
-                        if (pic.picType == 1){
-                            name = pic.name;
-                            timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
-                        }else{
-                            name = pic.name;
-                            timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
-                        }
-                        const w = $('#hispics img').css('width');
-                        $('#hispics img:eq(' + i + ')').attr('src', pic.thumbnailPicUrl);
-                        $('#hispics img:eq(' + i + ')').attr('data-original', pic.picUrl);
-                        $('#hispics img:eq(' + i + ')').attr('picId', pic.picId);
-                        $('#hispics img:eq(' + i + ')').attr('channelNo', pic.channelNo);
-                        $('#hispics img:eq(' + i + ')').attr('deviceId', pic.deviceId);
-                        $('#hispics p:eq(' + i + ')').text(pic.time+' '+pic.deviceId);
-                    }                    
+function getDevicePicsHistory(data) {
+    var outerData = data;
+    $.ajax({
+        url: '/v1/search/pics/device',
+        type: "GET",
+        data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: false,
+    }).then(function(data) {
+        if (!data.code) {
+            var pics = data.result.list;
+            for (var i = 0; i < pics.length; i++) {
+                var pic = pics[i];
+                var name = "";
+                var timeName = "";
+                if (pic.picType == 2) {
+                    // for ref pic
+                } else {
+                    if (pic.picType == 1) {
+                        name = pic.name;
+                        timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
+                    } else {
+                        name = pic.name;
+                        timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
+                    }
+                    var w = $('#hispics img').css('width');
+                    $('#hispics img:eq(' + i + ')').attr('src', pic.thumbnailPicUrl);
+                    $('#hispics img:eq(' + i + ')').attr('data-original', pic.picUrl);
+                    $('#hispics img:eq(' + i + ')').attr('picId', pic.picId);
+                    $('#hispics img:eq(' + i + ')').attr('channelNo', pic.channelNo);
+                    $('#hispics img:eq(' + i + ')').attr('deviceId', pic.deviceId);
+                    $('#hispics p:eq(' + i + ')').text(pic.time + ' ' + pic.deviceId);
                 }
-                const viewer = new Viewer(document.getElementById('hispics'), {
-                    url: 'data-original',
-                });
-            } else {
-                alert('查无图片！');
-                console.log(data);
             }
-        });
-    }
+            var viewer = new Viewer(document.getElementById('hispics'), {
+                url: 'data-original',
+            });
+        } else {
+            alert('查无图片！');
+            console.log(data);
+        }
+    });
+}
 
-    function getAllPicsHistory(data) {
-        const outerData = data;
-        $.ajax({
-            url: '/v1/search/pics/all',
-            type: "GET",
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false
-        }).then(function(data){
-            if (!data.code) {
-                // $('body').attr('allpic-index', outerData.index);
-                // $('body').attr('if-all', 1);
-                const pics = data.result.list;
-                for (let i=0;i<pics.length;i++) {
-                    const pic = pics[i];
-                    let name = "";
-                    let timeName = "";
-                    if (pic.picType == 2){
-                            // for ref pic
-                    }else{
-                        if (pic.picType == 1){
-                            name = pic.name;
-                            timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
-                        }else{
-                            name = pic.name;
-                            timeName = name.slice(18,22)+'-'+name.slice(22,24)+'-'+name.slice(24,26)+"\t"+name.slice(26,28)+":"+name.slice(28,30)+":"+name.slice(30,32);
-                        }
-                        const w = $('#hispics img').css('width');
-                        $('#hispics img:eq(' + i + ')').attr('src', pic.thumbnailPicUrl);
-                        $('#hispics img:eq(' + i + ')').attr('data-original', pic.picUrl);
-                        $('#hispics img:eq(' + i + ')').attr('picId', pic.picId);
-                        $('#hispics img:eq(' + i + ')').attr('channelNo', pic.channelNo);
-                        $('#hispics img:eq(' + i + ')').attr('deviceId', pic.deviceId);
-                        $('#hispics p:eq(' + i + ')').text(pic.time+' '+pic.deviceId);
-                    }                    
-                }
-                const viewer = new Viewer(document.getElementById('hispics'), {
-                    url: 'data-original',
-                });
-            } else {
-                if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) {
-                    console.log('这已经是最后一页！');
-                }else if ($('body').attr('allpic-index') == 0) {
-                    console.log('这是第一页！');
-                }else{
-                    console.log('查无图片！');
+function getAllPicsHistory(data) {
+    var outerData = data;
+    $.ajax({
+        url: '/v1/search/pics/all',
+        type: "GET",
+        data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: false
+    }).then(function(data) {
+        if (!data.code) {
+            // $('body').attr('allpic-index', outerData.index);
+            // $('body').attr('if-all', 1);
+            var pics = data.result.list;
+            for (var i = 0; i < pics.length; i++) {
+                var pic = pics[i];
+                var name = "";
+                var timeName = "";
+                if (pic.picType == 2) {
+                    // for ref pic
+                } else {
+                    if (pic.picType == 1) {
+                        name = pic.name;
+                        timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
+                    } else {
+                        name = pic.name;
+                        timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
+                    }
+                    var w = $('#hispics img').css('width');
+                    $('#hispics img:eq(' + i + ')').attr('src', pic.thumbnailPicUrl);
+                    $('#hispics img:eq(' + i + ')').attr('data-original', pic.picUrl);
+                    $('#hispics img:eq(' + i + ')').attr('picId', pic.picId);
+                    $('#hispics img:eq(' + i + ')').attr('channelNo', pic.channelNo);
+                    $('#hispics img:eq(' + i + ')').attr('deviceId', pic.deviceId);
+                    $('#hispics p:eq(' + i + ')').text(pic.time + ' ' + pic.deviceId);
                 }
             }
-        });
-    }
+            var viewer = new Viewer(document.getElementById('hispics'), {
+                url: 'data-original',
+            });
+        } else {
+            if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) {
+                console.log('这已经是最后一页！');
+            } else if ($('body').attr('allpic-index') == 0) {
+                console.log('这是第一页！');
+            } else {
+                console.log('查无图片！');
+            }
+        }
+    });
+}
 
-    function tempDevice(data) {
-        $.ajax({
-            url: '/v1/device/cmd',
-            type: "POST",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false
-        }).then(function(data){
-            if (!data.code) {
-                const temps = data.result.list;
-                $('#tempArea table tbody').empty();
-                for (let i=0;i<temps.length;i++) {
-                    $('#tempArea table tbody').append('<tr id="' + temps[i].cmdId + '"><td>' + temps[i].cmdId + '</td><td>' + temps[i].temperature + '</td><td>' + temps[i].time + '</td><td><button>查看</button></td></tr>')
-                }
-            } else {
-                console.log('获取设备(组)失败');
+function tempDevice(data) {
+    $.ajax({
+        url: '/v1/device/cmd',
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: false
+    }).then(function(data) {
+        if (!data.code) {
+            var temps = data.result.list;
+            $('#tempArea table tbody').empty();
+            for (var i = 0; i < temps.length; i++) {
+                $('#tempArea table tbody').append('<tr id="' + temps[i].cmdId + '"><td>' + temps[i].cmdId + '</td><td>' + temps[i].temperature + '</td><td>' + temps[i].time + '</td><td><button>查看</button></td></tr>')
             }
-        });
-    }
+        } else {
+            console.log('获取设备(组)失败');
+        }
+    });
+}

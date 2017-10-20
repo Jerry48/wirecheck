@@ -189,61 +189,70 @@ app.use(express.static(__dirname + '/files'));
 var api_front_main = fs.readFileSync(__dirname + '/front/test_main.html');
 app.use('/main', function(req, res) {
     console.log('req.session:%j', req.session);
-
-    res.set('Content-Type', 'text/html');
-    res.write(api_front_main);
-    res.end();
+    if(req.cookies.sessionId === "null") {
+        res.redirect("/login");
+    }else{
+        res.set('Content-Type', 'text/html');
+        res.write(api_front_main);
+        res.end();
+    }
 });
 
 var api_front_patrol = fs.readFileSync(__dirname + '/front/test_patrol.html');
 app.use('/patrol', function(req, res) {
     console.log('req.session:%j', req.session);
-
-    res.set('Content-Type', 'text/html');
-    res.write(api_front_patrol);
-    res.end();
-
+    if(req.cookies.sessionId === "null") {
+        res.redirect("/login");
+    }else{
+        res.set('Content-Type', 'text/html');
+        res.write(api_front_patrol);
+        res.end();
+    }
 });
 
 var api_front_device = fs.readFileSync(__dirname + '/front/test_device.html');
 app.use('/device', function(req, res) {
     console.log('req.session:%j', req.session);
-
-    res.set('Content-Type', 'text/html');
-    res.write(api_front_device);
-    res.end();
-
+    if(req.cookies.sessionId === "null") {
+        res.redirect("/login");
+    }else{
+        res.set('Content-Type', 'text/html');
+        res.write(api_front_device);
+        res.end();
+    }
 });
 
 var api_front_login = fs.readFileSync(__dirname + '/front/login.html');
 app.use('/login', function(req, res) {
     console.log('req.session:%j', req.session);
-
     res.set('Content-Type', 'text/html');
     res.write(api_front_login);
     res.end();
-
 });
 
 
 var api_front_user = fs.readFileSync(__dirname + '/front/test_user.html');
 app.use('/user', function(req, res) {
     console.log('req.session:%j', req.session);
-
-    res.set('Content-Type', 'text/html');
-    res.write(api_front_user);
-    res.end();
-
+    if(req.cookies.sessionId === "null") {
+        res.redirect("/login");
+    }else{
+        res.set('Content-Type', 'text/html');
+        res.write(api_front_user);
+        res.end();
+    }
 });
 
 var api_front_general_user = fs.readFileSync(__dirname + '/front/general_user.html');
 app.use('/general_user', function(req, res) {
     console.log('req.session:%j', req.session);
-
-    res.set('Content-Type', 'text/html');
-    res.write(api_front_general_user);
-    res.end();
-
+    if(req.cookies.sessionId === "null") {
+        res.redirect("/login");
+    }else{
+        res.set('Content-Type', 'text/html');
+        res.write(api_front_user);
+        res.end();
+    }
 });
 
 var configFile = fs.readFileSync('../config.json');

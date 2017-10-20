@@ -36,7 +36,6 @@ div {
     height: 30px;
     /*background-color: rgb(1,111,111); */
     background-image: url(elements/list.jpg);
-    border-top: 2px solid rgb(2, 130, 130);
     text-align: center;
     cursor: pointer;
 }
@@ -47,10 +46,6 @@ div {
     display: inline;
 }
 
-.list >img {
-    margin-left: 10px;
-    display: inline;
-}
 
 .content {
     width: 100%;

@@ -155,31 +155,18 @@ $(function() {
 		var lineId = $('#search select:eq(3)').val();
 		var dangerId = $('#search select:eq(4)').val();
 
-		if ($('#search .selectLevel0').val() == '0') {
-			var lv = 0;
-		} else {
-			if ($('#search .selectLevel2').val() == '0') {
-				if ($('#search .selectLevel1').val() == '0') {
-					var lv = 1;
-				} else {
-					var lv = 2;
-				}
-			} else {
-				var lv = 3;
-			}
-		}
-
+		var lv = parseInt($("body").attr("data-level"));
 		var area = [];
-		for (var i = 0; i < lv; i++) {
-			var tmp = $('#search .selectLevel' + i).find("option:selected").text();
-			area.push(tmp);
+		for (var i = 0; i < lv+1; i++) {
+			var tmp = $('#selectLevel' + i).find("option:selected").text();
+			if (tmp !== "全部") {
+				area.push(tmp);	
+			}
 		};
-		area = area.join('/');
-
-		if (dangerId == '0') {
-			var danger = '';
+		if (area.length > 1) {
+			area = area.join('/');
 		} else {
-			var danger = $("#search select:eq(4)").find("option:selected").text();
+			area = area[0];
 		}
 
 		var status = 2 - parseInt($('#search select:eq(5)').val());
@@ -193,7 +180,7 @@ $(function() {
 
 		var data = {
 			'area': area,
-			'danger': danger,
+			'deviceDangerID': $("#search select:eq(4)").find("option:selected").val(),
 			'lineId': lineId,
 			'name': deviceName,
 			'deviceTele': deviceTele,
@@ -257,32 +244,64 @@ $(function() {
 		}
 	})
 
-	$('.selectLevel0').change(function() {
-		$(".selectLevel1").empty();
-		$(".selectLevel2").empty();
-		var parentId = $(this).find('option:selected').val();
-		var data = {
-			'parentId': parentId,
-			'level': 1,
-		};
-		selectLevel(data);
+	$('#selectLevel0').change(function() {
+		$("#selectLevel1").parent().addClass("hide");
+		$("#selectLevel2").parent().addClass("hide");
+		if ($('#selectLevel0').val() === "0") {
+			$('#selectLevel1').parent().addClass("hide");
+			$('#selectLevel2').parent().addClass("hide");
+		} else {
+			const parentId = $(this).find('option:selected').val();
+			const data = {
+				'parentId': parentId,
+				'level': 1,
+			};
+			selectLevel(data);
+		}
+	})
 
-		var parentId = $(".selectLevel1").find("option:selected").attr('value');
-		var data = {
-			'parentId': parentId,
-			'level': 2,
-		};
-		selectLevel(data);
+	$('#selectLevel1').change(function() {
+		$("#selectLevel2").parent().addClass("hide");
+		if ($('#selectLevel1').val() === "0") {
+			$('#selectLevel2').parent().addClass("hide");
+		} else {
+			const parentId = $(this).find('option:selected').val();
+			const data = {
+				'parentId': parentId,
+				'level': 2,
+			};
+			selectLevel(data);
+		}
+	})
+
+	$('.selectLevel0').change(function() {
+		$(".selectLevel1").parent().addClass("hide");
+		$(".selectLevel2").parent().addClass("hide");
+		if ($('.selectLevel0').val() === "0") {
+			$('.selectLevel1').parent().addClass("hide");
+			$('.selectLevel2').parent().addClass("hide");
+		} else {
+			const parentId = $(this).find('option:selected').val();
+			const data = {
+				'parentId': parentId,
+				'level': 1,
+			};
+			_selectLevel(data);
+		}
 	})
 
 	$('.selectLevel1').change(function() {
-		$(".selectLevel2").empty();
-		var parentId = $(this).find('option:selected').val();
-		var data = {
-			'parentId': parentId,
-			'level': 2,
-		};
-		selectLevel(data);
+		$(".selectLevel2").parent().addClass("hide");
+		if ($('.selectLevel1').val() === "0") {
+			$('.selectLevel2').parent().addClass("hide");
+		} else {
+			const parentId = $(this).find('option:selected').val();
+			const data = {
+				'parentId': parentId,
+				'level': 2,
+			};
+			_selectLevel(data);
+		}
 	})
 
 	//
@@ -1149,8 +1168,8 @@ $(function() {
 
 						$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist' devicedangerid='" + dangerID + "' lineid='" 
 							+ list[i].lineId + "'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>" + list[i].version + "</td><td>" 
-							+ list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>"
-							+ list[i].batteryVoltage + "</td><td>" + list[i].temperature + "</td><td>" + list[i].batterySolarVoltage + "</td><td>" + list[i].capacityVoltage + "</td><td>" + list[i].networkSignal + "</td><td>"
+							+ list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>" + list[i].temperature + "</td><td>"
+							+ list[i].batteryVoltage + "</td><td>" + list[i].batterySolarVoltage + "</td><td>" + list[i].capacityVoltage + "</td><td>" + list[i].networkSignal + "</td><td>"
 							+ list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
 					}
 				} else {
@@ -1183,7 +1202,7 @@ $(function() {
 					var total = data.result.total;
 					$('#table').attr('infoedit-index', inputData.index);
 
-					var pages = Math.ceil(total / 50);
+					var pages = Math.ceil(total / ENTRIES);
 					$('#infoCount2').text('第' + (inputData.index + 1) + '页，共' + pages + '页');
 					if (inputData.index + 1 == 1) {
 						$('#infoLast2').hide();
@@ -1718,14 +1737,17 @@ $(function() {
 				if (data.code == 0) {
 					var list = data.result.list;
 					var lv = inputData.level;
-					$('.selectLevel' + lv).empty();
+					$('#selectLevel' + lv).empty();
+					$('#selectLevel' + lv).append('<option value="0">全部</option>');
+					$('#selectLevel' + lv).val("0");
 					for (var i = 0; i < list.length; i++) {
-						$('.selectLevel' + lv).append('<option value="' + list[i].id + '">' + list[i].name + '</option>');
+						$('#selectLevel' + lv).append('<option value="' + list[i].id + '">' + list[i].name + '</option>');
 					}
-					if (list.length == 0) {
-						$('.selectLevel' + lv).append('<option value="0">无</option>');
+					if (list.length !== 0) {
+						$("body").attr("data-level",lv);
+						$('#selectLevel' + lv).parent().removeClass("hide");
 					} else {
-						// $('#table').attr('level-count',lv);
+						$('#selectLevel' + lv).parent().addClass("hide");
 					}
 
 				} else {
@@ -1733,9 +1755,49 @@ $(function() {
 						console.log('获取线路失败！');
 					} else if (inputData.level == 1) {
 						console.log('获取线路失败！');
-					} else if (inputData.level == 2) {
-						$('.selectLevel2').val('无');
+					} 
+				}
+			}
+		})
+	}
+
+	function _selectLevel(inputData) {
+		var data = {
+			'id': inputData.parentId,
+			'level': inputData.level
+		}
+
+		$.ajax({
+			url: '/v1/device/level/childs',
+			type: "POST",
+			data: JSON.stringify(data),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			async: false,
+			success: function(data) {
+				if (data.code == 0) {
+					var list = data.result.list;
+					var lv = inputData.level;
+					$('.selectLevel' + lv).empty();
+					for (var i = 0; i < list.length; i++) {
+						$('.selectLevel' + lv).append('<option value="' + list[i].id + '">' + list[i].name + '</option>');
 					}
+					if (list.length !== 0) {
+						$('.selectLevel' + lv).parent().removeClass("hide");
+						if (lv + 1 < 3) {
+							var data = {
+								'parentId': list[0].id,
+								'level': lv+1
+							}
+							_selectLevel(data);
+						}
+					} else {
+						$('.selectLevel' + lv).parent().addClass("hide");
+					}
+
+
+				} else {
+					console.log('获取线路失败！');
 				}
 			}
 		})
@@ -1746,21 +1808,7 @@ $(function() {
 			'parentId': 'root',
 			'level': 0,
 		}
-		selectLevel(data);
-
-		var parentId = $(".selectLevel0").find("option:selected").val();
-		var data = {
-			'parentId': parentId,
-			'level': 1,
-		};
-		selectLevel(data);
-
-		var parentId = $(".selectLevel1").find("option:selected").val();
-		var data = {
-			'parentId': parentId,
-			'level': 2,
-		};
-		selectLevel(data);
+		_selectLevel(data);
 	}
 
 	function lineTree() {
@@ -1991,7 +2039,7 @@ $(function() {
 			'name': inputData.name,
 			'deviceTele': inputData.deviceTele,
 			'lineId': inputData.lineId,
-			'danger': inputData.danger,
+			'deviceDangerID': inputData.deviceDangerID,
 			'status': inputData.status,
 			'order': 'deviceID',
 			'userId': cookie_userId,
@@ -2007,9 +2055,10 @@ $(function() {
 			success: function(data) {
 				if (data.code == 0) {
 					var list = data.result.list;
+					console.log(list);
 					var total = data.result.total;
 					$('#table').attr('infolist-index', inputData.index);
-					var pages = Math.ceil(total / 20);
+					var pages = Math.ceil(total / ENTRIES);
 					$('#infoCount').text('第' + (inputData.index + 1) + '页，共' + pages + '页');
 					if (inputData.index + 1 == 1) {
 						$('#infoLast').hide();
@@ -2024,7 +2073,8 @@ $(function() {
 					}
 
 					$('#table tbody').empty();
-					for (var i = 0; i < 50; i++) {
+					for (var i = 0; i < list.length; i++) {
+						const dangerID = list[i].deviceDangerID;
 						switch (list[i].status) {
 							case 0:
 								var html = '<td style="color:red">离线</td>';
@@ -2036,7 +2086,11 @@ $(function() {
 								var html = '<td>离线</td>';
 								break;
 						}
-						$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>0</td><td>" + list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + list[i].danger + "</td>" + html + "<td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceMeid + "</td></tr>");
+						$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist' devicedangerid='" + dangerID + "' lineid='" 
+							+ list[i].lineId + "'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>" + list[i].version + "</td><td>" 
+							+ list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>"
+							+ list[i].batteryVoltage + "</td><td>" + list[i].temperature + "</td><td>" + list[i].batterySolarVoltage + "</td><td>" + list[i].capacityVoltage + "</td><td>" + list[i].networkSignal + "</td><td>"
+							+ list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
 					}
 				} else {
 					alert('失败!');
@@ -2056,16 +2110,13 @@ $(function() {
 		}
 		deviceInfoList(data);
 
+		$("#selectLevel1").parent().addClass("hide");
+		$("#selectLevel2").parent().addClass("hide");
 		var data = {
 			'parentId': 'root',
 			'level': 0,
 		}
 		selectLevel(data);
-
-		for (var i = 0; i < 3; i++) {
-			$('#search .selectLevel' + i).prepend('<option value="0">全部</option>');
-			$('#search .selectLevel' + i).val('0');
-		}
 
 		selectLine();
 		$('#search .selectLine').prepend('<option value="0">全部</option>');

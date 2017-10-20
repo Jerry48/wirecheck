@@ -115,72 +115,72 @@ function processRequest(param, fn){
                 }               
             });
         },
-        function(refpic, next){
-            if(channelNo == 1){
-                var update = {
-                    refPicId1 : refpic.pictureID,
-                    refPicPath1 : refpic.path,
-                };
-                var match = {
-                    deviceID : deviceId
-                };
-                var query = {
-                    update: update,
-                    match : match
-                };
-                deviceModel.update(query, function(err, rows){
-                    if (err) {
-                        var msg = err.msg  || err;
-                        console.error(moduleName + msg);
-                        next(err);
-                    }else{
-                        next(null, refpic);
-                    }
-                });
-            }else if(channelNo == 2){
-                var update = {
-                    refPicId2 : refpic.pictureID,
-                    refPicPath2 : refpic.path,
-                };
-                var match = {
-                    deviceID : deviceId
-                };
-                var query = {
-                    update: update,
-                    match : match
-                };
-                deviceModel.update(query, function(err, rows){
-                    if (err) {
-                        var msg = err.msg  || err;
-                        console.error(moduleName + msg);
-                        next(err);
-                    }else{
-                        next(null, refpic);
-                    }
-                });
-            }else{
-                var update = {
-                    refPicId3 : refpic.pictureID,
-                    refPicPath3 : refpic.path,
-                };
-                var match = {
-                    deviceID : deviceId
-                };
-                var query = {
-                    update: update,
-                    match : match
-                };
-                deviceModel.update(query, function(err, rows){
-                    if (err) {
-                        var msg = err.msg  || err;
-                        console.error(moduleName + msg);
-                        next(err);
-                    }else{
-                        next(null, refpic);
-                    }
-                });
-            }
-        },
+        // function(refpic, next){
+        //     if(channelNo == 1){
+        //         var update = {
+        //             refPicId1 : refpic.pictureID,
+        //             refPicPath1 : refpic.path,
+        //         };
+        //         var match = {
+        //             deviceID : deviceId
+        //         };
+        //         var query = {
+        //             update: update,
+        //             match : match
+        //         };
+        //         deviceModel.update(query, function(err, rows){
+        //             if (err) {
+        //                 var msg = err.msg  || err;
+        //                 console.error(moduleName + msg);
+        //                 next(err);
+        //             }else{
+        //                 next(null, refpic);
+        //             }
+        //         });
+        //     }else if(channelNo == 2){
+        //         var update = {
+        //             refPicId2 : refpic.pictureID,
+        //             refPicPath2 : refpic.path,
+        //         };
+        //         var match = {
+        //             deviceID : deviceId
+        //         };
+        //         var query = {
+        //             update: update,
+        //             match : match
+        //         };
+        //         deviceModel.update(query, function(err, rows){
+        //             if (err) {
+        //                 var msg = err.msg  || err;
+        //                 console.error(moduleName + msg);
+        //                 next(err);
+        //             }else{
+        //                 next(null, refpic);
+        //             }
+        //         });
+        //     }else{
+        //         var update = {
+        //             refPicId3 : refpic.pictureID,
+        //             refPicPath3 : refpic.path,
+        //         };
+        //         var match = {
+        //             deviceID : deviceId
+        //         };
+        //         var query = {
+        //             update: update,
+        //             match : match
+        //         };
+        //         deviceModel.update(query, function(err, rows){
+        //             if (err) {
+        //                 var msg = err.msg  || err;
+        //                 console.error(moduleName + msg);
+        //                 next(err);
+        //             }else{
+        //                 next(null, refpic);
+        //             }
+        //         });
+        //     }
+        // },
         function(refpic,next){
             var update = {
                 refPicId : refpic.pictureID,

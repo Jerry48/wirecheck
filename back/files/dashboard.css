@@ -31,9 +31,37 @@ body {
     font-family: 'SimSun';
 }
 
+#home:link {
+    text-decoration: none;
+    color: white;
+}
+
+#home:visited {
+    text-decoration: none;
+    color: white;
+}
+
+#home:hover {
+    text-decoration: none;
+    color: white;
+}
+
+#home:active {
+    text-decoration: none;
+    color: white;
+}
+
 a {
     text-decoration: none;
     color: white;
+}
+
+.hide {
+    display: none;
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 #nav {
