@@ -22,9 +22,6 @@
 	<style type="text/css">
 	    .iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
 	    .iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
-        #map img {
-max-width: inherit;
-}
     </style>
 	        
 	<script src="http://api.map.baidu.com/api?v=2.0&ak=fpvcsaWnmNdpfnGqRNWxszgPvAo6m0CI&services=&t=20170517145936"></script>
@@ -36,17 +33,27 @@ max-width: inherit;
             document.body.appendChild(script);
         }
         function init() {
-            var map = new BMap.Map("map");            // 创建Map实例
-            var point = new BMap.Point(121.506377,31.245105); // 创建点坐标
-            map.centerAndZoom(point, 18);                 
-            map.enableScrollWheelZoom();
-            window.map = map;                 //启用滚轮放大缩小
+            // var map = new BMap.Map("map");            // 创建Map实例
+            // var point = new BMap.Point(121.506377,31.245105); // 创建点坐标
+            // map.centerAndZoom(point, 18);                 
+            // map.enableScrollWheelZoom();
+            var map = new BMap.Map("allmap");    // 创建Map实例
+            var point = new BMap.Point(116.404, 39.915);
+            map.centerAndZoom(point, 11);  // 初始化地图,设置中心点坐标和地图级别
+            map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+            map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+            map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+            var marker = new BMap.Marker(point);  // 创建标注
+            map.addOverlay(marker);               // 将标注添加到地图中
+            marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                    window.map = map;                 //启用滚轮放大缩小
         }  
         window.onload = loadJScript;  //异步加载地图
     </script> -->
 </head>
 
 <body>
+    <!-- <div id="allmap" style="z-index: 9999999;width: 100%;height: 100%;"></div> -->
     <div id="nav">
         <div id="nav_left" style="cursor: pointer;">
             <!-- <img src="/elements/logo.gif"> -->
@@ -58,10 +65,10 @@ max-width: inherit;
                 </div>
                 <div id="header_right">
                     <ul>
-                        <li><a href="#" id="icon_photo"><span><img src="elements/icon_photo.gif" alt="photo" title="手动拍照"></span></a></li>
-                        <li><a href="#"><span><img src="elements/icon_analysis.gif" alt="analysis" title="手动分析"></span></a></li>
-                        <li><a href="#"  id="icon_setting"><span><img src="elements/icon_setting.gif" alt="setting" title="配置设备"></span></a></li>
-                        <li><a href="#" id="icon_map"><span><img src="elements/icon_map.gif" alt="map" title="查看地图"></span></a></li>
+                        <li><a href="javascript:" id="icon_photo"><span><img src="elements/icon_photo.gif" alt="photo" title="手动拍照"></span></a></li>
+                        <li><a href="javascript:"><span><img src="elements/icon_analysis.gif" alt="analysis" title="手动分析"></span></a></li>
+                        <li><a href="javascript:"  id="icon_setting"><span><img src="elements/icon_setting.gif" alt="setting" title="配置设备"></span></a></li>
+                        <li><a href="javascript:" id="icon_map"><span><img src="elements/icon_map.gif" alt="map" title="查看地图"></span></a></li>
                     </ul>
                 </div>
             </div>
@@ -72,10 +79,10 @@ max-width: inherit;
                         <li class="tabs"><a target="_blank" href="/device" id="device" data-role="href">设备管理</a></li>
                         <li class="tabs"><a target="_blank" href="/user" id="user" data-role="href">用户管理</a></li>
                         
-                        <li class="tabs"><a href="#" id="logout" data-role="href">退出登录</a></li>
-                        <li class="tabs"><a href="#" id="history" data-role="tab">历史图片</a></li>
-                        <li class="tabs"><a href="#" id="temperature" data-role="tab">线路测温</a></li>
-                        <li class="tabs"><a href="#" data-role="tab">温度曲线</a></li>
+                        <li class="tabs"><a href="javascript:" id="logout" data-role="href">退出登录</a></li>
+                        <li class="tabs"><a href="javascript:" id="history" data-role="tab">历史图片</a></li>
+                        <li class="tabs"><a href="javascript:" id="temperature" data-role="tab">线路测温</a></li>
+                        <li class="tabs"><a href="javascript:" data-role="tab">温度曲线</a></li>
                     </ul>
                 </div>
                 <div id="tabs_right">
@@ -107,16 +114,16 @@ max-width: inherit;
                 <div id="content3" class="content" style="display: none;"></div> -->
             </div>
         </div>
-        <div id="main_right">
+        <div id="main_right" style="display: block;">
             <div id="buttons">
                 <div id="buttons_left">
                     <ul>
-                        <li><a href="#" id="picLast">上一页</a></li>
-                        <li><a href="#" id="picNext">下一页</a></li>
-                        <li><a href="#" id="setRef">设置对比图片</a></li>
-                        <li><a href="#" id="refresh">刷新</a></li>
-                        <li><a href="#" id="showAlert">显示警告</a></li>
-                        <li><a href="#" id="push">推送</a></li>
+                        <li><a href="javascript:" id="picLast">上一页</a></li>
+                        <li><a href="javascript:" id="picNext">下一页</a></li>
+                        <li><a href="javascript:" id="setRef">设置对比图片</a></li>
+                        <li><a href="javascript:" id="refresh">刷新</a></li>
+                        <li><a href="javascript:" id="showAlert">显示警告</a></li>
+                        <li><a href="javascript:" id="push">推送</a></li>
                         <li>
                             <select id="interval">
                                 <option value="60">1分钟</option>
@@ -215,8 +222,8 @@ max-width: inherit;
 			<div id='mapWrapper'>
 	            <div id='mapInput'>
 	                <button type="button" id="back">返回主页</button>   
-	                <input type="text" class="form-control"  placeholder="输入地址，如东方明珠">
-	                <input type="text" class="form-control"  placeholder="输入半径(km)">
+	                <input type="text" placeholder="请输入中心地址">
+	                <input type="text" placeholder="请输入半径(km)">
 	                <button type="button" id="searchMap">查询</button>            
 	            </div>
 	            <div id='map'>
@@ -228,12 +235,12 @@ max-width: inherit;
             <div id="" class="buttons">
                 <div id="" class="buttons_left">
                     <ul>
-                        <li><a href="#" id="">上一页</a></li>
-                        <li><a href="#" id="">下一页</a></li>
-                        <li><a href="#" id="">设置对比图片</a></li>
-                        <li><a href="#" id="">刷新</a></li>
-                        <li><a href="#" id="">显示警告</a></li>
-                        <li><a href="#" id="">推送</a></li>
+                        <li><a href="javascript:" id="">上一页</a></li>
+                        <li><a href="javascript:" id="">下一页</a></li>
+                        <li><a href="javascript:" id="">设置对比图片</a></li>
+                        <li><a href="javascript:" id="">刷新</a></li>
+                        <li><a href="javascript:" id="">显示警告</a></li>
+                        <li><a href="javascript:" id="">推送</a></li>
                     </ul>
                 </div>
             </div>
@@ -258,12 +265,12 @@ max-width: inherit;
             <div id="" class="buttons">
                 <div id="" class="buttons_left">
                     <ul>
-                        <li><a href="#" id="">上一页</a></li>
-                        <li><a href="#" id="">下一页</a></li>
-                        <li><a href="#" id="">设置对比图片</a></li>
-                        <li><a href="#" id="">刷新</a></li>
-                        <li><a href="#" id="">显示警告</a></li>
-                        <li><a href="#" id="">推送</a></li>
+                        <li><a href="javascript:" id="">上一页</a></li>
+                        <li><a href="javascript:" id="">下一页</a></li>
+                        <li><a href="javascript:" id="">设置对比图片</a></li>
+                        <li><a href="javascript:" id="">刷新</a></li>
+                        <li><a href="javascript:" id="">显示警告</a></li>
+                        <li><a href="javascript:" id="">推送</a></li>
                     </ul>
                 </div>
             </div>
@@ -278,12 +285,12 @@ max-width: inherit;
             <div id="" class="buttons">
                 <div id="" class="buttons_left">
                     <ul>
-                        <li><a href="#" id="">上一页</a></li>
-                        <li><a href="#" id="">下一页</a></li>
-                        <li><a href="#" id="">设置对比图片</a></li>
-                        <li><a href="#" id="">刷新</a></li>
-                        <li><a href="#" id="">显示警告</a></li>
-                        <li><a href="#" id="">推送</a></li>
+                        <li><a href="javascript:" id="">上一页</a></li>
+                        <li><a href="javascript:" id="">下一页</a></li>
+                        <li><a href="javascript:" id="">设置对比图片</a></li>
+                        <li><a href="javascript:" id="">刷新</a></li>
+                        <li><a href="javascript:" id="">显示警告</a></li>
+                        <li><a href="javascript:" id="">推送</a></li>
                     </ul>
                 </div>
             </div>
@@ -347,9 +354,9 @@ max-width: inherit;
     <div id="records">
         <div id="records_tab">
             <ul>
-                <li style="background-color: rgb(228,241,250);"><a href="#" style="color:rgb(3,108,108);">图片对比告警</a></li>
-                <li><a href="#">设备通讯故障</a></li>
-                <li><a href="#">事件</a></li>
+                <li style="background-color: rgb(228,241,250);"><a href="javascript:" style="color:rgb(3,108,108);">图片对比告警</a></li>
+                <li><a href="javascript:">设备通讯故障</a></li>
+                <li><a href="javascript:">事件</a></li>
             </ul>
         </div>
         <div id="records_content">

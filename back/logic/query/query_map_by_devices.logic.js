@@ -7,7 +7,7 @@
  */
  
 'use strict';  
-var moduleName = 'query_device_by_map.logic';
+var moduleName = 'query_map_by_device.logic';
 var URLPATH = '/v1/device/map/range';
 
 
@@ -72,53 +72,13 @@ function packageResponseData(inputData){
     }   
     
     var devices = inputData.devices;
-    var deviceStatus = inputData.deviceStatus;
     var pics = inputData.pics;
-    var latitudeLow =  wxConstants.LATITUDE.LEFTDEFAULT;
-    var latitudeHigh =  wxConstants.LATITUDE.RIGHTDEFAULT;
-    var longitudeLeft =  wxConstants.LONGITUDE.LOWDEFAULT;
-    var longitudeRight =  wxConstants.LONGITUDE.HIGHDEFAULT;
 
     var resData = {
-        longitudeLeft: wxConstants.LONGITUDE.LOWDEFAULT,
-        longitudeRight: wxConstants.LONGITUDE.HIGHDEFAULT,
-        latitudeLow: wxConstants.LATITUDE.LEFTDEFAULT,
-        latitudeHigh: wxConstants.LATITUDE.RIGHTDEFAULT,
-        size: devices.length,
         list: [],
     };
-    if (devices.length > 0) {
-        longitudeLeft = devices[0].longitude;
-        longitudeRight = devices[0].longitude;
-        latitudeLow = devices[0].latitude;
-        latitudeHigh = devices[0].latitude;
-    }
     for (var i = 0; i < devices.length; i++) {
         var j = 0;
-
-        for (j = i; j < deviceStatus.length; j++) {
-            if(deviceStatus[j].id== devices[i].deviceID){
-                devices[i].batteryVoltage = deviceStatus[j].batteryVoltage;
-                devices[i].chargeVoltage = deviceStatus[j].chargeVoltage;
-                devices[i].temperature = deviceStatus[j].temperature;
-                devices[i].alert = deviceStatus[j].alert;
-                devices[i].alertId = deviceStatus[j].alertId;
-                devices[i].status = deviceStatus[j].status;
-            }
-        }
-
-        if (j==deviceStatus.length) {
-            for (j = 0; j < i; j++) {
-                if(deviceStatus[j].id== devices[i].deviceID){
-                    devices[i].batteryVoltage = deviceStatus[j].batteryVoltage;
-                    devices[i].chargeVoltage = deviceStatus[j].chargeVoltage;
-                    devices[i].temperature = deviceStatus[j].temperature;
-                    devices[i].alert = deviceStatus[j].alert;
-                    devices[i].alertId = deviceStatus[j].alertId;
-                    devices[i].status = deviceStatus[j].status;
-                } 
-            }
-        }
 
         for (j = i; j < pics.length; j++) {
             if(pics[j]!=null){
@@ -139,26 +99,8 @@ function packageResponseData(inputData){
                 }
             }
         }
-
-        if (longitudeLeft > devices[i].longitude) {
-            longitudeLeft = devices[i].longitude;
-        }
-        if (longitudeRight < devices[i].longitude) {
-            longitudeRight = devices[i].longitude;
-        }
-        if (latitudeLow> devices[i].latitude) {
-            latitudeLow = devices[i].latitude;
-        }
-        if (latitudeHigh < devices[i].latitude) {
-            latitudeHigh = devices[i].latitude;
-        }
         resData.list.push(devices[i]);
     }
-    
-    resData.longitudeLeft = longitudeLeft - 0.1;
-    resData.longitudeRight = longitudeRight + 0.1;
-    resData.latitudeLow = latitudeLow - 0.1;
-    resData.latitudeHigh = latitudeHigh +0.1;
 
     return resData;
 }
@@ -299,36 +241,34 @@ function processRequest(param, fn){
     var ids = [];
     var devices = [];
     var deviceStatus = [];
-    debug('Try to get the device by map');
+
+    debug('------ Try to get the device by map');
 
     async.waterfall([
         function(next){
-            //devices
-            if (type==0) {
+            if (type == 0) {
                 next(null, []);
-            }else if (type==1) {
+            }else if (type == 1) {
                 findDeviceIdsByLevel(param, next);
-            }else if (type==2) {
+            }else if (type == 2) {
                 findDeviceIdsByGroup(param, next);
             }
         },
         function(ids, next){
             var deviceIds = param.deviceIds || [];
-            //pend the device Ids
             for (var i = 0; i < deviceIds.length; i++) {
                 ids.push(deviceIds[i]);
             }
-            console.log("&&&&&&&&&&&&&&&&&&&&&&"+ids);
+            console.log("------ "+ ids);
             next(null, ids);
         },
         function(ids, next){
-            if (ids.length==0) {
+            if (ids.length == 0) {
                 return next(null, []);
             }
-            var sqlstr = 'select deviceID, name, latitude,longitude from '+deviceModel.tableName;
-            sqlstr +=' where deviceID in ("';
-            sqlstr +=ids.join('","');
-            sqlstr +='");';
+            var sqlstr = 'select deviceID, name, latitude, longitude, batteryVoltage, chargeVoltage, temperature, alert, status from '+ deviceModel.tableName + ',' + deviceStatusModel.tableName;
+            sqlstr +=' where deviceID in ("' + ids.join('","') + '") and ' + deviceModel.tableName +'.deviceID = ' +deviceStatusModel.tableName+ '.id;';
+            console.log(sqlstr);
             var query = {
                 sqlstr:sqlstr,
             };
@@ -340,29 +280,6 @@ function processRequest(param, fn){
                 }else{
                     devices = rows;
                     next(null, ids);
-                }
-            });
-        },
-        function(ids, next){
-            if (ids.length==0) {
-                return next(null, []);
-            }
-
-            var sqlstr = 'select * from '+deviceStatusModel.tableName;
-            sqlstr +=' where id in ("';
-            sqlstr += ids.join('","');
-            sqlstr +='");';
-            var query = {
-                sqlstr: sqlstr,
-            };
-            deviceStatusModel.query(query, function(err, rows){
-                if (err) {
-                    var msg = err.msg || err;
-                    console.error(moduleName + msg);
-                    next(err);
-                }else{
-                    deviceStatus = rows;
-                    next(null,ids);
                 }
             });
         },

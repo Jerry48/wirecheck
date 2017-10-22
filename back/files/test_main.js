@@ -185,7 +185,7 @@ $(function() {
 
         // interval things
         intervalIds.getAllPics = setInterval(
-            function() {
+            () => {
                 var index = parseInt($('body').attr('allpic-index'));
                 if (index == 0) {
                     getAllPics(data);
@@ -193,11 +193,7 @@ $(function() {
             }, INTERVAL
         );
 
-        intervalIds.heartBeatRecords = setInterval(
-            function() {
-                getAlertRecords(0);
-            }, INTERVAL
-        );
+        intervalIds.heartBeatRecords = setInterval(getAlertRecords(0), INTERVAL);
     }
 
     function checkServer() {
@@ -207,8 +203,8 @@ $(function() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false
-        }).then((data) => {
-            if (!data.code) {
+        }).then(data => {
+            if (data.code == 0) {
                 var status = data.result.serverStatus;
                 if (status.wechatserver) {
                     $("#wechat-status").html("在线");
@@ -239,14 +235,9 @@ $(function() {
         });
     }
 
-    // logo click
-    $('#nav_left').click(function() {
-        window.location.href = '/main';
-    })
-
     //logout
-    $('#logout').click(function() {
-        var data = {
+    $('#logout').click(() => {
+        const data = {
             'userId': cookie_userId
         }
         $.ajax({
@@ -256,9 +247,9 @@ $(function() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false
-        }).then(function(data) {
-            if (!data.code) {
-                window.location.href = 'login';
+        }).then(data => {
+            if (data.code == 0) {
+                window.location.href = '/login';
                 Cookies.set('sessionId', null);
             } else {
                 alert('用户登出失败');
@@ -266,11 +257,11 @@ $(function() {
         });
     });
 
-    $('#searchHis').click(function() {
+    $('#searchHis').click(() => {
         var startDate = $('#historyArea input[name=daterange]:eq(0)').val();
         var endDate = $('#historyArea input[name=daterange]:eq(1)').val();
-        startDate = (startDate == '') ? '1970-01-01' : startDate;
-        endDate = (endDate == '') ? '2970-01-01' : endDate;
+        startDate = (startDate === '') ? '1970-01-01' : startDate;
+        endDate = (endDate === '') ? '2970-01-01' : endDate;
 
         if (parseInt($('body').attr('if-all'))) {
             var index = parseInt($('body').attr('allpic-index'));
@@ -303,27 +294,18 @@ $(function() {
         }
     })
 
-
-    // $('#home').click(function(){
-    //     $('#chartArea').hide();
-    //     $('#tempArea').hide();
-    //     $('#historyArea').hide();
-    //     $('#tabs_left a').parent().css('background-image',"url(elements/tabs.gif)");
-    //     $('#tabs_left a').css('color','white');
-    //     $('#main_right').show();
-    // })
-
     $('#tree').click(function() {
         $('.content ul').css('margin', '0px');
         $('.content ul li').css('padding', '10px');
         $('.indent').css('margin', '5px');
     })
 
-    $('#list1').click(function() {
-        var channeltree = channelTree();
-        $('#content1').treeview({
-            data: channeltree,
-            levels: 3,
+    function listRefresh(data, selector, levels, mapFlag){
+        $('.content').removeClass('treeSelected');
+        $('.content').hide();
+        selector.treeview({
+            data: data,
+            levels: levels,
             showBorder: false,
             showCheckbox: false,
             showTags: false,
@@ -334,46 +316,22 @@ $(function() {
             selectedBackColor: "rgb(1, 111, 111)",
             selectedColor: "rgb(170, 247, 247)",
         });
-
-        $('#content1').show();
-        $('#content2').hide();
-        $('#content3').hide();
-        $('.content').removeClass('treeSelected');
-        $('#content1').addClass('treeSelected');
-        setTreeNodeSelected($('#content1'));
+        selector.show();
+        selector.addClass('treeSelected');
+        if (mapFlag) {
+            setTreeNodeSelectedMap(selector);
+        }else{
+            setTreeNodeSelected(selector);
+        }
+    }
+    
+    $('#list1').click(function() {
+        listRefresh(channelTree(), $('#content1'), 2, false);
     })
 
     $('#list2').click(function() {
-        var linetree = deviceLineTree();
-        $('#content2').treeview({
-            data: linetree,
-            levels: 3,
-            showBorder: false,
-            showCheckbox: false,
-            showTags: false,
-            collapseIcon: "glyphicon glyphicon-chevron-down",
-            expandIcon: "glyphicon glyphicon-chevron-right",
-            backColor: "rgb(170, 247, 247)",
-            color: "rgb(1, 111, 111)",
-            selectedBackColor: "rgb(1, 111, 111)",
-            selectedColor: "rgb(170, 247, 247)",
-        });
-        $('#content2').show();
-        $('#content1').hide();
-        $('#content3').hide();
-        $('.content').removeClass('treeSelected');
-        $('#content2').addClass('treeSelected');
-        setTreeNodeSelected($('#content2'));
+        listRefresh(channelLineTree(), $('#content2'), 2, false);
     })
-
-    // $('#list3').click(function() {
-    //     $('#content3').show();
-    //     $('#content2').hide();
-    //     $('#content1').hide();
-    //     $('.content').removeClass('treeSelected');
-    //     $('#content3').addClass('treeSelected');
-    //     setTreeNodeSelected($('#content3'));
-    // })
 
     // buttons
     $('#picLast').click(function() {
@@ -863,128 +821,112 @@ $(function() {
 
 
     // `map
+    $('#back').click(function() {
+        $('#main_right').show();
+        $('#mapArea').hide();
+    })
+
     $('#icon_map').click(function() {
         $('#main_right').hide();
         $('#mapArea').show();
-        initMap();
-        var ggPoint = new BMap.Point(121.506377,31.245105);
-        var markergg = new BMap.Marker(ggPoint);
-        map.addOverlay(markergg); //添加GPS marker
-        var labelgg = new BMap.Label("未转换的GPS坐标（错误）",{offset:new BMap.Size(20,-10)});
-        markergg.setLabel(labelgg); //添加GPS label
+        initMap(); 
+        listRefresh(deviceTree(), $('#content1'), 2, true); 
     })
 
-    $('#mapInput button:eq(1)').click(function() {
-        var address = $('#mapInput input:eq(0)').val();
-        var radius = $('#mapInput input:eq(1)').val();
-        var url = 'http://api.map.baidu.com/geocoder/v2/?address=' + address + '&output=json&ak=fr2k1GxnZbBxXalKYdcQUNBM';
+    function getDevicesByMap(url, method, data){
+        $.ajax({
+            url: url,
+            type: method,
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false
+        })
+        .then(data => {
+            if (data.code == 0) {
+                map.clearOverlays();
+                const list = data.result.list;
+                const points = [];　
+                const contentTemplte = `
+                    <div style='width:100%;height:100%;'>
+                        <h3 style="margin: 10px;text-align:center">设备名称</h3>
+                        <div style='float:left;width:20%;font-size:14px;'>
+                            <p>电压</p>
+                            <p>充电电压</p>
+                            <p>温度</p>
+                            <p>警报</p>
+                            <p>状态:status</p>
+                        </div>
+                        <div style='float:left;width:80%;text-align:center;'>
+                            <img id='imgDemo' width='350' height='200' src='thumbnail' data-original='url' alt=''/>
+                        </div>
+                    </div>
+                `;
+
+                const contents = [];
+                list.forEach(item => {
+                    let content = contentTemplte;
+                    content = content.replace('tmpid', item.deviceID);
+                    content = content.replace('设备名称', item.name);
+                    content = content.replace('电压', '电压:' + item.batteryVoltage);
+                    content = content.replace('充电电压', '充电电压:' + item.chargeVoltage);
+                    content = content.replace('温度', '温度:' + item.temperature);
+                    content = content.replace('警报', '警报:' + item.alert);
+                    content = content.replace('thumbnail', item.picUrl);
+                    content = content.replace('url', item.picUrl);
+                    content = content.replace('status', item.status ? "<span class='online'>在线</span>" : "<span class='offline'>离线</span>");
+
+                    const status = item.status; // 是否在线
+                    const lon = item.longitude;
+                    const lat = item.latitude;
+                    const point = new BMap.Point(lon, lat);
+                    points.push(point);
+                    var marker = status ? new BMap.Marker(point, {icon: createIcon()}) : new BMap.Marker(point);
+                    var label = new BMap.Label(item.name, {
+                        "offset": new BMap.Size(0, -25)
+                    });
+
+                    map.addOverlay(marker); // 将标注添加到地图中
+                    marker.setLabel(label);
+                    label.setStyle({
+                        color : status ? "blue" : "red",
+                        fontSize : "13px",
+                        backgroundColor: "transparent",
+                        borderWidth: "0px"
+                    });
+                    addClickHandler(content, marker);
+                })
+                map.setViewport(points);　
+            } else {
+                alert('按地图获取设备列表失败');
+                console.log(data);
+            }
+        })
+    }
+
+    $('#searchMap').click(function() {
+        const address = $('#mapInput input:eq(0)').val();
+        const radius = $('#mapInput input:eq(1)').val();
+        const url = 'http://api.map.baidu.com/geocoder/v2/?address=' + address + '&output=json&ak=fr2k1GxnZbBxXalKYdcQUNBM';
 
         $.ajax({    
             url: url,
             dataType: 'jsonp',
-            success: function(data) {
-                if (data.status == 0) {
-                    address = data.result.location;
-                    var data = {
-                        'latitude': parseFloat(address.lat),
-                        'longitude': parseFloat(address.lng),
-                        'radius': parseFloat(radius)
-                    }
-                    $.ajax({
-                        url: '/v1/device/query/map2',
-                        type: "GET",
-                        data: data,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        async: false,
-                        success: function(data) {
-                            if (data.code == 0) {
-                                map.clearOverlays();
-                                var list = data.result.list;
-                                var data_info = [];
-
-                                var contentTemplte =
-                                    "<div style='width:100%;height:100%;'id='tmpid'>" +
-                                    "<div style='float:left;width:30%;'><h5 style='margin:0px;'>名字</h5><p style='margin:0px;'>电压</p><p style='margin:0px;'>充电电压</p><p style='margin:0px;'>温度</p><p style='margin:0px;'>警报</p><p style='margin:0px;'>状态</p></div>" +
-                                    "<div id='pics' style='float:left;width:70%; height:50px;'><img id='imgDemo' width='350' height='200' src='thumbnail' data-original='url' title='告警图片'/><button type='button' class='mapLastPic'>上一张</button><button type='button' class='mapNextPic'>下一张</button></div>" +
-                                    "</div>"
-
-                                var contents = [];
-                                for (var i = 0; i < list.length; ++i) {
-                                    data_info[i] = {}
-                                    data_info[i].id = list[i].deviceID;
-                                    data_info[i].name = list[i].name;
-                                    data_info[i].latitude = list[i].latitude;
-                                    data_info[i].longitude = list[i].longitude;
-                                    data_info[i].batteryVoltage = list[i].batteryVoltage;
-                                    data_info[i].chargeVoltage = list[i].chargeVoltage;
-                                    data_info[i].temperature = list[i].temperature;
-                                    data_info[i].alert = list[i].alert;
-                                    data_info[i].alertId = list[i].alertId;
-                                    data_info[i].status = list[i].status;
-                                    data_info[i].thumbnailPicUrl = list[i].thumbnailPicUrl;
-                                    data_info[i].picUrl = list[i].picUrl;
-                                    contents[i] = contentTemplte;
-                                    contents[i] = contents[i].replace('tmpid', list[i].deviceID);
-                                    contents[i] = contents[i].replace('名字', list[i].name);
-                                    contents[i] = contents[i].replace('电压', '电压:' + list[i].batteryVoltage);
-                                    contents[i] = contents[i].replace('充电电压', '充电电压:' + list[i].chargeVoltage);
-                                    contents[i] = contents[i].replace('温度', '温度:' + list[i].temperature);
-                                    contents[i] = contents[i].replace('警报', '警报:' + list[i].alert);
-                                    contents[i] = contents[i].replace('thumbnail', list[i].picUrl);
-                                    contents[i] = contents[i].replace('url', list[i].picUrl);
-                                    if (list[i].status == 0) {
-                                        var status = '离线'
-                                    } else {
-                                        var status = '在线'
-                                    }
-                                    contents[i] = contents[i].replace('状态', '状态:' + status);
-                                }
-                                console.log(contents);
-                                var viewer = new Viewer(document.getElementById('pics'), {
-                                    url: 'data-original'
-                                });
-                                var points = [];　　　　
-                                for (var i = 0; i < data_info.length; i++) {
-                                    var status = data_info[i].status; // 是否在线
-                                    var lon = data_info[i].longitude;
-                                    var lat = data_info[i].latitude;
-                                    var point = new BMap.Point(lon, lat);
-                                    // points.push(point);
-                                    if (status === 1) {
-                                        var marker = new BMap.Marker(point); // 创建标注
-                                    } else {
-                                        var iconImg = createIcon();
-                                        var marker = new BMap.Marker(point, {
-                                            icon: iconImg
-                                        }); // 创建标注
-                                    }
-                                    var label = new BMap.Label(data_info[i].name, {
-                                        "offset": new BMap.Size(colorIcons.red.lb - colorIcons.red.x + 10, -20)
-                                    });
-
-                                    map.addOverlay(marker); // 将标注添加到地图中
-                                    marker.setLabel(label);
-                                    label.setStyle({
-                                        borderColor: "#808080",
-                                        color: "#333",
-                                        cursor: "pointer",
-                                        borderWidth: '0px',
-                                        backgroundColor: 'transparent'
-                                    });
-                                    addClickHandler(contents[i], marker);
-                                }
-                                map.setViewport(points);　
-                            } else {
-                                alert('按地图获取设备列表失败');
-                                console.log(data);
-                            }
-                        }
-                    }) // end of ajax
-                } else {
-                    alert('获取指定地址经纬度失败');
-                    console.log(data);
-                }
+            })
+        .then(data => {
+            if (data.status === 0) {
+                const address = data.result.location;
+                var data = {
+                    'latitude': parseFloat(address.lat),
+                    'longitude': parseFloat(address.lng),
+                    'radius': parseFloat(radius)
+                };
+                listRefresh(deviceTree(), $('#content1'), 2, true); 
+                getDevicesByMap('/v1/device/query/map2', 'GET', data);
+                
+            } else {
+                alert('获取指定地址经纬度失败');
+                console.log(data);
             }
         })
     })
@@ -1052,59 +994,41 @@ $(function() {
         }
     })
 
+
+    // 通道列表
     function channelTree() {
-        var data = {
+        const data = {
             "userId": cookie_userId,
             "userType": cookie_userType,
         };
-        var rootNode = [];
+        let rootNode;
         $.ajax({
             url: '/v1/device/tree2',
             type: "POST",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            async: false,
-            success: function(data) {
-                if (data.code == 0) {
-                    rootNode = data.result.data;
-                } else {
-                    console.log('获取设备树失败');
-                }
+            async: false
+        })
+        .then(data => {
+            if (data.code == 0) {
+                rootNode = data.result.data;
+            } else {
+                console.log('获取设备树失败');
             }
         })
+        if(window.sessionStorage){
+            sessionStorage.channelList = rootNode;
+        }
         return rootNode;
     }
 
-    function deviceLineTree() {
-        var data = {
-            "userId": cookie_userId
-        };
-        var rootNode = [];
-        $.ajax({
-            url: '/v1/device/tree/line',
-            type: "POST",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false,
-            success: function(data) {
-                if (data.code == 0) {
-                    rootNode = data.result.data;
-                } else {
-                    console.log('获取设备树失败');
-                }
-            }
-        })
-        return rootNode;
-    }
-
-
+    // 通道列表多选
     function channelTreeMulti() {
-        var data = {
+        const data = {
             "userId": cookie_userId
         };
-        var rootNode = [];
+        let rootNode;
         $.ajax({
             url: '/v1/device/tree/channel/multi',
             type: "POST",
@@ -1112,22 +1036,48 @@ $(function() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false,
-            success: function(data) {
-                if (data.code == 0) {
-                    rootNode = data.result.data;
-                } else {
-                    console.log('获取设备树失败');
-                }
+        })
+        .then(data => {
+            if (data.code == 0) {
+                rootNode = data.result.data;
+            } else {
+                console.log('获取设备树失败');
             }
         })
         return rootNode;
     }
 
-    function deviceTree() {
-        var data = {
+    // 设备线路列表
+    function channelLineTree() {
+        const data = {
             "userId": cookie_userId
         };
-        var rootNode = [];
+        let rootNode;
+        $.ajax({
+            url: '/v1/device/tree/line',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+        })
+        .then(data => {
+            if (data.code == 0) {
+                rootNode = data.result.data;
+            } else {
+                console.log('获取设备树失败');
+            }
+        })
+        return rootNode;
+    }
+
+    
+    // 设备列表
+    function deviceTree() {
+        const data = {
+            "userId": cookie_userId
+        };
+        let rootNode;
         $.ajax({
             url: '/v1/device/tree3',
             type: "POST",
@@ -1135,12 +1085,11 @@ $(function() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false,
-            success: function(data) {
-                if (data.code == 0) {
-                    rootNode = data.result.data;
-                } else {
-                    alert('获取设备树失败');
-                }
+        }).then(data => {
+            if (data.code == 0) {
+                rootNode = data.result.data;
+            } else {
+                alert('获取设备树失败');
             }
         })
         return rootNode;
@@ -1155,22 +1104,20 @@ $(function() {
 
 
     function getStatus(deviceId) {
-        // console.log(deviceId);
         $.ajax({
             url: '/v1/device/details',
             type: "POST",
             data: JSON.stringify({id: deviceId}),
             contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function(data) {
-            	var status = data.result.status === 1 ? "在线" : "离线";
-                if (data.code == 0) {
-                    $('#dvc_status div').empty();
-                    $('#dvc_status div:eq(0)').append("<p><b>状态：&nbsp;&nbsp;</b></p><p><b>温度：&nbsp;&nbsp;</b>${data.result.temperature}</p>");
-                    $('#dvc_status div:eq(1)').append("<p><b>电压：&nbsp;&nbsp;</b>" + data.result.batteryVoltage + "</p><p><b>隐患类型：&nbsp;&nbsp;</b>" + dangerType[data.result.deviceDangerID] + "</p>");
-                } else {
-                    console.log('failed at alert/process');
-                }
+            dataType: "json"
+        }).then(data => {
+        	const status = data.result.status === 1 ? "在线" : "离线";
+            if (data.code == 0) {
+                $('#dvc_status div').empty();
+                $('#dvc_status div:eq(0)').append(`<p><b>状态：&nbsp;&nbsp;${status}</b></p><p><b>温度：&nbsp;&nbsp;</b>${data.result.temperature}</p>`);
+                $('#dvc_status div:eq(1)').append(`<p><b>电压：&nbsp;&nbsp;</b>${data.result.batteryVoltage}</p><p><b>隐患类型：&nbsp;&nbsp;</b>${dangerType[data.result.deviceDangerID]}</p>`);
+            } else {
+                console.log('failed at alert/process');
             }
         }) // end of ajax
     }
@@ -1276,6 +1223,31 @@ $(function() {
                 }, INTERVAL);
             }
         }) // end of nodeSelected event
+    }
+
+    // 地图 点击设备
+    function setTreeNodeSelectedMap(selector) {
+        selector.data().treeview.options.multiSelect = true;
+        selector.unbind('nodeSelected');
+
+        selector.on('nodeSelected nodeUnselected', function(event, data) {
+            var newData = {};
+
+            newData.deviceIds = [];
+            newData.id = [];
+
+            var selectedDevices = selector.treeview('getSelected');
+            newData.type = 0;
+            for (var i = 0; i < selectedDevices.length; i++) {
+                if (selectedDevices[i].type == 3) {
+                    newData.deviceIds.push(selectedDevices[i].id);
+                } else {
+                    newData.type = 1;
+                    newData.id.push(selectedDevices[i].id);
+                }
+            }
+            getDevicesByMap('/v1/device/map/range', 'POST', JSON.stringify(newData));
+        })
     }
 
     //`getDevicePics
@@ -1617,8 +1589,6 @@ var colorIcons = {
 };
 
 function createIcon() {
-    // function createIcon(json){
-    // var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w,json.h),{imageOffset: new BMap.Size(-json.l,-json.t),infoWindowOffset:new BMap.Size(json.lb+5,1),offset:new BMap.Size(json.x,json.h)})
     var icon = new BMap.Icon("http://7xic1p.com1.z0.glb.clouddn.com/markers.png", new BMap.Size(23, 25), {
         offset: new BMap.Size(10, 25),
         imageOffset: new BMap.Size(0, 0 - 10 * 25)
@@ -1638,8 +1608,10 @@ function createMap() {
     var map = new BMap.Map("map"); //在百度地图容器中创建一个地图
     var point = new BMap.Point(121.506377,31.245105); //定义一个中心点坐标
     map.centerAndZoom(point, 18); //设定地图的中心点和坐标并将地图显示在地图容器中
+
     window.map = map; //将map变量存储在全局
 }
+
 //地图事件设置函数：
 function setMapEvent() {
     map.enableDragging(); //启用地图拖拽事件，默认启用(可不写)
@@ -1682,12 +1654,14 @@ function addMapControl() {
     map.addControl(ctrl_sca);
 }
 
+
+// 检查用户权限
 function checkUser(inputData) {
-    var data = {
+    const data = {
         'userName': inputData.userName,
-        'password': inputData.password,
+        'password': inputData.password
     };
-    var flag = 0;
+    let flag = 0;
     $.ajax({
         url: '/v1/user/check',
         type: "GET",
@@ -1695,7 +1669,7 @@ function checkUser(inputData) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         async: false
-    }).then(function(data) {
+    }).then((data) => {
         if (data.code) {
             alert('用户名或密码有误!');
         } else {
@@ -1705,6 +1679,7 @@ function checkUser(inputData) {
     return flag;
 }
 
+// 查询设备历史图片
 function getDevicePicsHistory(data) {
     var outerData = data;
     $.ajax({
@@ -1714,7 +1689,7 @@ function getDevicePicsHistory(data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         async: false,
-    }).then(function(data) {
+    }).then((data) => {
         if (!data.code) {
             var pics = data.result.list;
             for (var i = 0; i < pics.length; i++) {
@@ -1750,6 +1725,7 @@ function getDevicePicsHistory(data) {
     });
 }
 
+// 查询所有历史图片
 function getAllPicsHistory(data) {
     var outerData = data;
     $.ajax({
@@ -1802,6 +1778,7 @@ function getAllPicsHistory(data) {
     });
 }
 
+// 获取设备CMD及其温度
 function tempDevice(data) {
     $.ajax({
         url: '/v1/device/cmd',
@@ -1810,12 +1787,12 @@ function tempDevice(data) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         async: false
-    }).then(function(data) {
+    }).then((data) => {
         if (!data.code) {
-            var temps = data.result.list;
+            const temps = data.result.list;
             $('#tempArea table tbody').empty();
             for (var i = 0; i < temps.length; i++) {
-                $('#tempArea table tbody').append('<tr id="' + temps[i].cmdId + '"><td>' + temps[i].cmdId + '</td><td>' + temps[i].temperature + '</td><td>' + temps[i].time + '</td><td><button>查看</button></td></tr>')
+                $('#tempArea table tbody').append(`<tr id=${temps[i].cmdId}><td>${temps[i].cmdId}</td><td>${temps[i].temperature}</td><td>${temps[i].time}</td><td><button>查看</button></td></tr>`)
             }
         } else {
             console.log('获取设备(组)失败');
