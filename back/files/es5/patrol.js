@@ -110,7 +110,7 @@ $(function () {
             "index": index,
             "size": size
         };
-        getAllPics(data);
+        getPics(data, true, 9);
 
         var index = 0;
         var size = 16;
@@ -120,14 +120,14 @@ $(function () {
             "index": index,
             "size": size
         };
-        getAllPics4x4(data);
+        getPics(data, true, 16);
 
         if (getSelectedDevice() == -1) {
             intervalIds.getAllPics = setInterval(function () {
-                getAllPics(data);
+                getPics(data, true, 9);
             }, INTERVAL);
             intervalIds.getAllPics4x4 = setInterval(function () {
-                getAllPics4x4(data);
+                getPics(data, true, 16);
             }, INTERVAL);
         }
 
@@ -139,19 +139,9 @@ $(function () {
             listRefresh(channelLineTree(), $('#content2'), 2, false);
         });
 
-        $('#list3').click(function () {
-            $('#content3').show();
-            $('#content2').hide();
-            $('#content1').hide();
-            $('.content').removeClass('treeSelected');
-            $('#content3').addClass('treeSelected');
-            setTreeNodeSelected($('#content3'));
-            // setTreeNodeSelected4x4($('#content3'));
-        });
+        $('body').attr('picsno-data', '9');
+        $('body').attr('screen-data', '');
     }
-
-    //页面显示
-    //nav
 
     // buttons
     $('#picLast').click(function () {
@@ -166,9 +156,9 @@ $(function () {
                 "startTime": "1970-01-01 00:00:00",
                 "endTime": "2900-01-01 23:59:59"
             };
-            getAllPics(_data);
+            getPics(_data, true, 9);
             _data.size = 16;
-            getAllPics4x4(_data);
+            getPics(_data, true, 16);
         } else {
             var id = $('body').attr('pic-deviceId');
             var channelNo = parseInt($('body').attr('pic-channelNo'));
@@ -184,9 +174,9 @@ $(function () {
                 "startTime": "1900-01-01 00:00:00",
                 "endTime": "2900-01-01 00:00:00"
             };
-            getNextPage(_data2);
+            getPics(_data2, false, 9);
             _data2.size = 16;
-            getNextPage4x4(_data2);
+            getPics(_data2, false, 9);
         }
     });
 
@@ -203,9 +193,9 @@ $(function () {
                 "startTime": "1970-01-01 00:00:00",
                 "endTime": "2900-01-01 23:59:59"
             };
-            getAllPics(_data3);
+            getPics(_data3, true, 9);
             _data3.size = 16;
-            getAllPics4x4(_data3);
+            getPics(_data3, true, 16);
         } else {
             var id = $('body').attr('pic-deviceId');
             var channelNo = parseInt($('body').attr('pic-channelNo'));
@@ -221,9 +211,9 @@ $(function () {
                 "startTime": "1900-01-01 00:00:00",
                 "endTime": "2900-01-01 00:00:00"
             };
-            getNextPage(_data4);
+            getPics(_data4, false, 9);
             _data4.size = 16;
-            getNextPage4x4(_data4);
+            getPics(_data4, false, 16);
         }
     });
 
@@ -239,9 +229,9 @@ $(function () {
                 "startTime": "1970-01-01 00:00:00",
                 "endTime": "2900-01-01 23:59:59"
             };
-            getAllPics(_data5);
+            getPics(_data5, true, 9);
             _data5.size = 16;
-            getAllPics4x4(_data5);
+            getPics(_data5, true, 16);
         } else {
             var id = $('body').attr('pic-deviceId');
             var channelNo = parseInt($('body').attr('pic-channelNo'));
@@ -257,9 +247,9 @@ $(function () {
                 "startTime": "1900-01-01 00:00:00",
                 "endTime": "2900-01-01 00:00:00"
             };
-            getNextPage(_data6);
+            getPics(_data6, false, 9);
             _data6.size = 16;
-            getNextPage4x4(_data6);
+            getPics(_data6, false, 16);
         }
     });
 
@@ -297,74 +287,57 @@ $(function () {
     });
 
     // 巡检操作
-
     $('#picsNumChange').click(function () {
-        $('#pics').hide();
-        $('#pics4x4').hide();
-        $('#fullMain').hide();
-        $('#fullMain4x4').hide();
-        if ($('body').attr('picsno-data') == undefined || $('body').attr('picsno-data') == '9') {
-            $('#pics4x4').show();
-            $(this).text('3x3');
-            $('body').attr('picsno-data', '16');
-        } else {
-            $('#pics').show();
-            $(this).text('4x4');
-            $('body').attr('picsno-data', '9');
-        }
+        var text = screen(false, true);
+        $('#picsNumChange').text(text);
     });
 
     $('#picsNumChangeFull').click(function () {
-        $('#pics').hide();
-        $('#pics4x4').hide();
-        $('#fullMain').hide();
-        $('#fullMain4x4').hide();
-        if ($('body').attr('picsno-data') == undefined || $('body').attr('picsno-data') == '9') {
-            ;
-            $('#fullMain4x4').show();
-            $(this).text('3x3');
-            $('body').attr('picsno-data', '16');
-        } else {
-            $('#fullMain').show();
-            $(this).text('4x4');
-            $('body').attr('picsno-data', '9');
-        }
+        var text = screen(true, true);
+        $('#picsNumChangeFull').text(text);
     });
 
     $('#fullScreen').click(function () {
-        $('#nav').hide();
-        $('#main').hide();
-        $('#hoverArea').show();
-        $('#pics').hide();
-        $('#pics4x4').hide();
-        $('#fullMain').hide();
-        $('#fullMain4x4').hide();
-        var tmp = $('body').attr('picsno-data');
-        if (tmp == undefined || tmp == '9') {
-            $('#fullMain').show();
-        } else {
-            $('#fullMain4x4').show();
-        }
-        $('body').attr('screen-data', 'full');
+        screen(true, false);
     });
 
     $('#exitFullScreen').click(function () {
+        screen(true, false);
+    });
+
+    function screen(fullFlag, numFlag) {
+        $('#main').hide();
+        $('#nav').hide();
         $('#pics').hide();
         $('#pics4x4').hide();
         $('#fullMain').hide();
         $('#fullMain4x4').hide();
-        var tmp = $('body').attr('picsno-data');
-        if (tmp == '16') {
-            $('#pics4x4').show();
-        } else {
-            $('#pics').show();
-        }
-        $('#nav').show();
-        $('#main').show();
 
-        $('#hoverArea').hide();
-        $('body').attr('screen-data', 'notfull');
-    });
+        var picNum = $('body').attr('picsno-data');
+        var target = void 0,
+            text = void 0;
+        /* 如果全屏，显示fullmain, */
+        if (fullFlag) {
+            $('body').attr('screen-data', 'full');
+            target = '#fullMain';
+        } else {
+            target = '#pics';
+            $('body').attr('screen-data', '');
+            $('#nav').show();
+            $('#main').show();
+        }
+
+        if (numFlag) {
+            text = picNum === '9' ? '3x3' : '4x4';
+            target += picNum === '9' ? '4x4' : '';
+            $('body').attr('picsno-data', picNum === '9' ? '16' : '9');
+        } else {
+            target += picNum === '9' ? '' : '4x4';
+        }
+
+        $(target).show();
+        return text;
+    }
 
     $(document).ready(function () {
         /** Coding Here */
@@ -372,33 +345,17 @@ $(function () {
         if (e.which === 27) {
             /** 这里编写当ESC按下时的处理逻辑！ */
             if ($('body').attr('screen-data') == 'full') {
-                $('#nav').show();
-                $('#main').show();
-                $('#fullMain').hide();
-                $('#hoverArea').hide();
-                $('body').attr('screen-data', 'notfull');
-                $('#pics').hide();
-                $('#pics4x4').hide();
-                $('#fullMain').hide();
-                $('#fullMain4x4').hide();
-                var tmp = $('body').attr('picsno-data');
-                if (tmp == '16') {
-                    $('#pics4x4').show();
-                } else {
-                    $('#pics').show();
-                }
+                screen(false, false);
             }
         }
     });
 
     $('#hoverArea').mouseover(function () {
-        $(this).css('background-color', 'rgb(3,161,161)');
-        $('#hoverContent').show();
+        $('#hoverArea').show();;
     });
 
     $('#hoverArea').mouseout(function () {
-        $(this).css('background-color', 'transparent');
-        $('#hoverContent').hide();
+        $('#hoverArea').hide();
     });
 
     //修改巡检时间间隔
@@ -410,10 +367,10 @@ $(function () {
             clearInterval(intervalIds.getAllPics);
             clearInterval(intervalIds.getAllPics4x4);
             intervalIds.getAllPics = setInterval(function () {
-                getAllPics(data);
+                getPics(data, true, 9);
             }, INTERVAL);
             intervalIds.getAllPics4x4 = setInterval(function () {
-                getAllPics4x4(data);
+                getPics(data, true, 16);
             }, INTERVAL);
         }
     });
@@ -547,196 +504,66 @@ $(function () {
         return rootNode;
     }
 
-    function getAllPics(data) {
-        // clearInterval(intervalIds.findDevicePic);
+    function getPics(data, allFlag, number) {
+        console.log('gonna get ' + (allFlag ? 'all' : 'device') + ' of ' + number);
+        console.log();
         var outerData = data;
+        var url = '/v1/search/pics/' + (allFlag ? 'all' : 'device');
         $.ajax({
-            url: '/v1/search/pics/all',
+            url: url,
             type: "GET",
             data: data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            async: false,
-            success: function success(data) {
-                if (data.code == 0) {
-                    var list = data.result.list;
-
+            async: false
+        }).then(function (data) {
+            if (data.code == 0) {
+                var list = data.result.list;
+                var ID = void 0,
+                    fullID = void 0;
+                if (allFlag) {
                     $('body').attr('allpic-index', outerData.index);
                     $('body').attr('if-all', 1);
-
-                    for (var i = 0; i < list.length; ++i) {
-                        if (list[i].picType == 2) {
-                            // for ref pic
-                        } else {
-                            $('#pics img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
-                            $('#pics img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#pics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#pics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#pics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-
-                            $('#fullMain img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
-                            $('#fullMain img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#fullMain img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#fullMain img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#fullMain img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-
-                            var viewer = new Viewer(document.getElementById('pics'), {
-                                url: 'data-original'
-                            });
-
-                            var viewer = new Viewer(document.getElementById('fullMain'), {
-                                url: 'data-original'
-                            });
-                        }
-                    }
                 } else {
-                    console.log(data);
-                }
-            }
-        }); // end of ajax   
-    }
-
-    function getNextPage(data) {
-        // clearInterval(intervalIds.findDevicePic);
-        // alert(INTERVAL);
-        var outerData = data;
-        $.ajax({
-            url: '/v1/search/pics/device',
-            type: "GET",
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false,
-            success: function success(data) {
-                if (data.code == 0) {
                     $('body').attr('pic-index', outerData.index);
                     $('body').attr('pic-deviceId', outerData.id);
                     $('body').attr('if-all', 0);
-
-                    var list = data.result.list;
-                    for (var i = 0; i < list.length; ++i) {
-                        if (list[i].picType == 2) {
-                            // for ref pic
-                        } else {
-                            $('#pics img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
-                            $('#pics img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#pics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#pics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#pics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-
-                            $('#fullMain img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
-                            $('#fullMain img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#fullMain img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#fullMain img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#fullMain img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-
-                            var viewer = new Viewer(document.getElementById('pics'), {
-                                url: 'data-original'
-                            });
-
-                            var viewer = new Viewer(document.getElementById('fullMain'), {
-                                url: 'data-original'
-                            });
-                        }
-                    }
-                } else {
-                    console.log(data);
                 }
-            }
-        }); // end of ajax   
-    }
-
-    function getAllPics4x4(data) {
-        // clearInterval(intervalIds.findDevicePic);
-        var outerData = data;
-        $.ajax({
-            url: '/v1/search/pics/all',
-            type: "GET",
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false,
-            success: function success(data) {
-                if (data.code == 0) {
-                    var list = data.result.list;
-
-                    for (var i = 0; i < list.length; ++i) {
-                        if (list[i].picType == 2) {
-                            // for ref pic
-                        } else {
-                            $('#pics4x4 img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
-                            $('#pics4x4 img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#pics4x4 img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#pics4x4 img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#pics4x4 img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-
-                            var viewer = new Viewer(document.getElementById('pics4x4'), {
-                                url: 'data-original'
-                            });
-
-                            var viewer = new Viewer(document.getElementById('fullMain4x4'), {
-                                url: 'data-original'
-                            });
-                        }
-                    }
+                if (number === 16) {
+                    ID = 'pics';
+                    fullID = 'fullMain';
                 } else {
-                    console.log(data);
+                    ID = 'pics4x4';
+                    fullID = 'fullMain4x4';
                 }
+
+                $('#' + ID + ' img').attr('src', '');
+                $('#' + ID + ' img').attr('picId', '');
+                $('#' + ID + ' img').attr('channelNo', '');
+                $('#' + fullID + ' img').attr('src', '');
+                $('#' + fullID + ' img').attr('picId', '');
+                $('#' + fullID + ' img').attr('channelNo', '');
+
+                list.forEach(function (item, index) {
+                    $('#' + ID + ' img:eq(' + index + ')').attr('src', item.thumbnailPicUrl);
+                    $('#' + ID + ' img:eq(' + index + ')').attr('picId', item.picId);
+                    $('#' + ID + ' img:eq(' + index + ')').attr('channelNo', item.channelNo);
+                    $('#' + ID + ' img:eq(' + index + ')').attr('data-original', item.picUrl);
+                    $('#' + ID + ' img:eq(' + index + ')').attr('deviceId', item.deviceId);
+
+                    $('#' + fullID + ' img:eq(' + index + ')').attr('src', item.thumbnailPicUrl);
+                    $('#' + fullID + ' img:eq(' + index + ')').attr('picId', item.picId);
+                    $('#' + fullID + ' img:eq(' + index + ')').attr('channelNo', item.channelNo);
+                    $('#' + fullID + ' img:eq(' + index + ')').attr('data-original', item.picUrl);
+                    $('#' + fullID + ' img:eq(' + index + ')').attr('deviceId', item.deviceId);
+
+                    var viewer = new Viewer(document.getElementById(ID), { url: 'data-original' });
+                    var viewer = new Viewer(document.getElementById(fullID), { url: 'data-original' });
+                });
+            } else {
+                console.log(data);
             }
-        }); // end of ajax   
-    }
-
-    function getNextPage4x4(data) {
-        // clearInterval(intervalIds.findDevicePic);
-        var outerData = data;
-        $.ajax({
-            url: '/v1/search/pics/device',
-            type: "GET",
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false,
-            success: function success(data) {
-                if (data.code == 0) {
-
-                    var list = data.result.list;
-
-                    for (var i = 0; i < list.length; ++i) {
-                        if (list[i].picType == 2) {
-                            // for ref pic
-                        } else {
-                            $('#pics4x4 img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
-                            $('#pics4x4 img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#pics4x4 img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#pics4x4 img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#pics4x4 img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('src', list[i].thumbnailPicUrl);
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#fullMain4x4 img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-
-                            var viewer = new Viewer(document.getElementById('pics4x4'), {
-                                url: 'data-original'
-                            });
-
-                            var viewer = new Viewer(document.getElementById('fullMain4x4'), {
-                                url: 'data-original'
-                            });
-                        }
-                    }
-                } else {
-                    console.log(data);
-                }
-            }
-        }); // end of ajax   
+        });
     }
 
     function getSelectedDevice() {
@@ -744,6 +571,12 @@ $(function () {
             return -1;
         }
         return $('.treeSelected').treeview('getSelected')[0].id;
+    }
+
+    function clearIntervals() {
+        for (var item in intervalIds) {
+            clearInterval(intervalIds[item]);
+        }
     }
 
     function setTreeNodeSelected(selector) {
@@ -760,67 +593,29 @@ $(function () {
             $('body').attr('pic-channelNo', channelNo);
             if ($('#devices ul li').filter('.chosen').text() == '设备列表') {
                 $('input[name="daterange"]').val('');
-                if (type == 3) {
-                    type = 0;
-                } else {
-                    type = 1;
-                }
+                type = type === 3 ? 0 : 1;
             } else {
-                if (type == 3) {
-                    type = 0;
-                } else {
-                    type = 2;
-                }
+                type = type === 3 ? 0 : 2;
             }
 
-            var size = 9;
-            var index = 0;
             var data = {
-                "channelNo": channelNo,
-                "type": type,
-                "id": deviceId,
-                "size": size,
-                "index": index,
-                "startTime": "1900-01-01 00:00:00",
-                "endTime": "2900-01-01 00:00:00"
-                // setDeviceStatus();
-            };clearInterval(intervalIds.getAllPics);
-            $('#pics img').attr('src', '');
-            $('#pics img').attr('picId', '');
-            $('#pics img').attr('channelNo', '');
-
-            $('#fullMain img').attr('src', '');
-            $('#fullMain img').attr('picId', '');
-            $('#fullMain img').attr('channelNo', '');
-            clearInterval(intervalIds.findDevicePic);
-            getNextPage(data);
+                channelNo: channelNo,
+                type: type,
+                id: deviceId,
+                size: 9,
+                index: 0,
+                startTime: "1900-01-01 00:00:00",
+                endTime: "2900-01-01 00:00:00"
+            };
+            clearIntervals();
+            getPics(data, false, 9);
             intervalIds.findDevicePic = setInterval(function () {
-                getNextPage(data);
+                getPics(data, false, 9);
             }, INTERVAL);
-
-            var size = 16;
-            var index = 0;
-            var data = {
-                "channelNo": channelNo,
-                "type": type,
-                "id": deviceId,
-                "size": size,
-                "index": index,
-                "startTime": "1900-01-01 00:00:00",
-                "endTime": "2900-01-01 00:00:00"
-                // setDeviceStatus();
-            };clearInterval(intervalIds.getAllPics4x4);
-            $('#pics4x4 img').attr('src', '');
-            $('#pics4x4 img').attr('picId', '');
-            $('#pics4x4 img').attr('channelNo', '');
-
-            $('#fullMain4x4 img').attr('src', '');
-            $('#fullMain4x4 img').attr('picId', '');
-            $('#fullMain4x4 img').attr('channelNo', '');
-            clearInterval(intervalIds.findDevicePic4x4);
-            getNextPage4x4(data);
+            data.size = 16;
+            getPics(data, false, 16);
             intervalIds.findDevicePic4x4 = setInterval(function () {
-                getNextPage4x4(data);
+                getPics(data, false, 16);
             }, INTERVAL);
         }); // end of nodeSelected event
     }

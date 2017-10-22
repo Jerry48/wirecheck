@@ -1,10 +1,13 @@
 'use strict';
 
+// 错误码
 var NO_SOCKET = 3003;
 var SERVER_ERROR = 5002;
+// 常数
 var CANVASWIDTH = 640;
 var ENTRIES = 50;
-var INTERVAL = 60000; // s
+var INTERVAL = 60000; // seconds
+
 var intervalIds = {};
 var dangerType = ['线下施工', '建筑工地', '塔吊作业', '线下堆物', '树木生长', '野火防范', '杆塔本体', '鸟类活动', '其他类型'];
 var hourLabels = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"];
@@ -39,71 +42,64 @@ $.getJSON("config", function (config) {
 });
 
 function getUsersBySession(sessionId) {
-    var data = {
-        "sessionId": sessionId
-    };
-    var userInfo = {};
+    var data = { "sessionId": sessionId };
+    var userInfo = null;
     console.log(data);
-
     $.ajax({
         url: '/v1/user/info/session',
         type: "POST",
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        async: false,
-        success: function success(data) {
-            if (data.code == 0) {
-                // todo session clear
-                if (data.result.flag == 0) {
-                    window.location.href = '/login';
-                } else {
-                    userInfo = {
-                        'userId': data.result.userId,
-                        'userName': data.result.userName,
-                        'name': data.result.name,
-                        'userType': data.result.userType
-                    };
-                }
+        async: false
+    }).then(function (data) {
+        if (data.code == 0) {
+            // todo session clear
+            if (data.result.flag == 0) {
+                window.location.href = '/login';
             } else {
-                console.log('info by session fail');
+                userInfo = {
+                    'userId': data.result.userId,
+                    'userName': data.result.userName,
+                    'name': data.result.name,
+                    'userType': data.result.userType
+                };
             }
+        } else {
+            console.log('info by session fail');
         }
     });
     return userInfo;
 }
 
 function getUserDetails(userName) {
-    var data = {
-        'userName': userName
-    };
-    var userPrivileges = {};
+    var data = { 'userName': userName };
+    var userPrivileges = null;
     $.ajax({
         url: '/v1/user/details',
         type: "POST",
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        async: false,
-        success: function success(data) {
-            if (data.code == 0) {
-                if (data.result.flag == 0) {
-                    window.location.href = '/login';
-                } else {
-                    userPrivileges = {
-                        'usrEdit': data.result.usrEdit,
-                        'pwdEdit': data.result.pwdEdit,
-                        'channelSet': data.result.channelSet,
-                        'deviceOp': data.result.deviceOp,
-                        'wechatPush': data.result.wechatPush,
-                        'createGroup': data.result.createGroup,
-                        'name': data.result.name,
-                        'password': data.result.password
-                    };
-                }
+        async: false
+    }).then(function (data) {
+        if (data.code == 0) {
+            if (data.result.flag == 0) {
+                window.location.href = '/login';
             } else {
-                console.log('info by session失败');
+                userPrivileges = {
+                    'usrEdit': data.result.usrEdit,
+                    'pwdEdit': data.result.pwdEdit,
+                    'channelSet': data.result.channelSet,
+                    'deviceOp': data.result.deviceOp,
+                    'wechatPush': data.result.wechatPush,
+                    'createGroup': data.result.createGroup,
+                    'name': data.result.name,
+                    'password': data.result.password
+                };
             }
+        } else {
+            console.log('info by session失败');
         }
     });
     return userPrivileges;

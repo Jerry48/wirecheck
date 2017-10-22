@@ -118,7 +118,7 @@ $(function () {
         $('body').attr('if-all', 1);
 
         // list1
-        listRefresh(channelTree(), $('#content1'), 2, false);
+        listRefresh(channelTree(), $('#content1'), 3, false);
 
         // server status
         checkServer();

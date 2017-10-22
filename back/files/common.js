@@ -1,10 +1,9 @@
-// 错误码
+// ErrorCode  
 const NO_SOCKET = 3003;
 const SERVER_ERROR = 5002;
-// 常数
 const CANVASWIDTH = 640;
 const ENTRIES = 50;
-const INTERVAL = 60000 // seconds
+const INTERVAL = 60000 // s
 
 const intervalIds = {};
 const dangerType = ['线下施工','建筑工地','塔吊作业','线下堆物','树木生长','野火防范','杆塔本体','鸟类活动','其他类型'];
@@ -18,12 +17,12 @@ $(function(){
 })
 
 function welcome(name){
-    var myDate = new Date();
-    var year = myDate.getFullYear();
-    var month = myDate.getMonth() + 1;
-    var day = myDate.getDate();
-    var dayOfWeek = myDate.getDay();
-    var dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
+    const myDate = new Date();
+    const year = myDate.getFullYear();
+    const month = myDate.getMonth() + 1;
+    const day = myDate.getDate();
+    const dayOfWeek = myDate.getDay();
+    const dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
     $('#tabs_right p').css("white-space", "pre");
     $('#tabs_right p').text('欢迎您, ' + name + '!  今天是' + year + '年' + month + '月' + day + '月' +
         '  星期' + dayOfWeekName[dayOfWeek]);
@@ -42,9 +41,12 @@ $.getJSON ("config", function (config)
 });  
 
 function getUsersBySession(sessionId) {
-    const data = { "sessionId": sessionId };
-    let userInfo = null;
+    var data = {
+        "sessionId": sessionId,
+    };
+    var userInfo = {};
     console.log(data);
+
     $.ajax({
         url: '/v1/user/info/session',
         type: "POST",
@@ -52,31 +54,33 @@ function getUsersBySession(sessionId) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         async: false,
-    })
-    .then(data => {
-        if (data.code == 0) {
-            // todo session clear
-            if (data.result.flag == 0) {
-                window.location.href = '/login';
-            } else {
-                userInfo = {
-                    'userId': data.result.userId,
-                    'userName': data.result.userName,
-                    'name': data.result.name,
-                    'userType': data.result.userType
+        success: function(data) {
+            if (data.code == 0) {
+                // todo session clear
+                if (data.result.flag == 0) {
+                    window.location.href = '/login';
+                } else {
+                    userInfo = {
+                        'userId': data.result.userId,
+                        'userName': data.result.userName,
+                        'name': data.result.name,
+                        'userType': data.result.userType,
+                    }
                 }
-            }
 
-        } else {
-            console.log('info by session fail');
+            } else {
+                console.log('info by session fail');
+            }
         }
     });
     return userInfo;
 }
 
 function getUserDetails(userName) {
-    const data = { 'userName': userName };
-    let userPrivileges = null;
+    var data = {
+        'userName': userName,
+    };
+    var userPrivileges = {};
     $.ajax({
         url: '/v1/user/details',
         type: "POST",
@@ -84,33 +88,33 @@ function getUserDetails(userName) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         async: false,
-    })
-    .then(data => {
-        if (data.code == 0) {
-            if (data.result.flag == 0) {
-                window.location.href = '/login';
-            } else {
-                userPrivileges = {
-                    'usrEdit': data.result.usrEdit,
-                    'pwdEdit': data.result.pwdEdit,
-                    'channelSet': data.result.channelSet,
-                    'deviceOp': data.result.deviceOp,
-                    'wechatPush': data.result.wechatPush,
-                    'createGroup': data.result.createGroup,
-                    'name': data.result.name,
-                    'password': data.result.password
+        success: function(data) {
+            if (data.code == 0) {
+                if (data.result.flag == 0) {
+                    window.location.href = '/login';
+                } else {
+                    userPrivileges = {
+                        'usrEdit': data.result.usrEdit,
+                        'pwdEdit': data.result.pwdEdit,
+                        'channelSet': data.result.channelSet,
+                        'deviceOp': data.result.deviceOp,
+                        'wechatPush': data.result.wechatPush,
+                        'createGroup': data.result.createGroup,
+                        'name': data.result.name,
+                        'password': data.result.password
+                    }
                 }
-            }
 
-        } else {
-            console.log('info by session失败');
+            } else {
+                console.log('info by session失败');
+            }
         }
     });
     return userPrivileges;
 }
 
 function makeId() {
-	const chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+	var chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
 		'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
 	];
 	var res = "";

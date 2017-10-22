@@ -195,6 +195,13 @@ div {
 	border-bottom: 1px green solid;
 }
 
-/*#hoverArea:hover {
-	background-color: blue;
-}*/
+#hoverArea{
+    position: fixed;
+    top: 0px; 
+    background-color: rgb(3,161,161);
+    width: 100%;
+    z-index: 9999;
+    display: none;
+    overflow-y: hidden;
+    padding: 10px 10px;
+}
