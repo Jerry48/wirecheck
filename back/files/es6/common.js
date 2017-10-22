@@ -10,6 +10,29 @@ var dayLables = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", 
 var weekLabels = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
 var monthLabels = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
 
+$(function(){
+    welcome();
+})
+
+function welcome(name){
+    var myDate = new Date();
+    var year = myDate.getFullYear();
+    var month = myDate.getMonth() + 1;
+    var day = myDate.getDate();
+    var dayOfWeek = myDate.getDay();
+    var dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
+    $('#tabs_right p').css("white-space", "pre");
+    $('#tabs_right p').text('欢迎您, ' + name + '!  今天是' + year + '年' + month + '月' + day + '月' +
+        '  星期' + dayOfWeekName[dayOfWeek]);
+}
+
+function formatDate(year, month, day){
+    var month0 = (month<10)?('0'+month):(month);
+    var day0 = (day<10)?('0'+day):(day);
+    var time = year+'-'+month0+'-'+day0;
+    return timeStr;
+}
+
 $.getJSON ("config", function (config)  
 {  
     var PIC_SERVER = "http://"+config.domain+":"+config.port.picserver+'/';

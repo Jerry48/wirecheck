@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"es5": "babel back/files/test_main.js -o back/files/es5/main.js"
+	"build": "babel back/files/es6 -d back/files/es5"
   },
   "author": "",
   "license": "ISC",

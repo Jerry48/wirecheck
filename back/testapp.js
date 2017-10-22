@@ -53,7 +53,7 @@ app.use(session({
     key: 'wirecheck_session_cookie',
     secret: 'ccflab.?sjtu@123',
     store: sessionStore,
-    cookie: { path: '/', secure: false, httpOnly: false, maxAge: 1000 * 3600 * 24 *7, },
+    cookie: { path: '/', secure: false, httpOnly: false, maxAge: 1000 * 3600 * 24 * 7, },
 }));
 
 /// body parser
@@ -189,7 +189,7 @@ app.use(express.static(__dirname + '/files'));
 var api_front_main = fs.readFileSync(__dirname + '/front/test_main.html');
 app.use('/main', function(req, res) {
     console.log('req.session:%j', req.session);
-    if(req.cookies.sessionId === "null") {
+    if(req.cookies.sessionId === "null" || req.cookies.sessionId === undefined) {
         res.redirect("/login");
     }else{
         res.set('Content-Type', 'text/html');
@@ -201,7 +201,7 @@ app.use('/main', function(req, res) {
 var api_front_patrol = fs.readFileSync(__dirname + '/front/test_patrol.html');
 app.use('/patrol', function(req, res) {
     console.log('req.session:%j', req.session);
-    if(req.cookies.sessionId === "null") {
+    if(req.cookies.sessionId === "null" || req.cookies.sessionId === undefined) {
         res.redirect("/login");
     }else{
         res.set('Content-Type', 'text/html');
@@ -213,7 +213,7 @@ app.use('/patrol', function(req, res) {
 var api_front_device = fs.readFileSync(__dirname + '/front/test_device.html');
 app.use('/device', function(req, res) {
     console.log('req.session:%j', req.session);
-    if(req.cookies.sessionId === "null") {
+    if(req.cookies.sessionId === "null" || req.cookies.sessionId === undefined) {
         res.redirect("/login");
     }else{
         res.set('Content-Type', 'text/html');
@@ -234,7 +234,7 @@ app.use('/login', function(req, res) {
 var api_front_user = fs.readFileSync(__dirname + '/front/test_user.html');
 app.use('/user', function(req, res) {
     console.log('req.session:%j', req.session);
-    if(req.cookies.sessionId === "null") {
+    if(req.cookies.sessionId === "null" || req.cookies.sessionId === undefined) {
         res.redirect("/login");
     }else{
         res.set('Content-Type', 'text/html');
@@ -246,7 +246,7 @@ app.use('/user', function(req, res) {
 var api_front_general_user = fs.readFileSync(__dirname + '/front/general_user.html');
 app.use('/general_user', function(req, res) {
     console.log('req.session:%j', req.session);
-    if(req.cookies.sessionId === "null") {
+    if(req.cookies.sessionId === "null" || req.cookies.sessionId === undefined) {
         res.redirect("/login");
     }else{
         res.set('Content-Type', 'text/html');

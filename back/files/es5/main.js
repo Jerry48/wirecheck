@@ -46,16 +46,6 @@ $(function () {
         $('#nav_left img').css('margin-top', (h - img_h) / 2 + 'px');
         $('#nav_left img').css('margin-bottom', (h - img_h) / 2 + 'px');
 
-        // welcome
-        var myDate = new Date();
-        var year = myDate.getFullYear();
-        var month = myDate.getMonth() + 1;
-        var day = myDate.getDate();
-        var dayOfWeek = myDate.getDay();
-        var dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
-        $('#tabs_right p').css("white-space", "pre");
-        $('#tabs_right p').text('欢迎您, ' + cookie_name + '!  今天是' + year + '年' + month + '月' + day + '月' + '  星期' + dayOfWeekName[dayOfWeek]);
-
         // ````````````````````````````` common use above
 
         // adjust pics0 & pics14
@@ -115,24 +105,6 @@ $(function () {
             $(this).val(picker.startDate.format('YYYY-MM-DD'));
         });
 
-        // list1
-        var channeltree = channelTree();
-        $('#content1').treeview({
-            data: channeltree,
-            levels: 3,
-            showBorder: false,
-            showCheckbox: false,
-            showTags: false,
-            collapseIcon: "glyphicon glyphicon-chevron-down",
-            expandIcon: "glyphicon glyphicon-chevron-right",
-            backColor: "rgb(170, 247, 247)",
-            color: "rgb(1, 111, 111)",
-            selectedBackColor: "rgb(1, 111, 111)",
-            selectedColor: "rgb(170, 247, 247)"
-        });
-        $('#content1').addClass('treeSelected');
-        setTreeNodeSelected($('#content1'));
-
         // content max height
         h = parseFloat($('#tree').css('height'));
         var list_h = parseFloat($('#list1').css('height'));
@@ -144,6 +116,9 @@ $(function () {
         // pics
         $('body').attr('allpic-index', 0);
         $('body').attr('if-all', 1);
+
+        // list1
+        listRefresh(channelTree(), $('#content1'), 2, false);
 
         // server status
         checkServer();
@@ -278,11 +253,12 @@ $(function () {
         $('.indent').css('margin', '5px');
     });
 
-    function channelRefresh() {
-        var channeltree = channelTree();
-        $('#content1').treeview({
-            data: channeltree,
-            levels: 3,
+    function listRefresh(data, selector, levels, mapFlag) {
+        $('.content').removeClass('treeSelected');
+        $('.content').hide();
+        selector.treeview({
+            data: data,
+            levels: levels,
             showBorder: false,
             showCheckbox: false,
             showTags: false,
@@ -293,61 +269,21 @@ $(function () {
             selectedBackColor: "rgb(1, 111, 111)",
             selectedColor: "rgb(170, 247, 247)"
         });
-        $('#content1').show();
-        $('#content1').addClass('treeSelected');
-        setTreeNodeSelected($('#content1'));
-    }
-
-    function deviceRefresh() {
-        var devicetree = deviceTree();
-        $('#content1').treeview({
-            data: devicetree,
-            levels: 3,
-            showBorder: false,
-            showCheckbox: false,
-            showTags: false,
-            collapseIcon: "glyphicon glyphicon-chevron-down",
-            expandIcon: "glyphicon glyphicon-chevron-right",
-            backColor: "rgb(170, 247, 247)",
-            color: "rgb(1, 111, 111)",
-            selectedBackColor: "rgb(1, 111, 111)",
-            selectedColor: "rgb(170, 247, 247)"
-        });
-        $('#content1').show();
-        $('#content1').addClass('treeSelected');
-        setTreeNodeSelectedMap($('#content1'));
-    }
-
-    function lineRefresh() {
-        var linetree = deviceLineTree();
-        $('#content2').treeview({
-            data: linetree,
-            levels: 2,
-            showBorder: false,
-            showCheckbox: false,
-            showTags: false,
-            collapseIcon: "glyphicon glyphicon-chevron-down",
-            expandIcon: "glyphicon glyphicon-chevron-right",
-            backColor: "rgb(170, 247, 247)",
-            color: "rgb(1, 111, 111)",
-            selectedBackColor: "rgb(1, 111, 111)",
-            selectedColor: "rgb(170, 247, 247)"
-        });
-        $('#content2').show();
-        $('#content2').addClass('treeSelected');
-        setTreeNodeSelected($('#content2'));
+        selector.show();
+        selector.addClass('treeSelected');
+        if (mapFlag) {
+            setTreeNodeSelectedMap(selector);
+        } else {
+            setTreeNodeSelected(selector);
+        }
     }
 
     $('#list1').click(function () {
-        $('.content').removeClass('treeSelected');
-        $('.content').hide();
-        channelRefresh();
+        listRefresh(channelTree(), $('#content1'), 3, false);
     });
 
     $('#list2').click(function () {
-        $('.content').removeClass('treeSelected');
-        $('.content').hide();
-        lineRefresh();
+        listRefresh(channelLineTree(), $('#content2'), 2, false);
     });
 
     // buttons
@@ -834,13 +770,14 @@ $(function () {
     $('#back').click(function () {
         $('#main_right').show();
         $('#mapArea').hide();
+        listRefresh(channelTree(), $('#content1'), 3, false);
     });
 
     $('#icon_map').click(function () {
         $('#main_right').hide();
         $('#mapArea').show();
         initMap();
-        deviceRefresh();
+        listRefresh(deviceTree(), $('#content1'), 2, true);
     });
 
     function getDevicesByMap(url, method, data) {
@@ -915,7 +852,7 @@ $(function () {
                     'longitude': parseFloat(_address.lng),
                     'radius': parseFloat(radius)
                 };
-                deviceRefresh();
+                listRefresh(deviceTree(), $('#content1'), 2, true);
                 getDevicesByMap('/v1/device/query/map2', 'GET', data);
             } else {
                 alert('获取指定地址经纬度失败');
@@ -1037,7 +974,7 @@ $(function () {
     }
 
     // 设备线路列表
-    function deviceLineTree() {
+    function channelLineTree() {
         var data = {
             "userId": cookie_userId
         };

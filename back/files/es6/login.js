@@ -8,7 +8,7 @@ $(function() {
     $("#inputUser").val(username);
     $("#inputPassword").val(password);
     $('#login').click(function() {
-        var user = $('#inputUser').val();
+        var user = $('#inputUser').val().trim();
         var pwd = $('#inputPassword').val();
         var data = {
             "userName": user,

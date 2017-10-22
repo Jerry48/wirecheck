@@ -1,34 +1,28 @@
 $(function(){
-    var cookie_sessionId = Cookies.get('sessionId');
-    if(cookie_sessionId == undefined) {
-        window.location.href = '/login';
-    }else{
-        var userInfo = getUsersBySession(cookie_sessionId);
-        var cookie_userId = userInfo.userId;
-        var cookie_userType = parseInt(userInfo.userType);
-        var cookie_userName = userInfo.userName;
+    const cookie_sessionId = Cookies.get('sessionId');
+    const userInfo = getUsersBySession(cookie_sessionId);
+    const cookie_userId = userInfo.userId;
+    const cookie_userType = parseInt(userInfo.userType);
+    const cookie_userName = userInfo.userName;
+    const userDetails = getUserDetails(cookie_userName);
+    const cookie_usrEdit = userDetails.usrEdit;
+    const cookie_pwdEdit = userDetails.pwdEdit;
+    const cookie_channelSet = userDetails.channelSet;
+    const cookie_deviceOp = userDetails.deviceOp;
+    const cookie_wechatPush = userDetails.wechatPush;
+    const cookie_createGroup = userDetails.createGroup;
+    const cookie_name = userDetails.name;
 
-        var userInfo = getUsersBySession(cookie_sessionId);
-        var cookie_userId = userInfo.userId;
-        var cookie_userType = parseInt(userInfo.userType);
-        var cookie_userName = userInfo.userName;
+    if(!cookie_userType) {
+        $("#tabs_left li:eq(1)").hide();
+    }
 
-        var userDetails = getUserDetails(cookie_userName);
-        var cookie_usrEdit = userDetails.usrEdit;
-        var cookie_pwdEdit = userDetails.pwdEdit;
-        var cookie_channelSet = userDetails.channelSet;
-        var cookie_deviceOp = userDetails.deviceOp;
-        var cookie_wechatPush = userDetails.wechatPush;
-        var cookie_createGroup = userDetails.createGroup;
-        var cookie_name = userDetails.name;
+    initialize();
 
-        if(!cookie_userType) {
-            $("#tabs_left li:eq(1)").hide();
-        }
+    $('#nav').css('visibility', 'visible');
+    $('#main').css('visibility', 'visible');
 
-        $('#nav').css('visibility', 'visible');
-        $('#main').css('visibility', 'visible');
-
+    function initialize(){
         // keep 16:9
         var win_width = parseFloat($(document).width());
         $('body').css('height', win_width * 1080 / 1920 + 'px');
@@ -55,15 +49,7 @@ $(function(){
         $('body').attr('allpic-index', 0);
         $('body').attr('if-all', 1);
 
-        // welcome
-        var myDate = new Date();
-        var year = myDate.getFullYear();
-        var month = myDate.getMonth() + 1;
-        var day = myDate.getDate();
-        var dayOfWeek = myDate.getDay();
-        var dayOfWeekName = ['日', '一', '二', '三', '四', '五', '六'];
-        $('#tabs_right p').text('欢迎您: ' + cookie_name + ' 今天是' + year + '年' + month + '月' + day + '月' +
-            '   星期' + dayOfWeekName[dayOfWeek]);
+        welcome(cookie_name);
 
         // ````````````````````````````` common use above
 
@@ -80,30 +66,30 @@ $(function(){
         $('#patrol').css('height',patrol_height+'px');
 
 
-        //datepicker默认日期
-        var month0 = (month<10)?('0'+month):(month);
-        var day0 = (day<10)?('0'+day):(day);
-        var time = year+'-'+month0+'-'+day0;
+        function listRefresh(data, selector, levels, mapFlag){
+            $('.content').removeClass('treeSelected');
+            $('.content').hide();
+            selector.treeview({
+                data: data,
+                levels: levels,
+                showBorder: false,
+                showCheckbox: false,
+                showTags: false,
+                collapseIcon: "glyphicon glyphicon-chevron-down",
+                expandIcon: "glyphicon glyphicon-chevron-right",
+                backColor: "rgb(170, 247, 247)",
+                color: "rgb(1, 111, 111)",
+                selectedBackColor: "rgb(1, 111, 111)",
+                selectedColor: "rgb(170, 247, 247)",
+            });
+            selector.show();
+            selector.addClass('treeSelected');
+            setTreeNodeSelected(selector);
+        }
 
         //设备列表
         // list1
-        var channeltree = channelTree();
-        $('#content1').treeview({
-            data: channeltree,
-            levels: 3,
-            showBorder: false,
-            showCheckbox: false,
-            showTags: false,
-            // emptyIcon: "glyphicon glyphicon-facetime-video",
-            collapseIcon: "glyphicon glyphicon-chevron-down",
-            expandIcon: "glyphicon glyphicon-chevron-right",
-            backColor: "rgb(170, 247, 247)",
-            color: "rgb(1, 111, 111)",
-            selectedBackColor: "rgb(1, 111, 111)",
-            selectedColor: "rgb(170, 247, 247)",
-        });
-        $('#content1').addClass('treeSelected');
-        setTreeNodeSelected($('#content1'));
+        listRefresh(channelTree(), $('#content1'), 3, false);
         // setTreeNodeSelected4x4($('#content1'));
 
         // content max height
@@ -142,54 +128,11 @@ $(function(){
         }
 
         $('#list1').click(function() {
-            var channeltree = channelTree();
-            $('#content1').treeview({
-                data: channeltree,
-                levels: 3,
-                showBorder: false,
-                showCheckbox: false,
-                showTags: false,
-                // emptyIcon: "glyphicon glyphicon-facetime-video",
-                collapseIcon: "glyphicon glyphicon-chevron-down",
-                expandIcon: "glyphicon glyphicon-chevron-right",
-                backColor: "rgb(170, 247, 247)",
-                color: "rgb(1, 111, 111)",
-                selectedBackColor: "rgb(1, 111, 111)",
-                selectedColor: "rgb(170, 247, 247)",
-            });
-
-            $('#content1').show();
-            $('#content2').hide();
-            $('#content3').hide();
-            $('.content').removeClass('treeSelected');
-            $('#content1').addClass('treeSelected');
-            setTreeNodeSelected($('#content1'));
-            // setTreeNodeSelected4x4($('#content1'));
+            listRefresh(channelTree(), $('#content1'), 3, false);
         })
 
         $('#list2').click(function() {
-            var linetree = deviceLineTree();
-            $('#content2').treeview({
-                data: linetree,
-                levels: 3,
-                showBorder: false,
-                showCheckbox: false,
-                showTags: false,
-                // emptyIcon: "glyphicon glyphicon-facetime-video",
-                collapseIcon: "glyphicon glyphicon-chevron-down",
-                expandIcon: "glyphicon glyphicon-chevron-right",
-                backColor: "rgb(170, 247, 247)",
-                color: "rgb(1, 111, 111)",
-                selectedBackColor: "rgb(1, 111, 111)",
-                selectedColor: "rgb(170, 247, 247)",
-            });
-            $('#content2').show();
-            $('#content1').hide();
-            $('#content3').hide();
-            $('.content').removeClass('treeSelected');
-            $('#content2').addClass('treeSelected');
-            setTreeNodeSelected($('#content2'));
-            // setTreeNodeSelected4x4($('#content2'));
+            listRefresh(channelLineTree(), $('#content2'), 2, false);
         })
 
         $('#list3').click(function() {
@@ -583,7 +526,7 @@ $(function(){
     }
 
 
-    function deviceLineTree() {
+    function channelLineTree() {
         var data = {
             "userId": cookie_userId
         };
