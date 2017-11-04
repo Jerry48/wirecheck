@@ -141,6 +141,9 @@ $(function() {
         // list1
         listRefresh(channelTree(), $('#content1'), 3, false);
 
+
+        welcome(cookie_name);
+        
         // server status
         checkServer();
         intervalIds.checkServer = setInterval(checkServer, 60000);

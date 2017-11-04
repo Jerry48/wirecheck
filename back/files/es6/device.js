@@ -1986,6 +1986,7 @@ $(function() {
 			channelNo: inputData.channelNo,
 		}
 		count = 0;
+		points = [];
 		$.ajax({
 			url: '/v1/device/refpic/info',
 			type: "GET",
@@ -2008,16 +2009,16 @@ $(function() {
 					$('body').attr('pic-height', result.height);
 					$('body').attr('canvas-width', CANVASWIDTH);
 					$('body').attr('canvas-height', CANVASWIDTH * result.height / result.width);
-
-					if(result.X1!=null){
+					console.log(result);
+					if(result.X1 !== null && (result.endY1 - result.X1)){
 						autoPaint(result.X1, result.Y1, result.endX1, result.endY1);
 					}
 
-					if(result.X2!=null){
+					if(result.X2 !== null && (result.endY2 - result.X2)){
 						autoPaint(result.X2, result.Y2, result.endX2, result.endY2);
 					}
 
-					if(result.X3!=null){
+					if(result.X3 !== null && (result.endY3 - result.X3)){
 						autoPaint(result.X3, result.Y3, result.endX3, result.endY3);
 					}
 					
@@ -2266,130 +2267,132 @@ function showPic(e, sUrl) {
 
 	}
 
-
-var count = 0;
-
 	
 
-	function autoPaint(x, y, endX, endY) {
-		if ((x == 0) && (endY == 0)) {
+function autoPaint(x, y, endX, endY) {
+	if (x && endY) {
+		points.push({x: x, y: y, endX: endX, endY: endY});
+		count ++;
+		var ctx = document.getElementById("myCanvas").getContext("2d");
+		var pwidth = parseInt($('body').attr('pic-width'));
+		var pheight = parseInt($('body').attr('pic-height'));
+		var cwidth = parseInt($('body').attr('canvas-width'));
+		var cheight = parseInt($('body').attr('canvas-height'));
+		var tmpx = x / pwidth * cwidth;
+		var tmpy = y / pheight * cheight;
+		var tmpendx = endX / pwidth * cwidth;
+		var tmpendy = endY / pheight * cheight;
+		// console.log(tmpx + '_' + tmpy + '_' + tmpendx + '_' + tmpendy);
 
-		} else {
-			count += 1;
-			var ctx = document.getElementById("myCanvas").getContext("2d");
-			var pwidth = parseInt($('body').attr('pic-width'));
-			var pheight = parseInt($('body').attr('pic-height'));
-			var cwidth = parseInt($('body').attr('canvas-width'));
-			var cheight = parseInt($('body').attr('canvas-height'));
-			var tmpx = x / pwidth * cwidth;
-			var tmpy = y / pheight * cheight;
-			var tmpendx = endX / pwidth * cwidth;
-			var tmpendy = endY / pheight * cheight;
-			// console.log(tmpx + '_' + tmpy + '_' + tmpendx + '_' + tmpendy);
-
-			ctx.lineWidth = 1;
-			ctx.strokeStyle = 'red';
-			ctx.fillStyle = 'transparent';
-			// alert(x+' '+y+' '+endX+' '+endY);
-
-			ctx.strokeRect(tmpx, tmpy, (tmpendx - tmpx), (tmpendy - tmpy));
-		}
-	}
-	// `Painter
-	var x, y, endX, endY;
-
-	var points = [];
-	var tmp = {
-		x: 0,
-		y: 0,
-		endX: 0,
-		endY: 0,
-	};
-
-	var rectTip = $("#myCanvas").next();
-
-	var flag = false;
-	var ctx = document.getElementById("myCanvas").getContext("2d");
-
-	$("#container").mousemove(fakeRectangleInput);
-
-	function fakeRectangleInput(e) {
-		if (count < 3) {
-			var offset = $("#myCanvas").offset();
-			endX = e.pageX - offset.left;
-			endY = e.pageY - offset.top;
-			var borderWidth = 1;
-			if (flag) {
-				rectTip.css({
-					left: x,
-					top: y
-				});
-				rectTip.width(endX - x - borderWidth * 2);
-				rectTip.height(endY - y - borderWidth * 2);
-				console.log(flag);
-			}
-		}
-	}
-
-	$("#container").mousedown(function(e) {
-		if (count < 3) {
-			flag = true;
-			var offset = $("#myCanvas").offset();
-			x = e.pageX - offset.left;
-			y = e.pageY - offset.top;
-			console.log("begin:" + x + " " + y);
-
-			// rectTip.css({
-			//     "border": sr,
-			//     "background-color":backgroundColor
-			// });
-			rectTip.css({
-				left: x,
-				top: y
-			});
-			rectTip.width(0);
-			rectTip.height(0);
-			rectTip.show();
-		}
-	})
-
-	$("#container").mouseup(function(e) {
-		if (count < 3) {
-			flag = false;
-			drawRectangle();
-		} else {
-			alert('最多划定3个对比区域！')
-		};
-	})
-
-	function drawRectangle() {
 		ctx.lineWidth = 1;
 		ctx.strokeStyle = 'red';
 		ctx.fillStyle = 'transparent';
 		// alert(x+' '+y+' '+endX+' '+endY);
 
-		ctx.strokeRect(x, y, (endX - x), (endY - y));
-		// ctx.strokeRect(40,40,80,80);
+		ctx.strokeRect(tmpx, tmpy, (tmpendx - tmpx), (tmpendy - tmpy));
+	}
+}
+	// `Painter
+var count = 0;
+var x, y, endX, endY;
 
-		var pwidth = parseInt($('body').attr('pic-width'));
-		var pheight = parseInt($('body').attr('pic-height'));
-		var cwidth = parseInt($('body').attr('canvas-width'));
-		var cheight = parseInt($('body').attr('canvas-height'));
-		tmp.x = x / cwidth * pwidth;
-		tmp.y = y / cheight * pheight;
-		tmp.endX = endX / cwidth * pwidth;
-		tmp.endY = endY / cheight * pheight;
+var points = [];
+var tmp = {
+	x: 0,
+	y: 0,
+	endX: 0,
+	endY: 0,
+};
+
+var rectTip = $("#myCanvas").next();
+
+var flag = false;
+var ctx = document.getElementById("myCanvas").getContext("2d");
+
+$("#container").mousemove(fakeRectangleInput);
+
+function fakeRectangleInput(e) {
+	if (count < 3) {
+		var offset = $("#myCanvas").offset();
+		endX = e.pageX - offset.left;
+		endY = e.pageY - offset.top;
+		var borderWidth = 1;
+		if (flag) {
+			rectTip.css({
+				left: x,
+				top: y
+			});
+			rectTip.width(endX - x - borderWidth * 2);
+			rectTip.height(endY - y - borderWidth * 2);
+			console.log(flag);
+		}
+	}
+}
+
+$("#container").mousedown(function(e) {
+	if (count < 3) {
+		flag = true;
+		var offset = $("#myCanvas").offset();
+		x = e.pageX - offset.left;
+		y = e.pageY - offset.top;
+		console.log("begin:" + x + " " + y);
+
+		// rectTip.css({
+		//     "border": sr,
+		//     "background-color":backgroundColor
+		// });
+		rectTip.css({
+			left: x,
+			top: y
+		});
+		rectTip.width(0);
+		rectTip.height(0);
+		rectTip.show();
+	}
+})
+
+$("#container").mouseup(function(e) {
+	if (count < 3) {
+		flag = false;
+		drawRectangle();
+	} else {
+		alert('最多划定3个对比区域！')
+	};
+})
+
+function drawRectangle() {
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'red';
+	ctx.fillStyle = 'transparent';
+	// alert(x+' '+y+' '+endX+' '+endY);
+
+	ctx.strokeRect(x, y, (endX - x), (endY - y));
+	// ctx.strokeRect(40,40,80,80);
+
+	var pwidth = parseInt($('body').attr('pic-width'));
+	var pheight = parseInt($('body').attr('pic-height'));
+	var cwidth = parseInt($('body').attr('canvas-width'));
+	var cheight = parseInt($('body').attr('canvas-height'));
+	tmp.x = x / cwidth * pwidth;
+	tmp.y = y / cheight * pheight;
+	tmp.endX = endX / cwidth * pwidth;
+	tmp.endY = endY / cheight * pheight;
+	if((tmp.endY - tmp.y) && (tmp.endX - tmp.x)){
 		points.push(tmp);
-		count += 1;
-		tmp = {};
-		$("#myCanvas").focus();
-		rectTip.hide();
+		count++;
 	}
+	console.log(tmp);
+	console.log(points);
+	
+	tmp = {};
+	$("#myCanvas").focus();
+	rectTip.hide();
+}
 
-	function clearArea() {
-		// Use the identity matrix while clearing the canvas
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
-		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-		points = [];
-		count = 0;
-	}
+function clearArea() {
+	// Use the identity matrix while clearing the canvas
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+	points = [];
+	count = 0;
+}

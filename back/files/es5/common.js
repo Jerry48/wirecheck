@@ -15,9 +15,7 @@ var dayLables = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", 
 var weekLabels = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
 var monthLabels = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
 
-$(function () {
-    welcome();
-});
+$(function () {});
 
 function welcome(name) {
     var myDate = new Date();

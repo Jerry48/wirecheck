@@ -68,9 +68,11 @@ function appCallback(request, response) {
             fs.createReadStream(filepath, range).pipe(response);
         } else {
             debug('Full Download');
-            response.writeHead(200, {'Content-Type': type, 
+            response.writeHead(200, {
+            	'Content-Type': type, 
                 'Content-Length': stat.size,
-                });
+                'Cache-Control': 'max-age=1200'
+            });
             // send the file
             fs.createReadStream(filepath).pipe(response);
         } 

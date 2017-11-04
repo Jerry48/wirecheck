@@ -1967,6 +1967,7 @@ $(function () {
 			channelNo: inputData.channelNo
 		};
 		count = 0;
+		points = [];
 		$.ajax({
 			url: '/v1/device/refpic/info',
 			type: "GET",
@@ -1989,16 +1990,16 @@ $(function () {
 					$('body').attr('pic-height', result.height);
 					$('body').attr('canvas-width', CANVASWIDTH);
 					$('body').attr('canvas-height', CANVASWIDTH * result.height / result.width);
-
-					if (result.X1 != null) {
+					console.log(result);
+					if (result.X1 !== null && result.endY1 - result.X1) {
 						autoPaint(result.X1, result.Y1, result.endX1, result.endY1);
 					}
 
-					if (result.X2 != null) {
+					if (result.X2 !== null && result.endY2 - result.X2) {
 						autoPaint(result.X2, result.Y2, result.endX2, result.endY2);
 					}
 
-					if (result.X3 != null) {
+					if (result.X3 !== null && result.endY3 - result.X3) {
 						autoPaint(result.X3, result.Y3, result.endX3, result.endY3);
 					}
 
@@ -2237,11 +2238,10 @@ function hiddenPic() {
 	document.getElementById("Layer1").style.display = "none";
 }
 
-var count = 0;
-
 function autoPaint(x, y, endX, endY) {
-	if (x == 0 && endY == 0) {} else {
-		count += 1;
+	if (x && endY) {
+		points.push({ x: x, y: y, endX: endX, endY: endY });
+		count++;
 		var ctx = document.getElementById("myCanvas").getContext("2d");
 		var pwidth = parseInt($('body').attr('pic-width'));
 		var pheight = parseInt($('body').attr('pic-height'));
@@ -2262,6 +2262,7 @@ function autoPaint(x, y, endX, endY) {
 	}
 }
 // `Painter
+var count = 0;
 var x, y, endX, endY;
 
 var points = [];
@@ -2345,8 +2346,13 @@ function drawRectangle() {
 	tmp.y = y / cheight * pheight;
 	tmp.endX = endX / cwidth * pwidth;
 	tmp.endY = endY / cheight * pheight;
-	points.push(tmp);
-	count += 1;
+	if (tmp.endY - tmp.y && tmp.endX - tmp.x) {
+		points.push(tmp);
+		count++;
+	}
+	console.log(tmp);
+	console.log(points);
+
 	tmp = {};
 	$("#myCanvas").focus();
 	rectTip.hide();
