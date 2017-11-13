@@ -786,6 +786,7 @@ $(function() {
 
 	//`update
 	$('#update').click(function() {
+		$('#avatar').empty();
 		var num = $('#main2 table tbody').find("input:checkbox:checked").length;
 		if (num > 1) {
 			alert('只可以选择一个设备!');
@@ -794,15 +795,12 @@ $(function() {
 		} else {
 			var deviceId = $('#main2 table tbody').find("input:checkbox:checked").parent().parent().attr('id');
 			$('#update').attr('deviceId', deviceId);
-			$('#modalUpdate .modal-body').empty();
-			var data = {
-				'userId': cookie_userId,
-			};
-			findUpdateFiles(data);
+			findUpdateFiles(cookie_userId);
 		}
 	})
 
-	function findUpdateFiles(data) {
+	function findUpdateFiles(userId) {
+		var data = {userId: userId};
 		$.ajax({
 			url: '/v1/device/find/updateFiles',
 			type: "POST",
@@ -811,12 +809,12 @@ $(function() {
 			dataType: "json",
 			success: function(data) {
 				if (data.code == 0) {
+					$('#fileList').empty();
 					var list = data.result.list;
-					for (var i = 0; i < list.length; ++i) {
-						var $ctrl = '<div><button class="deleteFile" style="margin-right:20px;">删除</button><input filename="' + list[i] + '" type="radio">' + list[i] + '</div>';
-						$('#modalUpdate .modal-body').append($ctrl);
-
-					}
+					list.forEach(item => {
+						var $ctrl = `<div><button class="deleteFile" style="margin-right:20px;">删除</button><input filename="${item}" type="radio">${item}</div>`;
+						$('#fileList').append($ctrl);
+					});
 					$('#modalUpdate').modal();
 				} else {
 					alert('处理失败！');
@@ -839,11 +837,7 @@ $(function() {
 				success: function(data) {
 					if (data.code == 0) {
 						alert('删除成功!');
-						$('#modalUpdate .modal-body').empty();
-						var data = {
-							'userId': cookie_userId,
-						};
-						findUpdateFiles(data);
+						findUpdateFiles(cookie_userId);
 					} else {
 						alert('处理失败！');
 						console.log(data);
@@ -890,35 +884,38 @@ $(function() {
 	})
 
 
-	//`upload
-	$('#upload').click(function() {
-		$('#progressbar').hide();
-		$('#avatar').empty();
-		$('#modalUpload').modal();
-	})
+	// //`upload
+	// $('#upload').click(function() {
+	// 	$('#progressbar').hide();
+	// 	$('#avatar').empty();
+	// 	$('#modalUpload').modal();
+	// })
 
-	$(':file').change(function() {
+	$('#avatar').change(function() {
 		var file = this.files[0];
-		name = file.name;
-		size = file.size;
-		type = file.type;
-		// alert(name + size + type);
-		//your validation
+		if(file){
+			console.log(file);
+			console.log(`${file.name},${file.size},${file.type}`);
+		}
 	});
 
-	function progressHandlingFunction(e) {
-		if (e.lengthComputable) {
-			$("#progressbar").progressbar({
-				value: e.loaded,
-				max: e.total
-			});
-		}
-	}
+	
 
-	$('#modalUpload .modal-footer button:eq(0)').click(function() {
-		console.log('test');
-		var formData = new FormData($('form')[0]);
+	$('#uploadConfirm').click(function() {
+		var formData = new FormData();
+		console.log($('#avatar').prop('files'));
+		formData.append('avatar', $('#avatar').prop('files')[0]);
 		$('#progressbar').show();
+
+		function progressHandler(e) {
+			if (e.lengthComputable) {
+				$("#progressbar").progressbar({
+					value: e.loaded,
+					max: e.total
+				});
+			}
+		}
+
 		$.ajax({
 			url: '/api/upload/update',
 			type: 'POST',
@@ -927,21 +924,22 @@ $(function() {
 			processData: false,
 			contentType: false,
 			xhr: function() { // custom xhr
-				myXhr = $.ajaxSettings.xhr();
-				if (myXhr.upload) { // check if upload property exists
-					myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // for handling the progress of the upload
+				var myXhr = $.ajaxSettings.xhr();
+				if (progressHandler && myXhr.upload) { // check if upload property exists
+					myXhr.upload.addEventListener('progress', progressHandler, false); // for handling the progress of the upload
 				}
 				return myXhr;
-			},
-			success: function(data) {
-				if (data.flag == 1) {
-					alert('上传成功！');
-					$('#modalUpload').modal('hide');
-				} else {
-					alert('上传失败！请重新上传！');
-				}
+			}
+		})
+		.then(function(data) {
+			if (data.flag == 1) {
+				alert('上传成功！');
+				findUpdateFiles(cookie_userId);
+			} else {
+				alert('上传失败！请重新上传！');
 			}
 		});
+		console.log("after ajax!");
 	});
 
 	//`reset

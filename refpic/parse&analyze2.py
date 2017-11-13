@@ -97,7 +97,7 @@ def main():
         webservice.UploadData(conf, resItem, 0)
         # if salient > conf['threshold']:
         # 	webservice.UploadWarning(conf, warning, 1)
-        webservice.UploadWarning(conf, warning, 1)
+        # webservice.UploadWarning(conf, warning, 1)
   
         #refName = 'pic_0.jpg'
         #resItem['deviceId'] = item['deviceId']

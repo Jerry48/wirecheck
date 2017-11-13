@@ -96,14 +96,14 @@
 			<p id = "infoCount" style="float: right;margin-left: 5px;margin-bottom:0px;display: inline;">
 				第xxx页，共xxx页
 			</p>
-			<button type="button" class="" id='infoNext' style='float: right;'>下一页</button>
-			<button type="button" class="" id='infoLast' style='float: right;'>上一页</button>
+			<button type="button" id='infoNext' style='float: right;'>下一页</button>
+			<button type="button" id='infoLast' style='float: right;'>上一页</button>
 		</div>
 	</div>
 	<div id="search">
 		<div style="text-align: center;"><button id="searchSubmit" style="margin-right: 30px;">查询</button><button id="resetSubmit">重置</button></div>
 		<div>
-			<p style="float: left;width: 35%;">区域查询:&nbsp</p>
+			<p style="float: left;width: 35%;">区域查询:&nbsp;</p>
 			<select id="selectLevel0" style="width: 65%;float: left;"></select>
 		</div>
 		<div class="hide">
@@ -113,16 +113,16 @@
 			<select id="selectLevel2" style="width: 65%;float: right;"></select>
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">名称查询:&nbsp</p><input type="text" name="" style="float: left;width: 65%;"></input> 
+			<p style="float: left;width: 35%;">名称查询:&nbsp;</p><input type="text" name="" style="float: left;width: 65%;"></input> 
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">电话查询:&nbsp</p><input type="text" name="" style="float: left;width: 65%;"></input> 
+			<p style="float: left;width: 35%;">电话查询:&nbsp;</p><input type="text" name="" style="float: left;width: 65%;"></input> 
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">线路查询:&nbsp</p><select class="selectLine" style="float: left;width: 65%;"><option selected="selected">全部</option></select>
+			<p style="float: left;width: 35%;">线路查询:&nbsp;</p><select class="selectLine" style="float: left;width: 65%;"><option selected="selected">全部</option></select>
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">隐患查询:&nbsp</p>
+			<p style="float: left;width: 35%;">隐患查询:&nbsp;</p>
 			<!-- <select class="selectDanger"  style="width: 65%;float: left;"></select> -->
 			<select class="selectDanger" style="width: 65%;float: left;">
 				<option value="0">全部</option>
@@ -138,7 +138,7 @@
 			</select>
 		</div>
 		<div>
-			<p style="float: left;width: 35%;">状态查询:&nbsp</p>
+			<p style="float: left;width: 35%;">状态查询:&nbsp;</p>
 			<select id="searchStat" style="float: left;width: 65%;">
 				<option value="0">全部</option>
 				<option value="1">在线</option>
@@ -185,18 +185,18 @@
 	<div id="main2_header" style="overflow-y: hidden;height: 5%;background-color: rgb(3,161,161)">
 		<div style="float: left;height: 100%;color: white"><p>信息通道配置</p></div>
 		<div style="float: right;">
-			<button type="button" class="" id='addDevice' style=''>通道添加</button>
-			<button type="button" class="" id='editDevice' style=''>修改</button>
-			<button type="button" class="" id='deleteDevice' style=''>删除</button>
-<!-- 			<button type="button" class="" id='' style=''>线路添加</button>
-			<button type="button" class="" id='addDanger' style=''>隐患添加</button> -->
-			<button type="button" class="" id='setPicRef' style=''>图片对比</button>
-			<button type="button" class="" id='settings' style=''>高级参数设置</button>
-			<!-- <button type="button" class="" id='' style=''>自定义协议</button> -->
-			<button type="button" class="" id='update' style=''>升级</button>
-			<button type="button" class="" id='upload' style=''>上传升级文件</button>
-			<button type="button" class="" id='backup' style=''>备份数据库</button>
-			<button type="button" class="" id='reset' style=''>复位</button>
+			<button type="button" id='addDevice' style=''>通道添加</button>
+			<button type="button" id='editDevice' style=''>修改</button>
+			<button type="button" id='deleteDevice' style=''>删除</button>
+<!-- 			<button type="button" id='' style=''>线路添加</button>
+			<button type="button" id='addDanger' style=''>隐患添加</button> -->
+			<button type="button" id='setPicRef' style=''>图片对比</button>
+			<button type="button" id='settings' style=''>高级参数设置</button>
+			<!-- <button type="button" id='' style=''>自定义协议</button> -->
+			<button type="button" id='update' style=''>升级</button>
+<!-- 			<button type="button" id='upload' style=''>上传升级文件</button> -->
+			<button type="button" id='backup' style=''>备份数据库</button>
+			<button type="button" id='reset' style=''>复位</button>
 		</div>
 	</div>
 	<div id="table2" style="font-size: 12px;height: 90%;">
@@ -227,8 +227,8 @@
 				第xxx页，共xxx页
 			</p>
 		</div>
-		<div style="height: 100%;float: right;width: 90%;"><button type="button" class="" id='infoNext2' style='float: right;'>下一页</button>
-		<button type="button" class="" id='infoLast2' style='float: right;'>上一页</button></div>
+		<div style="height: 100%;float: right;width: 90%;"><button type="button" id='infoNext2' style='float: right;'>下一页</button>
+		<button type="button" id='infoLast2' style='float: right;'>上一页</button></div>
 		
 	</div>
 </div>
@@ -243,19 +243,19 @@
             </div>
             <div class="modal-body" id="modalAdd-body" style="width: 100%">
             	<div>
-					<p style="width: 35%;float: left;">设备ID:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">设备ID:&nbsp;</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">设备名称:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">设备名称:&nbsp;</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">捆绑号码:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">捆绑号码:&nbsp;</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 <!-- 				<div>
-					<p style="width: 35%;float: left;">MEID:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">MEID:&nbsp;</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div> -->
 				<div>
-					<p style="width: 35%;float: left;">区域选择:&nbsp</p>
+					<p style="width: 35%;float: left;">区域选择:&nbsp;</p>
 					<select class="selectLevel0" style="width: 65%;float: left;"></select>
 				</div>
 				<div class="hide">
@@ -265,11 +265,11 @@
 					<select class="selectLevel2" style="width: 65%;float: right;"></select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">线路选择:&nbsp</p>
+					<p style="width: 35%;float: left;">线路选择:&nbsp;</p>
 					<select class="selectLine" style="width: 65%;float: left;"></select>
 				</div>
 				<div>
-					<p  style="width: 35%;float: left;">隐患类型:&nbsp</p>
+					<p  style="width: 35%;float: left;">隐患类型:&nbsp;</p>
 					<!-- <select class="selectDanger"  style="width: 65%;float: left;"></select> -->
 					<select class="selectDanger" style="width: 65%;float: left;">
 						<option value="0">无</option>
@@ -285,18 +285,18 @@
 					</select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">管理员:&nbsp;</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">密码:&nbsp;</p><input type="password" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">确认密码:&nbsp;</p><input type="password" name="" style="width: 65%;float: left;"></input>
 				</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
+                <button type="button">确定</button>
+                <button type="button" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -312,19 +312,19 @@
             </div>
             <div class="modal-body" id="modalEdit-body" style="width: 100%">
             	<!-- <div>
-					<p style="width: 35%;float: left;">设备ID:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">设备ID:&nbsp;</p><input type="text" name="" style="width: 60%;float: left;"></input>
 				</div> -->
             	<div>
-					<p style="width: 35%;float: left;">设备名称:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">设备名称:&nbsp;</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">捆绑号码:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">捆绑号码:&nbsp;</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 <!-- 				<div>
-					<p style="width: 35%;float: left;">MEID:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">MEID:&nbsp;</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div> -->
 				<div>
-					<p style="width: 35%;float: left;">区域选择:&nbsp</p>
+					<p style="width: 35%;float: left;">区域选择:&nbsp;</p>
 					<select class="selectLevel0" style="width: 65%;float: left;"></select>
 				</div>
 				<div class="hide">
@@ -334,11 +334,11 @@
 					<select class="selectLevel2" style="width: 65%;float: right;"></select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">线路选择:&nbsp</p>
+					<p style="width: 35%;float: left;">线路选择:&nbsp;</p>
 					<select class="selectLine" style="width: 65%;float: left;"></select>
 				</div>
 				<div>
-					<p  style="width: 35%;float: left;">隐患类型:&nbsp</p>
+					<p  style="width: 35%;float: left;">隐患类型:&nbsp;</p>
 					<!-- <select class="selectDanger"  style="width: 65%;float: left;"></select> -->
 					<select class="selectDanger" style="width: 65%;float: left;">
 						<option value="0">无</option>
@@ -354,18 +354,18 @@
 					</select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">管理员:&nbsp;</p><input type="text" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">密码:&nbsp;</p><input type="password" name="" style="width: 65%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 65%;float: left;"></input>
+					<p style="width: 35%;float: left;">确认密码:&nbsp;</p><input type="password" name="" style="width: 65%;float: left;"></input>
 				</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
+                <button type="button">确定</button>
+                <button type="button" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -391,8 +391,8 @@
             	</table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
+                <button type="button">确定</button>
+                <button type="button" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -418,8 +418,8 @@
             	</table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
+                <button type="button">确定</button>
+                <button type="button" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -484,8 +484,8 @@
 				</div>                               
             </div>
             <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
+                <button type="button">确定</button>
+                <button type="button" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -501,30 +501,30 @@
             </div>
             <div class="modal-body" id="modalSetting-body" style="width: 100%">
             	<div>
-					<p style="width: 35%;float: left;">设备名称:&nbsp</p><input type="text" name="deviceName" id="deviceName" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">设备名称:&nbsp;</p><input type="text" name="deviceName" id="deviceName" style="width: 60%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">相机名称/主:&nbsp</p><input type="text" name="channel1Name" id="channel1Name" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">相机名称/主:&nbsp;</p><input type="text" name="channel1Name" id="channel1Name" style="width: 60%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">相机名称/2:&nbsp</p><input type="text" name="channel2Name" id="channel2Name" disabled="disabled" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">相机名称/2:&nbsp;</p><input type="text" name="channel2Name" id="channel2Name" disabled="disabled" style="width: 60%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">相机名称/3:&nbsp</p><input type="text" name="channel3Name" id="channel3Name" disabled="disabled" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">相机名称/3:&nbsp;</p><input type="text" name="channel3Name" id="channel3Name" disabled="disabled" style="width: 60%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">工作时间:&nbsp</p>
+					<p style="width: 35%;float: left;">工作时间:&nbsp;</p>
 					<select id="beginHour" style="width: 10%;float: left;"></select>
-					<p style="width: 5%;float: left;">&nbsp时</p>
+					<p style="width: 5%;float: left;">&nbsp;时</p>
 					<select id="beginMin" style="width: 10%;float: left;"></select>
-					<p style="width: 5%;float: left;">&nbsp分&nbsp&nbsp~~&nbsp&nbsp</p>
+					<p style="width: 5%;float: left;">&nbsp;分&nbsp;&nbsp;~~&nbsp;&nbsp;</p>
 					<select id="endHour" style="width: 10%;float: left;"></select>
-					<p style="width: 5%;float: left;">&nbsp时</p>
+					<p style="width: 5%;float: left;">&nbsp;时</p>
 					<select id="endMin" style="width: 10%;float: left;"></select>
-					<p style="width: 5%;float: left;">&nbsp分</p>
+					<p style="width: 5%;float: left;">&nbsp;分</p>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">图片像素:&nbsp</p>
+					<p style="width: 35%;float: left;">图片像素:&nbsp;</p>
 					<select id="photoSize" style="width: 60%;float: left;">
 						<option value="200">200万</option>
 						<option value="300">300万</option>
@@ -535,7 +535,7 @@
 					</select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">拍照次数/天:&nbsp</p>
+					<p style="width: 35%;float: left;">拍照次数/天:&nbsp;</p>
 					<!-- <select id="captureTime" style="width: 60%;float: left;">
 						<option value="30">30</option>
 						<option value="30">30</option>
@@ -545,7 +545,7 @@
 					<input type="" name="" placeholder="请输入1~100" style="width: 60%;float: left;">
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">拍照时间间隔/分钟:&nbsp</p>
+					<p style="width: 35%;float: left;">拍照时间间隔/分钟:&nbsp;</p>
 					<select id="capturePeriod" style="width: 60%;float: left;">
 						<option value="30">30</option>
 						<option value="60">60</option>
@@ -554,39 +554,39 @@
 					</select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">相机/2:&nbsp</p>
+					<p style="width: 35%;float: left;">相机/2:&nbsp;</p>
 					<select id="channelNo2" style="width: 60%;float: left;">
 						<option value="0">禁用</option>
 						<option value="1">启用</option>
 					</select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">相机/3:&nbsp</p>
+					<p style="width: 35%;float: left;">相机/3:&nbsp;</p>
 					<select id="channelNo3" style="width: 60%;float: left;">
 						<option value="0">禁用</option>
 						<option value="1">启用</option>
 					</select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">照片分辨率:&nbsp</p>
+					<p style="width: 35%;float: left;">照片分辨率:&nbsp;</p>
 					<select id="resolution"  style="width: 60%;float: left;">
 						<option value="2">640*480</option>
 						<option value="8">1920*1080</option>
 					</select>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">管理员:&nbsp</p><input type="text" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">管理员:&nbsp;</p><input type="text" name="" style="width: 60%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">密码:&nbsp;</p><input type="password" name="" style="width: 60%;float: left;"></input>
 				</div>
 				<div>
-					<p style="width: 35%;float: left;">确认密码:&nbsp</p><input type="password" name="" style="width: 60%;float: left;"></input>
+					<p style="width: 35%;float: left;">确认密码:&nbsp;</p><input type="password" name="" style="width: 60%;float: left;"></input>
 				</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
+                <button type="button">确定</button>
+                <button type="button" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -601,10 +601,10 @@
 		<div id="areaSet">
 			<p>区域设置</p>
 			<div>
-				<p>一级区域添加:&nbsp</p><input type="text" name=""></input><button id="addLevel0">添加</button>
-				<p>其他区域添加:&nbsp</p><input type="text" name=""></input><button id="addLevel">添加</button>
-				<p>区域名称修改:&nbsp</p><input type="text" name=""></input><button id="editLevel">修改</button>
-				<p>区域删除:&nbsp</p><input type="text" name=""></input><button id="deleteLevel">删除</button>
+				<p>一级区域添加:&nbsp;</p><input type="text" name=""></input><button id="addLevel0">添加</button>
+				<p>其他区域添加:&nbsp;</p><input type="text" name=""></input><button id="addLevel">添加</button>
+				<p>区域名称修改:&nbsp;</p><input type="text" name=""></input><button id="editLevel">修改</button>
+				<p>区域删除:&nbsp;</p><input type="text" name=""></input><button id="deleteLevel">删除</button>
 			</div>
 		</div>
 	</div>
@@ -619,9 +619,9 @@
 		<div id="lineSet">
 			<p>线路设置</p>
 			<div>
-				<p>线路添加:&nbsp</p><input type="text" name=""></input><button id="addLine">添加</button>
-				<p>线路名称修改:&nbsp</p><input type="text" name=""></input><button id="editLine">修改</button>
-				<p>线路删除:&nbsp</p><input type="text" name=""></input><button id="deleteLine">删除</button>
+				<p>线路添加:&nbsp;</p><input type="text" name=""></input><button id="addLine">添加</button>
+				<p>线路名称修改:&nbsp;</p><input type="text" name=""></input><button id="editLine">修改</button>
+				<p>线路删除:&nbsp;</p><input type="text" name=""></input><button id="deleteLine">删除</button>
 			</div>
 		</div>
 	</div>
@@ -636,52 +636,21 @@
                 <h4 class="modal-title" id="myModalLabel">选择升级文件</h4>
             </div>
             <div class="modal-body" id="modalUpdate-body" style="width: 100%">
-            	<div id="uploader" class="wu-example">
-				    <!--用来存放文件信息-->
-				    <!-- <div id="list" class="uploader-list"></div>
-				    <div class="btns">
-				        <div id="picker">选择文件</div>
-				        <button id="ctlBtn" class="btn btn-default">开始上传</button>
-				    </div> -->
-				    <form>
-					 <input type="file" id="avatar" name="avatar" multiple>
-					</form>
-					<div id="progressbar"></div>
+            	<div id="uploader" class="wu-example clearfix">
+            		<div class="clearfix">
+            			<form style="float: left;">
+							<input type="file" id="avatar" name="avatar" multiple>
+						</form>
+						<button id="uploadConfirm" style="float: right;" type="button">上传</button>
+            		</div>
+					<div id="progressbar" style="display: none; margin-top: 5px;"></div>
 				</div>
+				<hr>
+				<div id="fileList"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
-
-<!-- 升级-->
-<div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="padding-top: 200px">
-        <div class="modal-content">
-            <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">选择升级文件</h4>
-            </div>
-            <div class="modal-body" id="modalUpload-body" style="width: 100%">
-            	<div id="uploader" class="wu-example">
-				    <!--用来存放文件信息-->
-				    <!-- <div id="list" class="uploader-list"></div>
-				    <div class="btns">
-				        <div id="picker">选择文件</div>
-				        <button id="ctlBtn" class="btn btn-default">开始上传</button>
-				    </div> -->
-				    <form>
-					 <input type="file" id="avatar" name="avatar" multiple>
-					</form>
-					<div id="progressbar"></div>
-				</div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
+                <button type="button">确定</button>
+                <button type="button" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -702,8 +671,8 @@
             	<input type="radio" name="reset" value="3">调试模式
             </div>
             <div class="modal-footer">
-                <button type="button" class="">确定</button>
-                <button type="button" class="" data-dismiss="modal">取消</button>
+                <button type="button">确定</button>
+                <button type="button" data-dismiss="modal">取消</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->

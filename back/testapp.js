@@ -65,69 +65,88 @@ app.use(bodyParser.urlencoded());
 var morgan = require('morgan');
 app.use(morgan('combined'));
 
-//multer upload
+//multer upload v1.3.0
 var multer = require('multer');
-app.use(multer({
-    dest: './uploads/',
-    putSingleFilesInArray: true,
-
-    changeDest: function(dest, req, res) {
-        debug('changeDest dest:' + dest);
-        debug('changeDest req.url:%j', req.url);
-
-        var filepath = dest;
-        var parentPath = dataHelper.createParentPath(new Date());
-        switch (req.url) {
-            case '/api/upload/voice':
-                filepath = constantHelper.SERVER.VOICEROOT + parentPath;
-                break;
-            case '/api/upload/portrait':
-                filepath = constantHelper.SERVER.PORTRAITROOT + parentPath;
-                break;
-            case '/api/upload/ios':
-                filepath = constantHelper.SERVER.DOWNLOADROOT;
-                break;
-            case '/api/upload/android':
-                filepath = constantHelper.SERVER.DOWNLOADROOT;
-                break;
-            case '/api/upload/update':
-                filepath = './uploads/update/';
-                break;
-            default:
-                break;
-        }
-        debug('changeDest filepath:%j', filepath);
-
-        if (!fs.existsSync(filepath)) {
-            fs.mkdirSync(filepath);
-        }
-
-        return filepath;
+var storage = multer.diskStorage({
+    destination: function(req, file, next){
+        next(null, './uploads/update/');
     },
-
-    rename: function(fieldname, filename, req, res) {
-        debug('rename: fieldname:' + fieldname);
-        debug('rename: filename:' + filename);
-
-        var newName = filename;
-
-        debug('rename: new Name:' + newName);
-
-        return newName;
-    },
-
-    onFileUploadStart: function(file, req, res) {
-
-        debug('onFileUploadStart file: %j', file);
-
-    },
-
-    onFileUploadComplete: function(file, req, res) {
-        debug('onFileUploadComplete file: %j', file);
-        res.json({ flag: 1 });
-        debug(res.json);
+    filename: function(req, file, next){
+        next(null, file.originalname)
     }
-}));
+});
+var upload = multer({
+    storage: storage 
+});
+app.post("/api/upload/update", upload.single('avatar'), function(req,res,next) {
+    console.log(req.file); 
+    console.log(req.body); 
+    res.json({ flag: 1 });
+});
+
+// v0.1.8
+// var multer = require('multer');
+// app.use(multer({
+//     dest: './uploads/',
+//     putSingleFilesInArray: true,
+
+//     changeDest: function(dest, req, res) {
+//         debug('changeDest dest:' + dest);
+//         debug('changeDest req.url:%j', req.url);
+
+//         var filepath = dest;
+//         var parentPath = dataHelper.createParentPath(new Date());
+//         switch (req.url) {
+//             case '/api/upload/voice':
+//                 filepath = constantHelper.SERVER.VOICEROOT + parentPath;
+//                 break;
+//             case '/api/upload/portrait':
+//                 filepath = constantHelper.SERVER.PORTRAITROOT + parentPath;
+//                 break;
+//             case '/api/upload/ios':
+//                 filepath = constantHelper.SERVER.DOWNLOADROOT;
+//                 break;
+//             case '/api/upload/android':
+//                 filepath = constantHelper.SERVER.DOWNLOADROOT;
+//                 break;
+//             case '/api/upload/update':
+//                 filepath = './uploads/update/';
+//                 break;
+//             default:
+//                 break;
+//         }
+//         debug('changeDest filepath:%j', filepath);
+
+//         if (!fs.existsSync(filepath)) {
+//             fs.mkdirSync(filepath);
+//         }
+
+//         return filepath;
+//     },
+
+//     rename: function(fieldname, filename, req, res) {
+//         debug('rename: fieldname:' + fieldname);
+//         debug('rename: filename:' + filename);
+
+//         var newName = filename;
+
+//         debug('rename: new Name:' + newName);
+
+//         return newName;
+//     },
+
+//     onFileUploadStart: function(file, req, res) {
+
+//         debug('onFileUploadStart file: %j', file);
+
+//     },
+
+//     onFileUploadComplete: function(file, req, res) {
+//         debug('onFileUploadComplete file: %j', file);
+//         res.json({ flag: 1 });
+//         debug(res.json);
+//     }
+// }));
 
 // Login logic
 //var login = require('./logic/login');

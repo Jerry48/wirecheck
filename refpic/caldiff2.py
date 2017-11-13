@@ -82,7 +82,9 @@ def imgSimilarity(imgPath, refImgPath, roi, conf, senstivity):
     timg2 = np.array(img2.getdata(), dtype=np.uint8).reshape(img2.size[1], -1)
     # timg1 = np.array(img1.getdata(), dtype=np.uint8).reshape(img1_width, -1)
     # timg2 = np.array(img2.getdata(), dtype=np.uint8).reshape(img2_width, -1)
+    print "-------- originalPic"
     print timg1.shape[1],timg1.shape[0]
+    print "-------- refPic"
     print timg2.shape[1],timg2.shape[0]
     sub_x, sub_y = timg1.shape[1]/nx, timg1.shape[0]/ny
     print 'sub_x,sub_y:',sub_x,sub_y 
@@ -92,13 +94,15 @@ def imgSimilarity(imgPath, refImgPath, roi, conf, senstivity):
     sub_images1 = splitPic(timg1,nx,ny)
     sub_images2 = splitPic(timg2,nx,ny)
 
+    # print sub_images1
+    # print sub_images2
     locs = splitPicLoc(timg1,nx,ny)
     match = []
     index = []
     # Initialize the drawer
     draw = ImageDraw.Draw(rgb_img1)
     # font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 16)
-    #draw.text((200,400),'text', 255, font=font)
+    # draw.text((200,400),'text', 255, font=font)
     
 
     for c, (i,j) in enumerate(zip(sub_images1, sub_images2)):

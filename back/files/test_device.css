@@ -1,3 +1,8 @@
+button {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
 .input_button {
   width: 40px;
   background-color:rgb(1, 111, 111);
@@ -106,10 +111,6 @@ table>tbody>tr>td>a {
 #main2_header>div {
 	color: black;
 	padding:5px;
-}
-
-#main2_header>div>button {
-	padding: 0px;
 }
 
 #table2 {
