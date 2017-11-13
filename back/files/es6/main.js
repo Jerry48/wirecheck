@@ -416,7 +416,9 @@ $(function() {
         var picId = $(this).attr('picId');
         var deviceId = $(this).attr('deviceId');
         var channelNo = $(this).attr('channelNo');
+        var picUrl = $(this).attr('src');
         $('body').attr('selectedPic', picId);
+        $('body').attr('selectedPic-picUrl', picUrl);
         $('body').attr('selectedPic-deviceId', deviceId);
         $('body').attr('selectedPic-channelNo', channelNo);
     })
@@ -433,6 +435,34 @@ $(function() {
                 $('#modalPwd input').val('');
                 $('#modalPwd').modal();
             }
+        }
+    });
+
+    $('#manRef').click(function() {
+        var picId = $('body').attr('selectedPic');
+        var picUrl = $('body').attr('selectedPic-picUrl');
+        if (picId === undefined) {
+            alert('请选择图片');
+        } else {
+            var data = {picId: picId};
+            $.ajax({
+                url: '/v1/picture/ref/get',
+                type: "GET",
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function(data) {
+                    if (data.code == 0) {
+                        console.log(data.result);
+                        $('#manRef_refPic').attr('src', data.result.refPicPath);
+                        $('#manRef_curPic').attr('src', picUrl);
+                        $('#modalManRef').modal();
+                    } else {
+                        console.log("获取对比图片失败！");
+                    }
+                }
+            });
         }
     });
 

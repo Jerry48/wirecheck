@@ -121,6 +121,7 @@
                         <li><a href="javascript:" id="picLast">上一页</a></li>
                         <li><a href="javascript:" id="picNext">下一页</a></li>
                         <li><a href="javascript:" id="setRef">设置对比图片</a></li>
+                        <li><a href="javascript:" id="manRef">手动对比</a></li>
                         <li><a href="javascript:" id="refresh">刷新</a></li>
                         <li><a href="javascript:" id="showAlert">显示警告</a></li>
                         <li><a href="javascript:" id="push">推送</a></li>
@@ -493,6 +494,30 @@
 	        </div><!-- /.modal-content -->
 	    </div><!-- /.modal -->
 	</div>
+
+    <!-- 手动对比 -->
+    <div class="modal fade" id="modalManRef" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="padding-top: 200px">
+            <div class="modal-content">
+                <div class="modal-header" style="padding: 10px;background-color: rgb(3,161,161);color:white">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">手动对比</h4>
+                </div>
+                <div class="modal-body clearfix" id="modalManRef-body" style="width: 100%">
+                    <div style="width: 47%;float: left;">
+                        <img src="" id="manRef_refPic" style="width: 100%;">
+                    </div>
+                    <div style="width: 47%;float: right;">
+                        <img src="" id="manRef_curPic" style="width: 100%;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="">确定</button>
+                    <button type="button" class="" data-dismiss="modal">取消</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
 
 	<!-- 手动配置 -->
 	<div class="modal fade" id="modalSetting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

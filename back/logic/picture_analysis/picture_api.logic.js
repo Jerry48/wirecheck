@@ -21,8 +21,11 @@ router.use(api_picture_upload_analysis.router);
 var api_device_set_refpic = require('./picture_set_refpic.logic');
 router.use(api_device_set_refpic.router);
 
-var api_refpic_set = require('./refpic_set.logic');
+var api_refpic_set = require('./picture_refpic_set.logic');
 router.use(api_refpic_set.router);
+
+var api_refpic_get = require('./picture_refpic_get.logic');
+router.use(api_refpic_get.router);
 
 var api_picture_alert = require('./picture_alert.logic');
 router.use(api_picture_alert.router);
