@@ -292,7 +292,11 @@ $(function() {
                 $('#privilegeGroupSelect').val('1');
                 $('#privilegeGroupSelect').attr('disabled', 'disabled');
                 $('#privilegeGroupSelect').css('background-color', '#EEEEEE');
-            } else {}
+            } else {
+                var groupId = tr.attr('groupid');
+                // console.log(groupId);
+                $('#privilegeGroupSelect').val(groupId);
+            }
             $('#modalEdit').modal();
         }
     })
@@ -623,6 +627,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 0) {
                     var list = data.result.list;
+                    // console.log(list);
                     $('#main table tbody').empty();
                     for (var i = 0; i < list.length; i++) {
                         if (list[i].userType == 0) {
@@ -633,11 +638,11 @@ $(function() {
                             var groupName = "全部";
                         }
                         $("#main table tbody").append("<tr id='" + list[i].userId + "' class='infolist' usertype='" + list[i].userType +
-                            "' department='" + list[i].department + "' mobile='" + list[i].mobile + "' groupid='" + list[i].groupId + "'><td><input type='checkbox' name=''></td><td>" + (i + 1) + "</td><td>" + list[i].name + "</td><td>" + list[i].userName + "</td><td>" + userType + "</td><td>" + groupName + "</td><td>" + list[i].department + "</td></tr>");
+                            "' department='" + list[i].department + "' mobile='" + list[i].mobile + "' groupid='" + list[i].groupId + "'><td><input type='checkbox' name=''></td><td>" + (i + 1) + "</td><td>" + list[i].name + "</td><td>" + list[i].userName + "</td><td>" + userType + "</td><td>" + groupName + "</td><td>" + list[i].department + "</td><td>" + list[i].mobile + "</td>");
                     }
                     if (list.length < 35) {
                         for (var i = 0; i < 35 - list.length; i++) {
-                            $("#main table tbody").append("<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>");
+                            $("#main table tbody").append("<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>");
                         }
                     }
                 } else {

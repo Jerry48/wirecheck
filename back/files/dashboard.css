@@ -28,6 +28,12 @@ body {
     font-family: 'SimSun';
 }
 
+button {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
 #home:link {
     text-decoration: none;
     color: white;

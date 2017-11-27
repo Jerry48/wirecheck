@@ -17,6 +17,33 @@ $(function(){
     
 })
 
+function ajxSync(url, method, data){
+    if(method === "POST"){
+        data = JSON.stringify(data);
+    }
+    return $.ajax({
+        url: url,
+        type: method,
+        data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: false
+    });
+}
+
+function ajxAsync(url, method, data){
+    if(method === "POST"){
+        data = JSON.stringify(data);
+    }
+    return $.ajax({
+        url: url,
+        type: method,
+        data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+    });
+}
+
 function welcome(name){
     var myDate = new Date();
     var year = myDate.getFullYear();

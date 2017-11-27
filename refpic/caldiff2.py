@@ -23,10 +23,17 @@ def splitPic(img, nRow, nCol):
     sub_images = []
     w, h = img.shape[1], img.shape[0]
     sub_h, sub_w = h/nRow, w/nCol
+    print sub_h
+    print sub_w
     for i in xrange(nRow):
         for j in xrange(nCol):
+            print i*sub_h
+            print (i+1)*sub_h
+            print j*sub_w
+            print (j+1)*sub_w
             sub = img[i*sub_h:(i+1)*sub_h,j*sub_w:(j+1)*sub_w]
             sub_images.append(sub)
+            print sub
     return sub_images
 
 def splitPicLoc(img, nRow, nCol):
@@ -63,6 +70,7 @@ def fftMatch(im1, im2):
 
 def contain(patch, roi):
     if roi[0] <= patch[0] < patch[2] <= roi[2] and roi[1] <= patch[1] < patch[3] <= roi[3]:
+        print '-------- function contain()'
         print roi[0],roi[1],roi[2],roi[3],patch[0],patch[1],patch[2],patch[3]
         return True
     else:
@@ -112,7 +120,11 @@ def imgSimilarity(imgPath, refImgPath, roi, conf, senstivity):
             draw.rectangle(((roix[0], roix[1]),(roix[2], roix[3])), outline = "red")
             if contain(patch, roix):
                 #print patch, roi
-                print i ,",",j
+                print "-------- print i"
+                print i
+                print "-------- print j"
+                print j
+
                 d = fftMatch(i,j)
                 index.append(c)
                 match.append(d)

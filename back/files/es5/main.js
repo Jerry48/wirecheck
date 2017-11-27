@@ -82,7 +82,7 @@ $(function () {
 
         // adjust records
         h = parseFloat($('#records').css('height'));
-        $('#records a').css('line-height', h * 0.3 + 'px');
+        $('#records a').css('line-height', h * 0.2 + 'px');
 
         // daterangepicker
         $('input[name="daterange"]').daterangepicker({
@@ -210,6 +210,80 @@ $(function () {
                 alert('用户登出失败');
             }
         });
+    });
+
+    $('#picNextHistory').click(function () {
+        var startDate = $('#historyArea input[name=daterange]:eq(0)').val();
+        var endDate = $('#historyArea input[name=daterange]:eq(1)').val();
+        startDate = startDate === '' ? '1970-01-01' : startDate;
+        endDate = endDate === '' ? '2970-01-01' : endDate;
+
+        if (parseInt($('body').attr('if-all'))) {
+            var index = parseInt($('body').attr('allpic-history-index')) || 0;
+            var size = 9;
+            var data = {
+                "userId": cookie_userId,
+                "userType": cookie_userType,
+                "index": index + 1,
+                "size": size,
+                "startTime": startDate + " 00:00:00",
+                "endTime": endDate + " 23:59:59"
+            };
+            getAllPicsHistory(data);
+        } else {
+            var deviceId = $('body').attr('pic-deviceId');
+            var index = parseInt($('body').attr('pic-history-index')) || 0;
+            var channelNo = parseInt($('body').attr('pic-channelNo'));
+            var size = 9;
+            var type = 1;
+            var data = {
+                "channelNo": channelNo,
+                "type": 0,
+                "id": deviceId,
+                "size": 9,
+                "index": index + 1,
+                "startTime": startDate + " 00:00:00",
+                "endTime": endDate + " 23:59:59"
+            };
+            getDevicePicsHistory(data);
+        }
+    });
+
+    $('#picLastHistory').click(function () {
+        var startDate = $('#historyArea input[name=daterange]:eq(0)').val();
+        var endDate = $('#historyArea input[name=daterange]:eq(1)').val();
+        startDate = startDate === '' ? '1970-01-01' : startDate;
+        endDate = endDate === '' ? '2970-01-01' : endDate;
+
+        if (parseInt($('body').attr('if-all'))) {
+            var index = parseInt($('body').attr('allpic-history-index')) || 0;
+            var size = 9;
+            var data = {
+                "userId": cookie_userId,
+                "userType": cookie_userType,
+                "index": index - 1,
+                "size": size,
+                "startTime": startDate + " 00:00:00",
+                "endTime": endDate + " 23:59:59"
+            };
+            getAllPicsHistory(data);
+        } else {
+            var deviceId = $('body').attr('pic-deviceId');
+            var index = parseInt($('body').attr('pic-history-index')) || 0;
+            var channelNo = parseInt($('body').attr('pic-channelNo'));
+            var size = 9;
+            var type = 1;
+            var data = {
+                "channelNo": channelNo,
+                "type": 0,
+                "id": deviceId,
+                "size": 9,
+                "index": index - 1,
+                "startTime": startDate + " 00:00:00",
+                "endTime": endDate + " 23:59:59"
+            };
+            getDevicePicsHistory(data);
+        }
     });
 
     $('#searchHis').click(function () {
@@ -962,14 +1036,7 @@ $(function () {
             "userType": cookie_userType
         };
         var rootNode = void 0;
-        $.ajax({
-            url: '/v1/device/tree2',
-            type: "POST",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false
-        }).then(function (data) {
+        ajxSync('/v1/device/tree/channel/multi', 'POST', data).then(function (data) {
             if (data.code == 0) {
                 rootNode = data.result.data;
             } else {
@@ -984,18 +1051,8 @@ $(function () {
 
     // 通道列表多选
     function channelTreeMulti() {
-        var data = {
-            "userId": cookie_userId
-        };
         var rootNode = void 0;
-        $.ajax({
-            url: '/v1/device/tree/channel/multi',
-            type: "POST",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false
-        }).then(function (data) {
+        ajxSync('/v1/device/tree/channel/multi', 'POST', { userId: cookie_userId }).then(function (data) {
             if (data.code == 0) {
                 rootNode = data.result.data;
             } else {
@@ -1007,18 +1064,8 @@ $(function () {
 
     // 设备线路列表
     function channelLineTree() {
-        var data = {
-            "userId": cookie_userId
-        };
         var rootNode = void 0;
-        $.ajax({
-            url: '/v1/device/tree/line',
-            type: "POST",
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false
-        }).then(function (data) {
+        ajxSync('/v1/device/tree/line', 'POST', { userId: cookie_userId }).then(function (data) {
             if (data.code == 0) {
                 rootNode = data.result.data;
             } else {
@@ -1072,111 +1119,83 @@ $(function () {
                 $('#dvc_status div:eq(0)').append("<p><b>\u72B6\u6001\uFF1A&nbsp;&nbsp;" + status + "</b></p><p><b>\u6E29\u5EA6\uFF1A&nbsp;&nbsp;</b>" + data.result.temperature + "</p>");
                 $('#dvc_status div:eq(1)').append("<p><b>\u7535\u538B\uFF1A&nbsp;&nbsp;</b>" + data.result.batteryVoltage + "</p><p><b>\u9690\u60A3\u7C7B\u578B\uFF1A&nbsp;&nbsp;</b>" + dangerType[data.result.deviceDangerID] + "</p>");
             } else {
-                console.log('failed at alert/process');
+                console.log('获取设备失败！');
             }
         }); // end of ajax
     }
 
     function setTreeNodeSelected(selector) {
         selector.data().treeview.options.multiSelect = false;
+
         selector.unbind('nodeSelected');
         selector.on('nodeSelected', function (event, data) {
             $("#pics img").parent().css('border', '0px');
-            var type = selector.treeview('getSelected')[0].type;
-            var tmp = selector.treeview('getSelected')[0].id;
-            var tmpData = tmp.split('_');
-            var deviceId = tmpData[0];
-            var channelNo = tmpData[1];
-            $('body').attr('pic-deviceId', deviceId);
-            $('body').attr('pic-channelNo', channelNo);
-            var name = selector.treeview('getSelected')[0].text;
-            if ($('#devices ul li').filter('.chosen').text() == '设备列表') {
-                if (type == 3) {
-                    type = 0;
-                    $.ajax({
-                        url: '/v1/device/find/parents',
-                        type: "POST",
-                        data: JSON.stringify({
-                            deviceId: deviceId
-                        }),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function success(data) {
-                            if (data.code == 0) {
-                                var parents = data.result.data;
-                                var parentsName = "";
-                                for (var i = 0; i < parents.length; i++) {
-                                    parentsName = parentsName + parents[parents.length - 1 - i] + " / ";
-                                }
-                                parentsName += name;
-                                // $('#header p').text(parentsName);
-                            } else {
-                                console.log('failed at alert/process');
-                            }
-                        }
-                    }); // end of ajx
-                } else {
-                    type = 1;
-                }
-            } else {
-                if (type == 3) {
-                    type = 0;
-                } else {
-                    type = 2;
-                }
-            }
+            var selectedItem = selector.treeview('getSelected')[0];
+            var type = selectedItem.type;
+            var id = selectedItem.id;
+            var name = selectedItem.text;
+            console.log('selected item type:' + type);
+            if (type === 3) {
+                var tmpData = id.split('_');
+                var deviceId = tmpData[0];
+                var channelNo = tmpData[1];
 
-            getStatus(deviceId);
+                $('body').attr('pic-deviceId', deviceId);
+                $('body').attr('pic-channelNo', channelNo);
+                $('body').attr('pic-index', 0);
 
-            $('body').attr('pic-index', 0);
-            $('body').attr('pic-channelNo', channelNo);
-            if (parseInt($('body').attr('if-history'))) {
-                // var deviceId = $('body').attr('pic-deviceId');
-                var index = parseInt($('body').attr('pic-index'));
-                var channelNo = parseInt($('body').attr('pic-channelNo'));
-                var size = 9;
-                var type = 1;
-                var data = {
-                    "channelNo": channelNo,
-                    "type": 0,
-                    "id": deviceId,
-                    "size": 9,
-                    "index": 0,
-                    "startTime": "1970-01-01 00:00:00",
-                    "endTime": "2970-01-01 23:59:59"
-                };
-                getDevicePicsHistory(data);
-            } else if (parseInt($('body').attr('if-temperature'))) {
-                var newData = {};
+                getStatus(deviceId);
 
-                newData.deviceIds = [];
-                newData.id = [];
-                newData.type = 0;
-                newData.deviceIds.push(deviceId);
-                tempDevice(newData);
-            } else {
-                var size = 5;
-                var index = parseInt($('body').attr('pic-index'));
-                var data = {
-                    "channelNo": channelNo,
-                    "type": type,
-                    "id": deviceId,
-                    "size": size,
-                    "index": index,
-                    "startTime": "1900-01-01 00:00:00",
-                    "endTime": "2900-01-01 00:00:00"
-                    // setDeviceStatus();
-                };clearInterval(intervalIds.getAllPics);
-                clearInterval(intervalIds.findDevicePic);
-                getDevicePics(data);
-                intervalIds.findDevicePic = setInterval(function () {
+                if (parseInt($('body').attr('if-history'))) {
+                    // var deviceId = $('body').attr('pic-deviceId');
                     var index = parseInt($('body').attr('pic-index'));
-                    if (index == 0) {
-                        getDevicePics(data);
-                    }
-                }, INTERVAL);
+                    var channelNo = parseInt($('body').attr('pic-channelNo'));
+                    var size = 9;
+                    var type = 0;
+                    var data = {
+                        "channelNo": channelNo,
+                        "type": type,
+                        "id": deviceId,
+                        "size": 9,
+                        "index": 0,
+                        "startTime": "1970-01-01 00:00:00",
+                        "endTime": "2970-01-01 23:59:59"
+                    };
+                    getDevicePicsHistory(data);
+                } else if (parseInt($('body').attr('if-temperature'))) {
+                    var newData = {};
+
+                    newData.deviceIds = [];
+                    newData.id = [];
+                    newData.type = 0;
+                    newData.deviceIds.push(deviceId);
+                    tempDevice(newData);
+                } else {
+                    var size = 5;
+                    var type = 0;
+                    var index = parseInt($('body').attr('pic-index'));
+                    var data = {
+                        "channelNo": channelNo,
+                        "type": type,
+                        "id": deviceId,
+                        "size": size,
+                        "index": index,
+                        "startTime": "1900-01-01 00:00:00",
+                        "endTime": "2900-01-01 00:00:00"
+                        // setDeviceStatus();
+
+                    };clearInterval(intervalIds.getAllPics);
+                    clearInterval(intervalIds.findDevicePic);
+                    getDevicePics(data);
+                    intervalIds.findDevicePic = setInterval(function () {
+                        var index = parseInt($('body').attr('pic-index'));
+                        if (index == 0) {
+                            getDevicePics(data);
+                        }
+                    }, INTERVAL);
+                }
             }
-        }); // end of nodeSelected event
+        });
     }
 
     // 地图 点击设备
@@ -1208,86 +1227,78 @@ $(function () {
     function getDevicePics(data) {
         // clearInterval(intervalIds.findDevicePic);
         var outerData = data;
-        $.ajax({
-            url: '/v1/search/pics/device',
-            type: "GET",
-            data: data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false,
-            success: function success(data) {
-                if (data.code == 0) {
-                    if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) $('#picNext').show();else $('#picNext').show();
+        ajxSync('/v1/search/pics/device', 'GET', data).then(function (data) {
+            if (data.code == 0) {
+                if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) $('#picNext').show();else $('#picNext').show();
 
-                    $('body').attr('pic-index', outerData.index);
-                    $('body').attr('pic-deviceId', outerData.id);
-                    $('body').attr('if-all', 0);
-                    if ($('body').attr('pic-index') > 0) {
-                        $('#picLast').show();
-                    } else {
-                        $('#picLast').show();
-                    }
-
-                    var list = data.result.list;
-
-                    // picThings();
-                    $('#pics img').removeAttr('data-original');
-                    $('#pics img').removeAttr('src');
-                    $('#pics img').removeAttr('picId');
-                    $('#pics img').removeAttr('channelNo');
-                    $('.pics p').text('');
-                    // picReset();
-                    for (var i = 0; i < list.length; ++i) {
-                        if (list[i].picType == 2) {
-                            // for ref pic
-                        } else {
-                            if (list[i].picType == 1) {
-                                var name = list[i].name;
-                                var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
-                                // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 告警图片:"+timeName);
-                            } else {
-                                var name = list[i].name;
-                                var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
-                                // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 原始图片:"+timeName);
-                            }
-                            if (list[i].width > list[i].height) {
-                                horPicCss(i, list[i].width, list[i].height);
-                            } else {
-                                verPicCss(i, list[i].width, list[i].height);
-                            }
-
-                            $('#pics img:eq(' + i + ')').attr('src', list[i].picUrl);
-                            $('#pics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                            $('#pics img:eq(' + i + ')').attr('picId', list[i].picId);
-                            $('#pics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                            $('#pics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-                            if (i > 0) {
-                                $('.pics:eq(' + (i - 1) + ') p').text(list[i].time + ' ' + list[i].deviceId);
-                            } else {
-                                $('#pics0_desc input:eq(0)').val(list[i].time);
-                                $('#pics0_desc input:eq(1)').val(list[i].deviceId);
-                                $('#pics0_desc input:eq(2)').val(list[i].deviceTele);
-                                $('#pics0_desc input:eq(3)').val(list[i].deviceId);
-                            }
-
-                            $('#picCount').text('第' + (outerData.index + 1) + '页 共' + Math.ceil(data.result.total / outerData.size) + '页');
-                        }
-                    }
-
-                    var viewer = new Viewer(document.getElementById('pics'), {
-                        url: 'data-original'
-                    });
+                $('body').attr('pic-index', outerData.index);
+                $('body').attr('pic-deviceId', outerData.id);
+                $('body').attr('if-all', 0);
+                if ($('body').attr('pic-index') > 0) {
+                    $('#picLast').show();
                 } else {
-                    if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) {
-                        alert('这已经是最后一页！');
-                    } else if ($('body').attr('pic-index') == 0) {
-                        console.log('这是第一页！');
+                    $('#picLast').show();
+                }
+
+                var list = data.result.list;
+
+                // picThings();
+                $('#pics img').removeAttr('data-original');
+                $('#pics img').removeAttr('src');
+                $('#pics img').removeAttr('picId');
+                $('#pics img').removeAttr('channelNo');
+                $('.pics p').text('');
+                // picReset();
+                for (var i = 0; i < list.length; ++i) {
+                    if (list[i].picType == 2) {
+                        // for ref pic
                     } else {
-                        console.log('查无图片！');
+                        if (list[i].picType == 1) {
+                            var name = list[i].name;
+                            var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
+                            // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 告警图片:"+timeName);
+                        } else {
+                            var name = list[i].name;
+                            var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
+                            // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 原始图片:"+timeName);
+                        }
+                        if (list[i].width > list[i].height) {
+                            horPicCss(i, list[i].width, list[i].height);
+                        } else {
+                            verPicCss(i, list[i].width, list[i].height);
+                        }
+
+                        $('#pics img:eq(' + i + ')').attr('src', list[i].picUrl);
+                        $('#pics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
+                        $('#pics img:eq(' + i + ')').attr('picId', list[i].picId);
+                        $('#pics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
+                        $('#pics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
+                        if (i > 0) {
+                            $('.pics:eq(' + (i - 1) + ') p').text(list[i].time + ' ' + list[i].deviceId);
+                        } else {
+                            $('#pics0_desc input:eq(0)').val(list[i].time);
+                            $('#pics0_desc input:eq(1)').val(list[i].deviceId);
+                            $('#pics0_desc input:eq(2)').val(list[i].deviceTele);
+                            $('#pics0_desc input:eq(3)').val(list[i].deviceId);
+                        }
+
+                        $('#picCount').text('第' + (outerData.index + 1) + '页 共' + Math.ceil(data.result.total / outerData.size) + '页');
                     }
                 }
+
+                var viewer = new Viewer(document.getElementById('pics'), {
+                    url: 'data-original'
+                });
+            } else {
+                if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) {
+                    alert('这已经是最后一页！');
+                } else if ($('body').attr('pic-index') == 0) {
+                    console.log('这是第一页！');
+                } else {
+                    console.log('查无图片！');
+                }
             }
-        }); // end of ajax   
+        });
     }
 
     // `getallpics
@@ -1639,6 +1650,7 @@ function getDevicePicsHistory(data) {
         async: false
     }).then(function (data) {
         if (!data.code) {
+            $('body').attr('pic-history-index', outerData.index);
             var pics = data.result.list;
             for (var i = 0; i < pics.length; i++) {
                 var pic = pics[i];
@@ -1685,7 +1697,7 @@ function getAllPicsHistory(data) {
         async: false
     }).then(function (data) {
         if (!data.code) {
-            // $('body').attr('allpic-index', outerData.index);
+            $('body').attr('allpic-history-index', outerData.index);
             // $('body').attr('if-all', 1);
             var pics = data.result.list;
             for (var i = 0; i < pics.length; i++) {

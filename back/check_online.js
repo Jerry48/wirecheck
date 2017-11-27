@@ -40,7 +40,7 @@ function main(){
                         var t1 = data[i].heartBeatTime.getTime(); 
                         var t2 = Date.now();
                         var interval = t2-t1;
-                        if(interval>15*60*1000){//5分钟内无心跳认定离线(毫秒)
+                        if(interval>15*60*1000){//15分钟内无心跳认定离线(毫秒)
                             data[i].status=0;
                             offline.push(data[i]);
                         }else{
