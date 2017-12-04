@@ -907,12 +907,14 @@ $(function() {
     $('#back').click(function() {
         $('#main_right').show();
         $('#mapArea').hide();
+        $('#list2').show();
         listRefresh(channelTree(), $('#content1'), 3, false); 
     })
 
     $('#icon_map').click(function() {
         $('#main_right').hide();
         $('#mapArea').show();
+        $('#list2').hide();
         initMap(); 
         listRefresh(deviceTree(), $('#content1'), 2, true); 
     })

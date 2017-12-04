@@ -105,31 +105,48 @@ function processRequest(param, fn){
             });
         },
         function(groupId,next){
-            var match = {
-                groupId: groupId,
-            };
-            var select = {
-                deviceId: 'deviceId',
-            };
-            var query = {
-                select: select,
-                match: match,
-            };
-            deviceGroupMemberModel.lookup(query, function(err, rows){
-                if (err) {
-                    var msg = err.msg || err;
-                    console.error(moduleName+' Err:'+msg);
-                    next(err);
-                }else{
-                    console.log(rows);
-                    next(null,rows);
-                }
-            });
+            if(groupId === '1'){
+                var sqlstr = 'select deviceID from tb_device_info where deviceID <> ""';
+                var query = {
+                    sqlstr: sqlstr
+                };
+                deviceModel.query(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+' Err:'+msg);
+                        next(err);
+                    }else{
+                        console.log(rows);
+                        next(null,rows);
+                    }
+                })
+            }else{
+                var match = {
+                    groupId: groupId,
+                };
+                var select = {
+                    deviceId: 'deviceId',
+                };
+                var query = {
+                    select: select,
+                    match: match,
+                };
+                deviceGroupMemberModel.lookup(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+' Err:'+msg);
+                        next(err);
+                    }else{
+                        console.log(rows);
+                        next(null,rows);
+                    }
+                });
+            }
         },
         function(result,next){
             var deviceIds = [];
             for (var i=0;i<result.length;i++){
-                deviceIds.push(result[i].deviceId);
+                deviceIds.push(result[i].deviceId || result[i].deviceID);
             }
             var sqlstr = 'select id,name, deviceId, channelNo, status,lineId from '+channelModel.tableName;
             sqlstr +=' where deviceId in ("';
