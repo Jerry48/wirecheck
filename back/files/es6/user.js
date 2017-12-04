@@ -341,12 +341,14 @@ $(function() {
         if (num == 0) {
             alert('未选中设备!');
         } else {
-            var list = [];
-            for (var i = 0; i < num; i++) {
-                var id = $('#main table tbody').find("input:checkbox:checked:eq(" + i + ")").parent().parent().attr('id');
-                list.push(id);
-            }
-            deleteUser(list);
+            if (confirm('确认删除该用户？点击确定后用户所有信息将被删除')) {
+                var list = [];
+                for (var i = 0; i < num; i++) {
+                    var id = $('#main table tbody').find("input:checkbox:checked:eq(" + i + ")").parent().parent().attr('id');
+                    list.push(id);
+                }
+                deleteUser(list);
+            }   
         }
     })
 

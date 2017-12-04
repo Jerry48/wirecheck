@@ -22,6 +22,9 @@ var is = require('is_js');
 //model 
 var userModel = require('../../model/user_info');
 var userDeviceRModel = require('../../model/user_device_r_info');
+var userDeviceGroupRModel = require('../../model/user_device_group_r_info');
+var wechatModel = require('../../model/wechat_info');
+
 
 //helper 
 var logic_helper = require('../../../common/logic_helper');
@@ -83,6 +86,42 @@ function processRequest(param, fn){
 			};
 
 			userModel.query(query, function(err, rows){
+				if (err) {
+					var msg = err.msg || err;
+					console.error(moduleName+'Failed to get the group member for'+msg);
+					next(err);
+				}else{
+					next(null);
+				}
+			});
+		},
+		function(next){
+			var sqlstr = 'delete from '+wechatModel.tableName+' where userId in ("';
+                sqlstr += list.join('","');
+                sqlstr +='");';
+			var query = {
+				sqlstr: sqlstr,
+			};
+
+			wechatModel.query(query, function(err, rows){
+				if (err) {
+					var msg = err.msg || err;
+					console.error(moduleName+'Failed to get the group member for'+msg);
+					next(err);
+				}else{
+					next(null);
+				}
+			});
+		},
+		function(next){
+			var sqlstr = 'delete from '+userDeviceGroupRModel.tableName+' where userId in ("';
+                sqlstr += list.join('","');
+                sqlstr +='");';
+			var query = {
+				sqlstr: sqlstr,
+			};
+
+			userDeviceGroupRModel.query(query, function(err, rows){
 				if (err) {
 					var msg = err.msg || err;
 					console.error(moduleName+'Failed to get the group member for'+msg);

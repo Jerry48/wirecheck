@@ -8,7 +8,7 @@ $(function() {
     const cookie_name = userDetails.name;
 
     if (!cookie_userType) {
-        $("#user").hide();
+        $("#user").parent().hide();
     }
 
     initialize();

@@ -255,6 +255,8 @@ app.use('/user', function(req, res) {
     console.log('req.session:%j', req.session);
     if(req.cookies.sessionId === "null" || req.cookies.sessionId === undefined) {
         res.redirect("/login");
+    }else if(req.session.userInfo.userType === 0){
+        res.send("无权限访问");
     }else{
         res.set('Content-Type', 'text/html');
         res.write(api_front_user);
@@ -298,7 +300,7 @@ app.use(function(req, res){
     console.log('req.session:%j', req.session);
 
     res.set('Content-Type', 'text/html');
-    res.send('wire check service, no view');
+    res.send('网页出错404，请联系网站管理员');
   }
 });
 app.listen(port);

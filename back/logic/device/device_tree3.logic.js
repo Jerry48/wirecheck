@@ -18,7 +18,9 @@ var moment = require('moment');
 var async = require('async');
 var is = require('is_js');
 
-var userDeviceRModel = require('../../model/user_device_r_info');
+var userDeviceGroupRModel = require('../../model/user_device_group_r_info');
+var deviceGroupMemberModel = require('../../model/device_group_member_info');
+
 var deviceModel = require('../../model/device_info');
 var deviceLevelModel = require('../../model/device_level_info');
 var deviceStatusModel = require('../../model/device_status_info');
@@ -78,9 +80,52 @@ function processRequest(param, fn){
 	debug('Try to list the child of device level of '+userId);
 
     async.waterfall([
-    	function(next){
-    		var match = {
-                ugId: userId,
+    	// function(next){
+    	// 	var match = {
+     //            ugId: userId,
+     //        };
+     //        var select = {
+     //            deviceId: 'deviceId',
+     //        };
+     //        var query = {
+     //            select: select,
+     //            match: match,
+     //        };
+     //        userDeviceRModel.lookup(query, function(err, rows){
+     //            if (err) {
+     //                var msg = err.msg || err;
+     //                console.error(moduleName+' Err:'+msg);
+     //                next(err);
+     //            }else{
+     //                next(null,rows);
+     //            }
+     //        });
+    	// },
+         function(next){
+            var match = {
+                userId: userId,
+            };
+            var select = {
+                groupId: 'groupId',
+            };
+            var query = {
+                select: select,
+                match: match,
+            };
+            userDeviceGroupRModel.lookup(query, function(err, rows){
+                if (err) {
+                    var msg = err.msg || err;
+                    console.error(moduleName+' Err:'+msg);
+                    next(err);
+                }else{
+                    console.log(rows[0].groupId);
+                    next(null,rows[0].groupId);
+                }
+            });
+        },
+        function(groupId,next){
+            var match = {
+                groupId: groupId,
             };
             var select = {
                 deviceId: 'deviceId',
@@ -89,16 +134,17 @@ function processRequest(param, fn){
                 select: select,
                 match: match,
             };
-            userDeviceRModel.lookup(query, function(err, rows){
+            deviceGroupMemberModel.lookup(query, function(err, rows){
                 if (err) {
                     var msg = err.msg || err;
                     console.error(moduleName+' Err:'+msg);
                     next(err);
                 }else{
+                    console.log(rows);
                     next(null,rows);
                 }
             });
-    	},
+        },
         function(result,next){
             var deviceIds = [];
             for (var i=0;i<result.length;i++){
