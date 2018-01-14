@@ -70,6 +70,7 @@ function packageResponseData(inputData){
         data.department = inputData[i].department;
         data.groupId = inputData[i].groupId;
         data.groupName = inputData[i].groupName;
+        data.logoFile = inputData[i].logoFile;
         resData.list.push(data);
     }
 	return resData;
@@ -94,6 +95,7 @@ function processRequest(param, fn){
             mobile: 'mobile',
             name: 'name',
             department: 'department',
+            logoFile: 'logoFile',
             userType: 0,
            };
            var match = {
@@ -117,8 +119,10 @@ function processRequest(param, fn){
                             name: rows[i].name,
                             department: rows[i].department,
                             userType: rows[i].userType,
+                            logoFile: rows[i].logoFile,
                             groupId: '',
                             groupName: '',
+
                         }
                    }
                     next(null,users);

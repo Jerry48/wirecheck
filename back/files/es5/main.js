@@ -1,14 +1,6 @@
 "use strict";
 
 $(function () {
-    var cookie_sessionId = Cookies.get('sessionId');
-    var userInfo = getUsersBySession(cookie_sessionId);
-    var cookie_userId = userInfo.userId;
-    var cookie_userType = parseInt(userInfo.userType);
-    var cookie_userName = userInfo.userName;
-    var userDetails = getUserDetails(cookie_userName);
-    var cookie_name = userDetails.name;
-
     if (!cookie_userType) {
         $("#user").parent().hide();
     }

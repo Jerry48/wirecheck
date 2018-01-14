@@ -1,35 +1,18 @@
-'use strict';
+"use strict";
 
 var PIC_SERVER = "http://www.zskjsdxl.top:9090/";
+var ENTRIES = 100;
+
 $(function () {
-	var cookie_sessionId = Cookies.get('sessionId');
-	if (cookie_sessionId == undefined) {
-		window.location.href = '/login';
-	} else {
-		var userInfo = getUsersBySession(cookie_sessionId);
-		var cookie_userId = userInfo.userId;
-		var cookie_userType = parseInt(userInfo.userType);
-		var cookie_userName = userInfo.userName;
-
-		var userDetails = getUserDetails(cookie_userName);
-		var cookie_usrEdit = userDetails.usrEdit;
-		var cookie_pwdEdit = userDetails.pwdEdit;
-		var cookie_channelSet = userDetails.channelSet;
-		var cookie_deviceOp = userDetails.deviceOp;
-		var cookie_wechatPush = userDetails.wechatPush;
-		var cookie_createGroup = userDetails.createGroup;
-		var cookie_name = userDetails.name;
-
-		if (!cookie_userType) {
-			$("#tab_edit").parent().hide();
-			$("#tab_area").parent().hide();
-			$("#tab_line").parent().hide();
-			$("#tabs_left li:eq(1)").hide();
-		}
-
-		$('#nav').css('visibility', 'visible');
-		$('#main').css('visibility', 'visible');
+	if (!cookie_userType) {
+		$("#tab_edit").parent().hide();
+		$("#tab_area").parent().hide();
+		$("#tab_line").parent().hide();
+		$("#tabs_left li:eq(1)").hide();
 	}
+
+	$('#nav').css('visibility', 'visible');
+	$('#main').css('visibility', 'visible');
 
 	// keep 16:9
 	var win_width = parseFloat($(document).width());
@@ -134,7 +117,8 @@ $(function () {
 	//设备信息
 	$('body').on('click', '.infolist', function () {
 		$('.infolist').css('background-color', 'white');
-		$(this).css('background-color', 'rgb(176,196,222)');
+		// $(this).css('background-color', 'rgb(176,196,222)');
+		$(this).css('background-color', 'rgb(3,161,161)');
 		$('#search input:eq(2)').val($(this).find('td:eq(1)').text());
 		$('#search input:eq(3)').val($(this).find('td:eq(2)').text());
 		$('#search input:eq(4)').val($(this).find('td:eq(7)').text());
@@ -811,7 +795,7 @@ $(function () {
 					$('#fileList').empty();
 					var list = data.result.list;
 					list.forEach(function (item) {
-						var $ctrl = '<div><button class="deleteFile" style="margin-right:20px;">\u5220\u9664</button><input filename="' + item + '" type="radio">' + item + '</div>';
+						var $ctrl = "<div><button class=\"deleteFile\" style=\"margin-right:20px;\">\u5220\u9664</button><input filename=\"" + item + "\" type=\"radio\">" + item + "</div>";
 						$('#fileList').append($ctrl);
 					});
 					$('#modalUpdate').modal();
@@ -893,7 +877,7 @@ $(function () {
 		var file = this.files[0];
 		if (file) {
 			console.log(file);
-			console.log(file.name + ',' + file.size + ',' + file.type);
+			console.log(file.name + "," + file.size + "," + file.type);
 		}
 	});
 
@@ -1158,7 +1142,7 @@ $(function () {
 								break;
 						}
 
-						$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist' devicedangerid='" + dangerID + "' lineid='" + list[i].lineId + "'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>" + list[i].version + "</td><td>" + list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>" + list[i].temperature + "</td><td>" + list[i].batteryVoltage + "</td><td>" + list[i].batterySolarVoltage + "</td><td>" + list[i].capacityVoltage + "</td><td>" + list[i].networkSignal + "</td><td>" + list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
+						$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist' devicedangerid='" + dangerID + "' lineid='" + list[i].lineId + "'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>" + list[i].version + "</td><td>" + list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>" + toFix3(list[i].temperature) + "</td><td>" + toFix3(list[i].batteryVoltage) + "</td><td>" + toFix3(list[i].batterySolarVoltage) + "</td><td>" + toFix3(list[i].capacityVoltage) + "</td><td>" + toFix3(list[i].networkSignal) + "</td><td>" + list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
 					}
 				} else {
 					console.log('获取设备信息列表失败');
@@ -1174,7 +1158,7 @@ $(function () {
 			'userId': cookie_userId,
 			'userType': cookie_userType,
 			'index': inputData.index,
-			'size': 50,
+			'size': ENTRIES,
 			'order': inputData.order
 		};
 		$.ajax({
@@ -1205,7 +1189,7 @@ $(function () {
 					}
 
 					$('#main2 table tbody').empty();
-					for (var i = 0; i < 50; i++) {
+					for (var i = 0; i < ENTRIES; i++) {
 						var html1 = "<a href = '#' style = 'margin-left:10px;' onmouseout='hiddenPic();' onmousemove='showPic(event,\"" + list[i].picUrl1 + "\");'>摄像头1</a>";
 						var html2 = "<a href = '#' style = 'margin-left:10px;' onmouseout='hiddenPic();' onmousemove='showPic(event,\"" + list[i].picUrl2 + "\");'>摄像头2</a>";
 						var html3 = "<a href = '#' style = 'margin-left:10px;' onmouseout='hiddenPic();' onmousemove='showPic(event,\"" + list[i].picUrl3 + "\");'>摄像头3</a>";
@@ -2063,7 +2047,7 @@ $(function () {
 								var html = '<td>离线</td>';
 								break;
 						}
-						$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist' devicedangerid='" + dangerID + "' lineid='" + list[i].lineId + "'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>" + list[i].version + "</td><td>" + list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>" + list[i].batteryVoltage + "</td><td>" + list[i].temperature + "</td><td>" + list[i].batterySolarVoltage + "</td><td>" + list[i].capacityVoltage + "</td><td>" + list[i].networkSignal + "</td><td>" + list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
+						$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist' devicedangerid='" + dangerID + "' lineid='" + list[i].lineId + "'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>" + list[i].version + "</td><td>" + list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>" + toFix3(list[i].temperature) + "</td><td>" + toFix3(list[i].batteryVoltage) + "</td><td>" + toFix3(list[i].batterySolarVoltage) + "</td><td>" + toFix3(list[i].capacityVoltage) + "</td><td>" + toFix3(list[i].networkSignal) + "</td><td>" + list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
 					}
 				} else {
 					alert('失败!');

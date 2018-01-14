@@ -198,11 +198,11 @@ function packageResponseData(inputData){
             deviceDangerID: products.deviceDangerID,
 
             status: status.status,
-            batteryVoltage: status.batteryVoltage.toFixed(3),
-            temperature: status.temperature.toFixed(3),
-            batterySolarVoltage: status.batterySolarVoltage.toFixed(3),
-            capacityVoltage: status.capacityVoltage.toFixed(3),
-            networkSignal: status.networkSignal.toFixed(3),
+            batteryVoltage: status.batteryVoltage,
+            temperature: status.temperature,
+            batterySolarVoltage: status.batterySolarVoltage,
+            capacityVoltage: status.capacityVoltage,
+            networkSignal: status.networkSignal,
             heartBeatTime: time,
             
             channelNo1: channel1.channelNo1,

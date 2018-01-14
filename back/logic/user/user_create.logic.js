@@ -107,6 +107,10 @@ var refModel = {
 			return is.inArray(data, [0,1]);	
 		}
 	},
+	logoFile: {
+		data: 'logoFile',
+		rangeCheck: null,
+	}
 };
 
 

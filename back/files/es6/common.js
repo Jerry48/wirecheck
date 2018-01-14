@@ -13,6 +13,8 @@ const dayLables = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
 const weekLabels = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
 const monthLabels = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
 
+const LOGOPATH = '../logo/'
+
 $(function(){
     
 })
@@ -83,9 +85,7 @@ function getUsersBySession(sessionId) {
     .then(data => {
         if (data.code == 0) {
             // todo session clear
-            if (data.result.flag == 0) {
-                window.location.href = '/login';
-            } else {
+            if (data.result.flag != 0) {
                 userInfo = {
                     'userId': data.result.userId,
                     'userName': data.result.userName,
@@ -114,9 +114,7 @@ function getUserDetails(userName) {
     })
     .then(data => {
         if (data.code == 0) {
-            if (data.result.flag == 0) {
-                window.location.href = '/login';
-            } else {
+            if (data.result.flag != 0) {
                 userPrivileges = {
                     'usrEdit': data.result.usrEdit,
                     'pwdEdit': data.result.pwdEdit,
@@ -125,8 +123,10 @@ function getUserDetails(userName) {
                     'wechatPush': data.result.wechatPush,
                     'createGroup': data.result.createGroup,
                     'name': data.result.name,
-                    'password': data.result.password
+                    'password': data.result.password,
+                    'logoFile': data.result.logoFile
                 }
+                
             }
 
         } else {
@@ -147,4 +147,37 @@ function makeId() {
 	}
 	return res;
 }
+
+function toFix3(num) {
+    var absnum = Math.abs(num);
+    if(absnum < 10){
+        return num.toFixed(2);
+    }else if(absnum < 100){
+        return num.toFixed(1);
+    }else{
+        return num;
+    }
+}
+
+var cookie_sessionId = Cookies.get('sessionId');
+var userInfo = getUsersBySession(cookie_sessionId);
+var cookie_userId = userInfo.userId;
+var cookie_userType = parseInt(userInfo.userType);
+var cookie_userName = userInfo.userName;
+
+var userDetails = getUserDetails(cookie_userName);
+var cookie_usrEdit = userDetails.usrEdit;
+var cookie_pwdEdit = userDetails.pwdEdit;
+var cookie_channelSet = userDetails.channelSet;
+var cookie_deviceOp = userDetails.deviceOp;
+var cookie_wechatPush = userDetails.wechatPush;
+var cookie_createGroup = userDetails.createGroup;
+var cookie_name = userDetails.name;
+var logoFile = userDetails.logoFile;
+
+// logo
+if((logoFile !== null) && (logoFile !== '0')){
+    $('#nav_left').html(`<img src="${LOGOPATH + logoFile}"/>`)
+}
+
 

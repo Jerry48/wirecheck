@@ -37,6 +37,7 @@ var refModel = {
     loginTime: new Date(),//'2014-12-20 09:14:08',
     loginState: 0, //0-login, 1-logout
     sessionId: '',
+    logoFile: '',
     createTime: new Date(), //
     updateTime: new Date(),
     state: 0,

@@ -1,23 +1,6 @@
 var USERTYPE = 1;
 $(function() {
-    var cookie_sessionId = Cookies.get('sessionId');
-    if (cookie_sessionId == undefined) {
-        window.location.href = '/login';
-    } else {
-        var userInfo = getUsersBySession(cookie_sessionId);
-        var cookie_userId = userInfo.userId;
-        var cookie_userType = parseInt(userInfo.userType);
-        var cookie_userName = userInfo.userName;
-
-        var userDetails = getUserDetails(cookie_userName);
-        var cookie_usrEdit = userDetails.usrEdit;
-        var cookie_pwdEdit = userDetails.pwdEdit;
-        var cookie_channelSet = userDetails.channelSet;
-        var cookie_deviceOp = userDetails.deviceOp;
-        var cookie_wechatPush = userDetails.wechatPush;
-        var cookie_createGroup = userDetails.createGroup;
-        var cookie_name = userDetails.name;
-
+    if (cookie_sessionId !== undefined) {
         if(!cookie_userType) {
             $("#tab_set").parent().hide();
         }
@@ -159,6 +142,7 @@ $(function() {
         $('#addUser').click(function() {
             flushAll();
             selectGroup();
+            selectLogo('#selectLogoAdd');
             $('#modalAdd').modal();
         })
 
@@ -194,6 +178,7 @@ $(function() {
             var mobile = $('#modalAdd-body input:eq(4)').val();
             var department = $('#modalAdd-body input:eq(5)').val();
             var userType = parseInt($('#modalAdd-body select').val()) - 1;
+            var logoFile = $('#selectLogoAdd').val()
 
             var usrEdit, pwdEdit, deviceOp, channelSet, wechatPush, createGroup;
             if (userType == 1 || $('#pselectAll').prop('checked')) {
@@ -242,6 +227,7 @@ $(function() {
                     'channelSet': channelSet,
                     'wechatPush': wechatPush,
                     'createGroup': createGroup,
+                    'logoFile': logoFile
                 };
                 createUser(data);
             }
@@ -287,7 +273,11 @@ $(function() {
             $('#modalEdit-body input:eq(5)').val(tr.find('td:eq(6)').text());
             $('#editUserType').val(tr.attr('usertype'));
 
+
             selectGroup();
+            selectLogo('#selectLogoEdit');
+            $('#selectLogoEdit').val(tr.attr('logofile'));
+
             if (tr.attr('usertype') == '1') {
                 $('#privilegeGroupSelect').val('1');
                 $('#privilegeGroupSelect').attr('disabled', 'disabled');
@@ -310,6 +300,7 @@ $(function() {
         var department = $('#modalEdit-body input:eq(5)').val();
         var userType = $('#modalEdit-body select').find('option:selected').val();
         var groupId = $('#privilegeGroupSelect').val();
+        var logoFile = $('#selectLogoEdit').val();
 
         var flag = true;
         if (userName == '' || name == '' || mobile == '' || department == '' || groupId == 0 || userType == -1) {
@@ -330,7 +321,8 @@ $(function() {
             'department': department,
             'userType': userType,
             'userId': userId,
-            'groupId': groupId
+            'groupId': groupId,
+            'logoFile': logoFile
         };
         editUser(data);
     })
@@ -351,6 +343,108 @@ $(function() {
             }   
         }
     })
+
+    // 上传logo
+    $('#uploadLogo').click(function() {
+        $('#logo').empty();
+        findLogoFiles(cookie_userId);
+    })
+
+    $('#logo').change(function() {
+        var file = this.files[0];
+        if(file){
+            console.log(file);
+            console.log(`${file.name},${file.size},${file.type}`);
+        }
+    });
+
+    $('#uploadConfirm').click(function() {
+        var formData = new FormData();
+        console.log($('#logo').prop('files'));
+        formData.append('logo', $('#logo').prop('files')[0]);
+        $('#progressbar').show();
+
+        function progressHandler(e) {
+            if (e.lengthComputable) {
+                $("#progressbar").progressbar({
+                    value: e.loaded,
+                    max: e.total
+                });
+            }
+        }
+
+        $.ajax({
+            url: '/api/upload/logo',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            xhr: function() { // custom xhr
+                var myXhr = $.ajaxSettings.xhr();
+                if (progressHandler && myXhr.upload) { // check if upload property exists
+                    myXhr.upload.addEventListener('progress', progressHandler, false); // for handling the progress of the upload
+                }
+                return myXhr;
+            }
+        })
+        .then(function(data) {
+            if (data.flag == 1) {
+                alert('上传成功！');
+                findLogoFiles(cookie_userId);
+            } else {
+                alert('上传失败！请重新上传！');
+            }
+        });
+        console.log("after ajax!");
+    });
+
+    function findLogoFiles(userId) {
+        var data = {userId: userId};
+        $.ajax({
+            url: '/v1/user/logo/list',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {
+                if (data.code == 0) {
+                    $('#fileList').empty();
+                    var list = data.result.list;
+                    list.forEach(item => {
+                        var $ctrl = `<div><button class="deleteFile" style="margin-right:20px;" filename="${item}">删除</button>${item}</div>`;
+                        $('#fileList').append($ctrl);
+                    });
+                } else {
+                    alert('处理失败！');
+                    console.log(data);
+                }
+            }
+        }) // end of ajax
+    }
+
+    $('#modalUpload').on('click','.deleteFile',function(){
+        if(confirm("是否确定删除该升级文件？")){
+            var filename = $(this).attr('filename');
+            var data = {'filename': filename};
+            $.ajax({
+                url: '/v1/user/logo/delete',
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(data) {
+                    if (data.code == 0) {
+                        alert('删除成功!');
+                        findLogoFiles(cookie_userId);
+                    } else {
+                        alert('处理失败！');
+                        console.log(data);
+                    }
+                }
+            }) // end of ajax
+        }
+    });
 
     //分组设置
     //添加分组
@@ -640,7 +734,7 @@ $(function() {
                             var groupName = "全部";
                         }
                         $("#main table tbody").append("<tr id='" + list[i].userId + "' class='infolist' usertype='" + list[i].userType +
-                            "' department='" + list[i].department + "' mobile='" + list[i].mobile + "' groupid='" + list[i].groupId + "'><td><input type='checkbox' name=''></td><td>" + (i + 1) + "</td><td>" + list[i].name + "</td><td>" + list[i].userName + "</td><td>" + userType + "</td><td>" + groupName + "</td><td>" + list[i].department + "</td><td>" + list[i].mobile + "</td>");
+                            "' department='" + list[i].department + "' mobile='" + list[i].mobile + "' groupid='" + list[i].groupId + "' logofile='"+ list[i].logoFile +"'><td><input type='checkbox' name=''></td><td>" + (i + 1) + "</td><td>" + list[i].name + "</td><td>" + list[i].userName + "</td><td>" + userType + "</td><td>" + groupName + "</td><td>" + list[i].department + "</td><td>" + list[i].mobile + "</td>");
                     }
                     if (list.length < 35) {
                         for (var i = 0; i < 35 - list.length; i++) {
@@ -677,6 +771,7 @@ $(function() {
     }
 
     function editUser(inputData) {
+        console.log(inputData);
         var data = inputData;
         $.ajax({
             url: '/v1/user/edit',
@@ -1061,6 +1156,30 @@ $(function() {
                     }
                 } else {
                     alert('failure!');
+                }
+            }
+        })
+    }
+
+    function selectLogo(target) {
+        var data = {
+            'userId': cookie_userId
+        };
+        $.ajax({
+            url: '/v1/user/logo/list',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+                if (data.code == 0) {
+                    var list = data.result.list;
+                    $(target).empty();
+                    $(target).append('<option value="0">请选择</option>')
+                    for (var i = 0; i < list.length; i++) {
+                        $(target).append('<option value="' + list[i] + '">' + list[i] + '</option>')
+                    }
                 }
             }
         })

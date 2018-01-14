@@ -56,8 +56,8 @@ var router = express.Router();
  var api_user_reset_pwd = require('./user_reset_pwd.logic');
  router.use(api_user_reset_pwd.router);
 
- var api_user_view_details = require('./user_view_details.logic');
- router.use(api_user_view_details.router);
+ var api_user_details = require('./user_details.logic');
+ router.use(api_user_details.router);
 
 var api_user_list_all = require('./user_list_all.logic');
 router.use(api_user_list_all.router);
@@ -77,7 +77,13 @@ router.use(api_user_group_member_delete.router);
 var api_user_check = require('./user_check.logic');
 router.use(api_user_check.router);
 
- var api_user_info_by_session = require('./user_info_by_session.logic');
- router.use(api_user_info_by_session.router);
+var api_user_info_by_session = require('./user_info_by_session.logic');
+router.use(api_user_info_by_session.router);
+
+var api_user_logo_list = require('./user_logo_list.logic');
+router.use(api_user_logo_list.router);
+
+var api_user_logo_delete = require('./user_logo_delete.logic');
+router.use(api_user_logo_delete.router);
 
 module.exports.router = router;

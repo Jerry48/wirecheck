@@ -1,12 +1,4 @@
 $(function() {
-    const cookie_sessionId = Cookies.get('sessionId');
-    const userInfo = getUsersBySession(cookie_sessionId);
-    const cookie_userId = userInfo.userId;
-    const cookie_userType = parseInt(userInfo.userType);
-    const cookie_userName = userInfo.userName;
-    const userDetails = getUserDetails(cookie_userName);
-    const cookie_name = userDetails.name;
-
     if (!cookie_userType) {
         $("#user").parent().hide();
     }
