@@ -116,16 +116,16 @@ $(function() {
 
 
 	//设备信息
-	$('body').on('click', '.infolist', function() {
-		$('.infolist').css('background-color', 'white');
+	$('body').on('click', '#dt1 tr', function() {
+		$('#dt1 tr').css('background-color', 'white');
 		// $(this).css('background-color', 'rgb(176,196,222)');
 		$(this).css('background-color', 'rgb(3,161,161)');
 		$('#search input:eq(2)').val($(this).find('td:eq(1)').text());
 		$('#search input:eq(3)').val($(this).find('td:eq(2)').text());
-		$('#search input:eq(4)').val($(this).find('td:eq(7)').text());
-		$('#search input:eq(5)').val($(this).find('td:eq(8)').text());
-		$('#search input:eq(6)').val($(this).find('td:eq(9)').text());
-		$('#search .selectDanger:eq(1)').val($(this).attr('devicedangerid'));
+		$('#search input:eq(4)').val($(this).find('td:eq(16)').text());
+		$('#search input:eq(5)').val($(this).find('td:eq(17)').text());
+		$('#search input:eq(6)').val($(this).find('td:eq(18)').text());
+		$('#search .selectDanger:eq(1)').val(dangerType.indexOf($(this).find('td:eq(6)').text()) + 1);
 	});
 
 	$('#resetSubmit').click(function() {
@@ -153,7 +153,7 @@ $(function() {
 			area = area[0];
 		}
 
-		var status = 2 - parseInt($('#search select:eq(5)').val());
+		var status = 2 - parseInt($('#searchStat').val());
 
 		if (lineId == '0') {
 			lineId = ''
@@ -164,7 +164,7 @@ $(function() {
 
 		var data = {
 			'area': area,
-			'deviceDangerID': $("#search select:eq(4)").find("option:selected").val(),
+			'deviceDangerID': $("#search .selectDanger").find("option:selected").val(),
 			'lineId': lineId,
 			'name': deviceName,
 			'deviceTele': deviceTele,
@@ -374,18 +374,19 @@ $(function() {
 			$('#modalEdit-body .selectDanger').val(tr.attr('devicedangerid'));
 			$('#modalEdit-body .selectLine').val(tr.attr('lineid'));
 
-			var danger = tr.find('td:eq(6)').text();
+			var danger = tr.find('td:eq(7)').text();
 			var count = $('#modalEdit-body .selectDanger option').length;
 			var i = 0;
 			while (count) {
 				if ($('#modalEdit-body .selectDanger option:eq(' + i + ')').text() == danger) {
-					$('#modalEdit-body .selectDanger option:eq(' + i + ')').attr('selected', true);
+					var tmpval = $('#modalEdit-body .selectDanger option:eq(' + i + ')').val();
+					$('#modalEdit-body .selectDanger').val(tmpval);
 					break;
 				}
 				i++;
 				count--;
 			}
-			var area = tr.find('td:eq(4)').text();
+			var area = tr.find('td:eq(5)').text();
 			var tmp = [];
 			tmp = area.split('/');
 			var count = $('#modalEdit-body .selectLevel0 option').length;
@@ -393,8 +394,9 @@ $(function() {
 			var parentId = "";
 			while (count) {
 				if ($('#modalEdit-body .selectLevel0 option:eq(' + j + ')').text() == tmp[0]) {
-					$('#modalEdit-body .selectLevel0 option:eq(' + j + ')').attr('selected', true);
-					parentId = $('#modalEdit-body .selectLevel0 option:eq(' + j + ')').val();
+					var tmpval = $('#modalEdit-body .selectLevel0 option:eq(' + j + ')').val();
+					$('#modalEdit-body .selectLevel0').val(tmpval);
+					parentId = tmpval
 					break;
 				}
 				j++;
@@ -413,8 +415,9 @@ $(function() {
 					var j = 0;
 					while (count) {
 						if ($('#modalEdit-body .selectLevel' + i + ' option:eq(' + j + ')').text() == tmp[i]) {
-							$('#modalEdit-body .selectLevel' + i + ' option:eq(' + j + ')').attr('selected', true);
-							parentId = $('#modalEdit-body .selectLevel' + i + ' option:eq(' + j + ')').val();
+							var tmpval = $('#modalEdit-body .selectLevel' + i + ' option:eq(' + j + ')').val();
+							$('#modalEdit-body .selectLevel' + i).val(tmpval)
+							parentId = tmpval
 							break;
 						}
 						j++;
@@ -1114,51 +1117,200 @@ $(function() {
 			success: function(data) {
 				if (data.code == 0) {
 					var list = data.result.list;
-					var total = data.result.total;
-					$('#table').attr('infolist-index', inputData.index);
-					var pages = Math.ceil(total / ENTRIES);
-					$('#infoCount').text('第' + (inputData.index + 1) + '页，共' + pages + '页');
-					if (inputData.index + 1 == 1) {
-						$('#infoLast').hide();
-					} else {
-						$('#infoLast').show();
-					}
-
-					if (inputData.index + 1 == pages) {
-						$('#infoNext').hide();
-					} else {
-						$('#infoNext').show();
-					}
-
-					$('#table tbody').empty();
-
-					var tmp = (total > ENTRIES) ? ENTRIES : total;
-
-					for (var i = 0; i < tmp; i++) {
-						var dangerID = list[i].deviceDangerID;
-						switch (list[i].status) {
-							case 0:
-								var html = '<td style="color:red">离线</td>';
-								break;
-							case 1:
-								var html = '<td style="color:blue">在线</td>';
-								break;
-							default:
-								var html = '<td>离线</td>';
-								break;
-						}
-
-						$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist' devicedangerid='" + dangerID + "' lineid='" 
-							+ list[i].lineId + "'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>" + list[i].version + "</td><td>" 
-							+ list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>" + toFix3(list[i].temperature) + "</td><td>"
-							+ toFix3(list[i].batteryVoltage) + "</td><td>" + toFix3(list[i].batterySolarVoltage) + "</td><td>" + toFix3(list[i].capacityVoltage) + "</td><td>" + toFix3(list[i].networkSignal) + "</td><td>"
-							+ list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
-					}
+					dataTableInit(list);
 				} else {
 					console.log('获取设备信息列表失败');
 				}
 			}
 		})
+	}
+
+	function dataTableInit(data) {
+		var height = parseInt($('#search').css('height')) * 0.85;
+		var dt = $('#dt1').DataTable({
+			data: data,
+			pageLength: 100,
+			scrollY: height+"px",
+			scrollX: true,
+			destroy:true,
+			columns: [
+				{"data": null},
+				{"data": "deviceName"},
+				{"data": "deviceTele"},
+				{"data": "version"},
+				{"data": "area"},
+				{"data": "lineName"},
+				{"data": "deviceDangerID"},//6
+				{"data": "status"},//7
+				{"data": "heartBeatTime"},
+				{"data": "temperature"},//9
+				{"data": "batteryVoltage"},
+				{"data": "batterySolarVoltage"},
+				{"data": "capacityVoltage"},
+				{"data": "networkSignal"},//13
+				{"data": "countPicDay"},
+				{"data": "countPicMonth"},
+				{"data": "latitude"},
+				{"data": "longitude"},
+				{"data": "deviceId"},
+			],
+			"columnDefs":[
+				{
+					"render": function(data, type, row, meta){
+						return dangerType[data-1] ;
+					},
+					"targets": 6
+				},
+				{
+					"render": function(data, type, row, meta){
+						return data == 0 ? '离线' : '在线';
+					},
+					"targets": 7
+				},
+				{
+					"render": function(data, type, row, meta){
+						return toFix3(data) ;
+					},
+					"targets": [9,10,11,12,13]
+				},
+			],
+			"language": {
+				"lengthMenu":     "显示 _MENU_ 条",
+				"info":           "显示 _START_ to _END_ of _TOTAL_ 条",
+				"infoEmpty":      "显示 0 to 0 of 0 条",
+				"search":         "搜索:",
+				"paginate": {
+			        "first":      "首页",
+			        "last":       "末页",
+			        "next":       "下一页",
+			        "previous":   "上一页"
+			    },
+			},
+			"createdRow": function ( row, data, index ) {
+                    if ( data['status'] == 0 ) {
+                        $('td', row).eq(7).css('color', 'red');
+                    }else{
+                    	$('td', row).eq(7).css('color', 'blue');
+                    }
+                },
+		});
+		dt.on('order.dt search.dt',
+		    function() {
+		        dt.column(0, {
+		            "search": 'applied',
+		            "order": 'applied'
+		        }).nodes().each(function(cell, i) {
+		            cell.innerHTML = i + 1;
+		        });
+		    }).draw();
+	}
+
+	function dataTable2Init(data) {
+		var height = parseInt($('#table2').css('height')) * 0.8;
+		var dt = $('#dt2').DataTable({
+			data: data,
+			pageLength: 100,
+			scrollY: height + "px",
+			scrollX: false,
+			destroy:true,
+			columns: [
+				{"data": null},
+				{"data": null},
+				{"data": "deviceName"},
+				{"data": "deviceTele"},
+				{"data": "version"},
+				{"data": "area"},
+				{"data": "lineName"},
+				{"data": "deviceDangerID"},
+				{"data": "deviceId"},
+				{"data": "deviceId"},
+			],
+			columnDefs: [
+				{
+					"render": function(data, type, row, meta){
+						return '<input type="checkbox"/>';
+					},
+					"targets": 0
+				},
+				{
+					"render": function(data, type, row, meta){
+						return dangerType[data-1] ;
+					},
+					"targets": 7
+				},
+				{
+					"render": function(data, type, row, meta){
+						var template_0 = "<a href = '#' style = 'margin-left:10px;' onmouseout='hiddenPic();' onmousemove='showPic(event,\"";
+						var html1 = template_0 + row.picUrl1 + "\");'>摄像头1</a>";
+						var html2 = template_0 + row.picUrl2 + "\");'>摄像头2</a>";
+						var html3 = template_0 + row.picUrl3 + "\");'>摄像头3</a>";
+						var htmls = ''
+
+						var template_1 = "<p style='margin-left:10px;display:inline-block'>";
+						if(row.picUrl1==''){
+							var html1 = template_1 + "摄像头1</p>";
+						}
+						if(row.picUrl2==''){
+							var html2 = template_1 + "摄像头2</p>";
+						}
+						if(row.picUrl3==''){
+							var html3 = template_1 + "摄像头3</p>";
+						}
+
+						if (row.refPicPath1 != '' && row.channelNo1 == 1) {
+							htmls += html1;
+						}
+						if (row.refPicPath2 != '' && row.channelNo2 == 1) {
+							htmls += html2;
+						}
+						if (row.refPicPath3 != '' && row.channelNo3 == 1) {
+							htmls += html3;
+						}
+						return htmls ;
+					},
+					"targets": 9
+				}
+			],
+			"createdRow": function ( row, data, index ) {
+                $(row).attr('id', data.deviceId);
+                $(row).attr('channelNo1', data.channelNo1);
+                $(row).attr('channel1Name', data.channel1Name);
+                $(row).attr('channelNo2', data.channelNo2);
+                $(row).attr('channel2Name', data.channel2Name);
+                $(row).attr('channelNo3', data.channelNo3);
+                $(row).attr('channel3Name', data.channel3Name);
+                $(row).attr('beginHour', data.beginHour);
+                $(row).attr('beginMinutes', data.beginMinutes);
+                $(row).attr('endHour', data.endHour);
+				$(row).attr('endMinutes', data.endMinutes);
+                $(row).attr('photoSize', data.photoSize);
+                $(row).attr('capturePeriod', data.capturePeriod);
+                $(row).attr('resolution', data.resolution);
+                $(row).attr('devicedangerid', data.devicedangerid);
+                $(row).attr('lineId', data.lineId);
+            },
+			"language": {
+				"lengthMenu":     "显示 _MENU_ 条",
+				"info":           "显示 _START_ to _END_ of _TOTAL_ 条",
+				"infoEmpty":      "显示 0 to 0 of 0 条",
+				"search":         "搜索:",
+				"paginate": {
+			        "first":      "首页",
+			        "last":       "末页",
+			        "next":       "下一页",
+			        "previous":   "上一页"
+			    },
+			},
+		});
+		dt.on('order.dt search.dt',
+	    function() {
+	        dt.column(1, {
+	            "search": 'applied',
+	            "order": 'applied'
+	        }).nodes().each(function(cell, i) {
+	            cell.innerHTML = i + 1;
+	        });
+	    }).draw();
 	}
 
 	// ` deviceInfoEdit
@@ -1181,60 +1333,7 @@ $(function() {
 			success: function(data) {
 				if (data.code == 0) {
 					var list = data.result.list;
-					var total = data.result.total;
-					$('#table').attr('infoedit-index', inputData.index);
-
-					var pages = Math.ceil(total / ENTRIES);
-					$('#infoCount2').text('第' + (inputData.index + 1) + '页，共' + pages + '页');
-					if (inputData.index + 1 == 1) {
-						$('#infoLast2').hide();
-					} else {
-						$('#infoLast2').show();
-					}
-
-					if (inputData.index + 1 == pages) {
-						$('#infoNext2').hide();
-					} else {
-						$('#infoNext2').show();
-					}
-
-					$('#main2 table tbody').empty();
-					for (var i = 0; i < ENTRIES; i++) {
-						var html1 = "<a href = '#' style = 'margin-left:10px;' onmouseout='hiddenPic();' onmousemove='showPic(event,\"" + list[i].picUrl1 + "\");'>摄像头1</a>";
-						var html2 = "<a href = '#' style = 'margin-left:10px;' onmouseout='hiddenPic();' onmousemove='showPic(event,\"" + list[i].picUrl2 + "\");'>摄像头2</a>";
-						var html3 = "<a href = '#' style = 'margin-left:10px;' onmouseout='hiddenPic();' onmousemove='showPic(event,\"" + list[i].picUrl3 + "\");'>摄像头3</a>";
-						var htmls = ''
-
-						if(list[i].picUrl1==''){
-							var html1 = "<p style='margin-left:10px;display:inline-block'>摄像头1</p>";
-						}
-						if(list[i].picUrl2==''){
-							var html2 = "<p style='margin-left:10px;display:inline-block'>摄像头2</p>";
-						}
-						if(list[i].picUrl3==''){
-							var html3 = "<p style='margin-left:10px;display:inline-block'>摄像头3</p>";
-						}
-
-						var dangerID = list[i].deviceDangerID;
-						if (list[i].refPicPath1 != '' && list[i].channelNo1 == 1) {
-							htmls += html1;
-						}
-						if (list[i].refPicPath2 != '' && list[i].channelNo2 == 1) {
-							htmls += html2;
-						}
-						if (list[i].refPicPath3 != '' && list[i].channelNo3 == 1) {
-							htmls += html3;
-						}
-
-						$("#main2 table tbody").append("<tr id='" + list[i].deviceId + "' channelNo1='" + list[i].channelNo1 + "' channel1Name='" 
-							+ list[i].channel1Name + "' channelNo2='" + list[i].channelNo2 + "' channel2Name='" + list[i].channel2Name 
-							+ "' channelNo3='" + list[i].channelNo3 + "' channel3Name='" + list[i].channel3Name + "' beginHour='" + list[i].beginHour 
-							+ "' beginMinutes='" + list[i].beginMinutes + "' endHour='" + list[i].endHour + "' endMinutes='" + list[i].endMinutes 
-							+ "' photoSize='" + list[i].photoSize + "' capturePeriod='" + list[i].capturePeriod + "' resolution='" + list[i].resolution 
-							+ "' devicedangerid='" + dangerID + "' lineid='" + list[i].lineId + "' class='infolist'><td><input type='checkbox' name=''></td><td>" + (i + 1) + "</td><td>"
-							 + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>"+list[i].version+"</td><td>" + list[i].area + "</td><td>" + list[i].lineName + "</td><td>" 
-							 + dangerType[dangerID] + "</td><td>" + list[i].deviceId + "</td><td>" + htmls + "</td></tr>");
-					}
+					dataTable2Init(list);
 				} else {
 					alert('获取设备树失败');
 				}
@@ -2038,43 +2137,44 @@ $(function() {
 			success: function(data) {
 				if (data.code == 0) {
 					var list = data.result.list;
-					console.log(list);
-					var total = data.result.total;
-					$('#table').attr('infolist-index', inputData.index);
-					var pages = Math.ceil(total / ENTRIES);
-					$('#infoCount').text('第' + (inputData.index + 1) + '页，共' + pages + '页');
-					if (inputData.index + 1 == 1) {
-						$('#infoLast').hide();
-					} else {
-						$('#infoLast').show();
-					}
+					dataTableInit(list);
+					// console.log(list);
+					// var total = data.result.total;
+					// $('#table').attr('infolist-index', inputData.index);
+					// var pages = Math.ceil(total / ENTRIES);
+					// $('#infoCount').text('第' + (inputData.index + 1) + '页，共' + pages + '页');
+					// if (inputData.index + 1 == 1) {
+					// 	$('#infoLast').hide();
+					// } else {
+					// 	$('#infoLast').show();
+					// }
 
-					if (inputData.index + 1 == pages) {
-						$('#infoNext').hide();
-					} else {
-						$('#infoNext').show();
-					}
+					// if (inputData.index + 1 == pages) {
+					// 	$('#infoNext').hide();
+					// } else {
+					// 	$('#infoNext').show();
+					// }
 
-					$('#table tbody').empty();
-					for (var i = 0; i < list.length; i++) {
-						const dangerID = list[i].deviceDangerID;
-						switch (list[i].status) {
-							case 0:
-								var html = '<td style="color:red">离线</td>';
-								break;
-							case 1:
-								var html = '<td style="color:blue">在线</td>';
-								break;
-							default:
-								var html = '<td>离线</td>';
-								break;
-						}
-						$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist' devicedangerid='" + dangerID + "' lineid='" 
-							+ list[i].lineId + "'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>" + list[i].version + "</td><td>" 
-							+ list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>"
-							+ toFix3(list[i].temperature) + "</td><td>" + toFix3(list[i].batteryVoltage) + "</td><td>" + toFix3(list[i].batterySolarVoltage) + "</td><td>" + toFix3(list[i].capacityVoltage) + "</td><td>" + toFix3(list[i].networkSignal) + "</td><td>"
-							+ list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
-					}
+					// $('#table tbody').empty();
+					// for (var i = 0; i < list.length; i++) {
+					// 	const dangerID = list[i].deviceDangerID;
+					// 	switch (list[i].status) {
+					// 		case 0:
+					// 			var html = '<td style="color:red">离线</td>';
+					// 			break;
+					// 		case 1:
+					// 			var html = '<td style="color:blue">在线</td>';
+					// 			break;
+					// 		default:
+					// 			var html = '<td>离线</td>';
+					// 			break;
+					// 	}
+					// 	$("#table tbody").append("<tr id='" + list[i].deviceId + "' class='infolist' devicedangerid='" + dangerID + "' lineid='" 
+					// 		+ list[i].lineId + "'><td>" + (i + 1) + "</td><td>" + list[i].deviceName + "</td><td>" + list[i].deviceTele + "</td><td>" + list[i].version + "</td><td>" 
+					// 		+ list[i].area + "</td><td>" + list[i].lineName + "</td><td>" + dangerType[dangerID] + "</td>" + html + "<td>" + list[i].heartBeatTime + "</td><td>"
+					// 		+ toFix3(list[i].temperature) + "</td><td>" + toFix3(list[i].batteryVoltage) + "</td><td>" + toFix3(list[i].batterySolarVoltage) + "</td><td>" + toFix3(list[i].capacityVoltage) + "</td><td>" + toFix3(list[i].networkSignal) + "</td><td>"
+					// 		+ list[i].countPicDay + "</td><td>" + list[i].countPicMonth + "</td><td>" + list[i].latitude + "</td><td>" + list[i].longitude + "</td><td>" + list[i].deviceId + "</td></tr>");
+					// }
 				} else {
 					alert('失败!');
 				}

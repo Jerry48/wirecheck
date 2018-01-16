@@ -84,6 +84,25 @@ app.post("/api/upload/update", upload.single('avatar'), function(req,res,next) {
     res.json({ flag: 1 });
 });
 
+var storage_logo = multer.diskStorage({
+    destination: function(req, file, next){
+        next(null, './files/logo/');
+    },
+    filename: function(req, file, next){
+        next(null, file.originalname)
+    }
+});
+
+var upload_logo = multer({
+    storage: storage_logo 
+});
+
+app.post("/api/upload/logo", upload_logo.single('logo'), function(req,res,next) {
+    console.log(req.file); 
+    console.log(req.body); 
+    res.json({ flag: 1 });
+});
+
 // v0.1.8
 // var multer = require('multer');
 // app.use(multer({

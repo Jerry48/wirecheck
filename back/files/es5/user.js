@@ -731,6 +731,62 @@ $(function () {
         });
     }
 
+    function dataTableInit(data) {
+        var height = parseInt($('#main').css('height')) * 0.95 * 0.85;
+        var dt = $('#dt1').DataTable({
+            data: data,
+            pageLength: 100,
+            // scrollY: height + "px",
+            scrollX: false,
+            destroy: true,
+            columns: [{ "data": null }, { "data": null }, { "data": "name" }, { "data": "userName" }, { "data": "userType" }, { "data": "groupName" }, { "data": "department" }, { "data": "mobile" }],
+            columnDefs: [{
+                "render": function render(data, type, row, meta) {
+                    return '<input type="checkbox"/>';
+                },
+                "targets": 0
+            }, {
+                "render": function render(data, type, row, meta) {
+                    return data == 0 ? '操作员' : '管理员';
+                },
+                "targets": 4
+            }, {
+                "render": function render(data, type, row, meta) {
+                    return row['userType'] == 0 ? data : '全部';
+                },
+                "targets": 5
+            }],
+            "createdRow": function createdRow(row, data, index) {
+                $(row).attr('id', data.userId);
+                $(row).attr('userType', data.userType);
+                $(row).attr('department', data.department);
+                $(row).attr('mobile', data.mobile);
+                $(row).attr('groupId', data.groupId);
+                $(row).attr('logoFile', data.logoFile);
+            },
+            "language": {
+                "lengthMenu": "显示 _MENU_ 条",
+                "info": "显示 _START_ to _END_ of _TOTAL_ 条",
+                "infoEmpty": "显示 0 to 0 of 0 条",
+                "search": "搜索:",
+                "paginate": {
+                    "first": "首页",
+                    "last": "末页",
+                    "next": "下一页",
+                    "previous": "上一页"
+                }
+            }
+        });
+        dt.on('order.dt search.dt', function () {
+            dt.column(1, {
+                "search": 'applied',
+                "order": 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+    }
+
     function userInfoList(inputData) {
         var data = {
             'userId': inputData
@@ -745,23 +801,7 @@ $(function () {
             success: function success(data) {
                 if (data.code == 0) {
                     var list = data.result.list;
-                    // console.log(list);
-                    $('#main table tbody').empty();
-                    for (var i = 0; i < list.length; i++) {
-                        if (list[i].userType == 0) {
-                            var userType = "操作员";
-                            var groupName = list[i].groupName;
-                        } else {
-                            var userType = "管理员";
-                            var groupName = "全部";
-                        }
-                        $("#main table tbody").append("<tr id='" + list[i].userId + "' class='infolist' usertype='" + list[i].userType + "' department='" + list[i].department + "' mobile='" + list[i].mobile + "' groupid='" + list[i].groupId + "' logofile='" + list[i].logoFile + "'><td><input type='checkbox' name=''></td><td>" + (i + 1) + "</td><td>" + list[i].name + "</td><td>" + list[i].userName + "</td><td>" + userType + "</td><td>" + groupName + "</td><td>" + list[i].department + "</td><td>" + list[i].mobile + "</td>");
-                    }
-                    if (list.length < 35) {
-                        for (var i = 0; i < 35 - list.length; i++) {
-                            $("#main table tbody").append("<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>");
-                        }
-                    }
+                    dataTableInit(list);
                 } else {
                     console('获取用户列表失败！');
                 }
