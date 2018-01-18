@@ -7,8 +7,8 @@
  */
  
 'use strict';  
-var moduleName = 'device_tree_channel_multi.logic';
-var URLPATH = '/v1/device/tree/channel/multi';
+var moduleName = 'device_tree_channel.logic';
+var URLPATH = '/v1/device/tree/channel';
 
 var debug = require('debug')(moduleName);
 var express = require('express');

@@ -93,8 +93,7 @@ router.use(api_device_roi_list.router);
 var api_device_info_search = require('./device_info_search.logic');
 router.use(api_device_info_search.router);
 
-var api_device_tree = require('./device_tree.logic');
-router.use(api_device_tree.router);
+
 
 var api_device_tree2 = require('./device_tree2.logic');
 router.use(api_device_tree2.router);
@@ -105,20 +104,32 @@ router.use(api_device_tree3.router);
 var api_device_tree4 = require('./device_tree4.logic');
 router.use(api_device_tree4.router);
 
-var api_device_tree_priv = require('./device_tree_priv.logic');
-router.use(api_device_tree_priv.router);
-
 var api_device_tree_channel_priv = require('./device_tree_channel_priv.logic');
 router.use(api_device_tree_channel_priv.router);
 
-var api_device_tree_channel_multi = require('./device_tree_channel_multi.logic');
-router.use(api_device_tree_channel_multi.router);
 
-var api_device_tree_multi = require('./device_tree_multi.logic');
-router.use(api_device_tree_multi.router);
+/*
+	tree
+*/
+
+var api_device_tree = require('./device_tree.logic');
+router.use(api_device_tree.router);
+
+var api_device_tree_channel = require('./device_tree_channel.logic');
+router.use(api_device_tree_channel.router);
 
 var api_device_tree_line = require('./device_tree_line.logic');
 router.use(api_device_tree_line.router);
+
+var api_device_tree_priv = require('./device_tree_priv.logic');
+router.use(api_device_tree_priv.router);
+
+/*
+	end of tree
+*/
+
+var api_device_tree_multi = require('./device_tree_multi.logic');
+router.use(api_device_tree_multi.router);
 
 var api_device_tree_line_multi = require('./device_tree_line_multi.logic');
 router.use(api_device_tree_line_multi.router);

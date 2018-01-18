@@ -18,10 +18,13 @@ var moment = require('moment');
 var async = require('async');
 var is = require('is_js');
 
-var userDeviceRModel = require('../../model/user_device_r_info');
+var userDeviceGroupRModel = require('../../model/user_device_group_r_info');
+var deviceGroupMemberModel = require('../../model/device_group_member_info');
+
 var deviceModel = require('../../model/device_info');
 var deviceLevelModel = require('../../model/device_level_info');
 var deviceStatusModel = require('../../model/device_status_info');
+var channelModel = require('../../model/channel_info');
 
 //helper 
 var logic_helper = require('../../../common/logic_helper');
@@ -71,38 +74,98 @@ function processRequest(param, fn){
 	}
 
 	var userId = param.userId || '';
-	var data= [];
+    var data = [];
+    var result = [];
 
 	debug('Try to list the child of device level of '+userId);
 
     async.waterfall([
-    	function(next){
-    		var match = {
-                ugId: userId,
+    	// function(next){
+    	// 	var match = {
+     //            ugId: userId,
+     //        };
+     //        var select = {
+     //            deviceId: 'deviceId',
+     //        };
+     //        var query = {
+     //            select: select,
+     //            match: match,
+     //        };
+     //        userDeviceRModel.lookup(query, function(err, rows){
+     //            if (err) {
+     //                var msg = err.msg || err;
+     //                console.error(moduleName+' Err:'+msg);
+     //                next(err);
+     //            }else{
+     //                next(null,rows);
+     //            }
+     //        });
+    	// },
+         function(next){
+            var match = {
+                userId: userId,
             };
             var select = {
-                deviceId: 'deviceId',
+                groupId: 'groupId',
             };
             var query = {
                 select: select,
                 match: match,
             };
-            userDeviceRModel.lookup(query, function(err, rows){
+            userDeviceGroupRModel.lookup(query, function(err, rows){
                 if (err) {
                     var msg = err.msg || err;
                     console.error(moduleName+' Err:'+msg);
                     next(err);
                 }else{
-                    console.log('test*****************************************************************8');
-                    next(null,rows);
+                    console.log(rows[0].groupId);
+                    next(null,rows[0].groupId);
                 }
             });
-    	},
+        },
+        function(groupId,next){
+            if(groupId === '1'){
+                var sqlstr = 'select deviceID from tb_device_info where deviceID <> ""';
+                var query = {
+                    sqlstr: sqlstr
+                };
+                deviceModel.query(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+' Err:'+msg);
+                        next(err);
+                    }else{
+                        console.log(rows);
+                        next(null,rows);
+                    }
+                })
+            }else{
+                var match = {
+                    groupId: groupId,
+                };
+                var select = {
+                    deviceId: 'deviceId',
+                };
+                var query = {
+                    select: select,
+                    match: match,
+                };
+                deviceGroupMemberModel.lookup(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+' Err:'+msg);
+                        next(err);
+                    }else{
+                        console.log(rows);
+                        next(null,rows);
+                    }
+                });
+            }
+        },
         function(result,next){
-            console.log('test*****************************************************************88');
             var deviceIds = [];
             for (var i=0;i<result.length;i++){
-                deviceIds.push(result[i].deviceId);
+                deviceIds.push(result[i].deviceId || result[i].deviceID);
             }
 
             var sqlstr = 'select id, temperature, batteryVoltage from '+deviceStatusModel.tableName;
@@ -119,12 +182,11 @@ function processRequest(param, fn){
                     next(err);
                 }else{
                     for(var i=0;i<rows.length;i++){
-                        data[i] = {}; 
-                    }
-                    for(var i=0;i<rows.length;i++){
-                        data[i].deviceId = rows[i].id;
-                        data[i].temperature = rows[i].temperature; 
-                        data[i].batteryVoltage = rows[i].batteryVoltage; 
+                        data[i] = {
+                            deviceId: rows[i].id,
+                            temperature : rows[i].temperature,
+                            batteryVoltage : rows[i].batteryVoltage,
+                        }
                     }
                     next(null,data);
                 }
@@ -135,8 +197,6 @@ function processRequest(param, fn){
             for (var i=0;i<data.length;i++){
                 deviceIds.push(data[i].deviceId);
             }
-            console.log(data[66]);
-            console.log(data[67]);
 
             var sqlstr = 'select deviceID, name, parentId from '+deviceModel.tableName;
             sqlstr +=' where deviceID in ("';
@@ -152,174 +212,350 @@ function processRequest(param, fn){
                     next(err);
                 }else{
                     for(var i=0;i<rows.length;i++){
-                        data[i].name = rows[i].name;
+                        data[i].id = rows[i].deviceID;
+                        data[i].text = data[i].temperature +'°C '+rows[i].name;
                         data[i].parentId = rows[i].parentId;  
-                        console.log(data[i]);
+                        data[i].type = 3;
                     }
-                    for(var i=0;i<rows.length;i++){
-                        data[i].parent = []; 
-                    }
-                    // console.log(data);
                     next(null,data);
                 }
             });
         },
-
+        // function(result,next){
+        //     var deviceIds = [];
+        //     for (var i=0;i<result.length;i++){
+        //         deviceIds.push(result[i].deviceId);
+        //     }
+        //     var sqlstr = 'select id,name, deviceId, channelNo, status,parentId from '+channelModel.tableName;
+        //     sqlstr +=' where deviceId in ("';
+        //     sqlstr += deviceIds.join('","');
+        //     sqlstr +='") and status = 1;';
+        //     var query = {
+        //         sqlstr: sqlstr,
+        //     };
+        //     channelModel.query(query, function(err, rows){
+        //         if (err) {
+        //             var msg = err.msg || err;
+        //             console.error(moduleName+'Failed to get the group member for'+msg);
+        //             next(err);
+        //         }else{
+        //             console.log(rows);
+        //             for(var i=0;i<rows.length;i++){
+        //                 data[i] = {
+        //                     id:rows[i].id,
+        //                     text:rows[i].name,
+        //                     parentId : rows[i].parentId,  
+        //                     type : 3,
+        //                 }
+        //             }
+        //             console.log(data);
+        //             next(null,data);
+        //         }
+        //     });
+        // },
         //1
         function(data,next){
             var parentIds = [];
             for (var i=0;i<data.length;i++){
-                parentIds.push(data[i].parentId);
-            } 
-            var sqlstr = 'select id, name, parentId, level from '+deviceLevelModel.tableName;
-            sqlstr +=' where id in ("';
-            sqlstr += parentIds.join('","');
-            sqlstr +='");';
-            var query = {
-                sqlstr: sqlstr,
-            };
-            deviceLevelModel.query(query, function(err, rows){
-                if (err) {
-                    var msg = err.msg || err;
-                    console.error(moduleName+'Failed to get the group member for'+msg);
-                    next(err);
-                }else{
-                	var k = 0;
-                    for(var i=0;i<data.length;i++){
-                    	console.log(i);
-                        for(var j=0;j<rows.length;j++){
-                            if(data[i].parentId == rows[j].id){
-                                var level = rows[j].level;
-                                data[i].parentId = rows[j].parentId;
-                                console.log(data[i].parentId);
-                                data[i].parent[level] = {
-                                    id: rows[j].id,
-                                    name: rows[j].name
-                                };  
-                                
+                parentIds.push(data[i].parentId);                    
+            }
+
+            if(parentIds.length==0){
+                next(null,result);
+            }else{
+                var sqlstr = 'select id, name, parentId from '+deviceLevelModel.tableName;
+                sqlstr +=' where id in ("';
+                sqlstr += parentIds.join('","');
+                sqlstr +='");';
+                var query = {
+                    sqlstr: sqlstr,
+                };
+
+                deviceLevelModel.query(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+'Failed to get the group member for'+msg);
+                        next(err);
+                    }else{
+                        var tmp = rows;
+                        for(var i=0;i<tmp.length;i++){
+                            tmp[i].num = 0;
+                            tmp[i].nodes = [];
+                            for(var j=0;j<data.length;j++){
+                                if(data[j].parentId == tmp[i].id){
+                                    tmp[i].num += 1;
+                                    tmp[i].type = 1;
+                                    tmp[i].nodes.push(data[j]);
+                                }
+                            }
+                            tmp[i].text = tmp[i].name + "(" + tmp[i].num + ")";
+                            tmp[i].tags = ['温测'];
+                        }
+                        for(var i=0;i<tmp.length;i++){
+                            for(var j=0;j<tmp.length;j++){
+                                if((tmp[i].id == tmp[j].id)&&(i!=j)){
+                                    tmp[i].num += tmp[j].num;
+                                    tmp[i].text = tmp[i].name + "(" + tmp[i].num + ")";
+                                    tmp[i].tags = ['温测'];
+                                    for(var m=0;m<tmp[j].num;m++){
+                                        tmp[i].nodes.push(tmp[j].nodes[m])
+                                    }
+                                    tmp.splice(j,1);
+                                }
                             }
                         }
-                        if(data[i].parentId == 0){
-                                data[i].flag = 1;
-                        }else{
-                                data[i].flag = 0;
-                        } 
+                        var data2 = tmp;
+
+                        next(null,data2);
                     }
-                    next(null,data);
-                }
-            });
+                });
+            }
         },
         //2
-        function(data,next){
+        function(data2,next){
             var parentIds = [];
-            var tmpData;
-            for (var i=0;i<data.length;i++){
-                if(data[i].parentId != 0){
-                   tmpData = data[i].parentId;
-                   break;
-                } 
-            } 
-
-            for (var i=0;i<data.length;i++){
-                if(data[i].parentId == 0){
-                   parentIds.push(tmpData); 
-                } else{
-                    parentIds.push(data[i].parentId); 
-                }
-            } 
-
-            var sqlstr = 'select id, name, parentId, level from '+deviceLevelModel.tableName;
-            sqlstr +=' where id in ("';
-            sqlstr += parentIds.join('","');
-            sqlstr +='");';
-            var query = {
-                sqlstr: sqlstr,
-            };
-            deviceLevelModel.query(query, function(err, rows){
-                if (err) {
-                    var msg = err.msg || err;
-                    console.error(moduleName+'Failed to get the group member for'+msg);
-                    next(err);
+            for (var i=0;i<data2.length;i++){
+                if(data2[i].parentId=='root'){
+                    result.push(data2[i]);
                 }else{
-                    for(var i=0;i<data.length;i++){
-                        if(data[i].flag == 0){
-                            for(var j=0;j<rows.length;j++){
-                                if(data[i].parentId == rows[j].id){
-                                    var level = rows[j].level;
-                                    data[i].parent[level] = {
-                                        id: rows[j].id,
-                                        name: rows[j].name
-                                    };  
-                                    data[i].parentId = rows[j].parentId;
-                                }
-                                break;
+                    parentIds.push(data2[i].parentId);                    
+                }
+            }
+            
+            if(parentIds.length==0){
+                for(var i=0;i<result.length;i++){
+                    for(var j=0;j<result.length;j++){
+                        if((result[i].id == result[j].id)&&(i!=j)){
+                            result[i].num += result[j].num;
+                            for(var m=0;m<result[j].nodes.length;m++){
+                                result[i].nodes.push(result[j].nodes[m])
                             }
-                            if(data[i].parentId == 0){
-                                data[i].flag = 1;
-                            }else{
-                                data[i].flag = 0;
-                            }
+                            result.splice(j,1);
                         }
                     }
-                    next(null,data);
                 }
-            });
+                next(null,result);
+            }else{
+                var sqlstr = 'select id, name, parentId from '+deviceLevelModel.tableName;
+                sqlstr +=' where id in ("';
+                sqlstr += parentIds.join('","');
+                sqlstr +='");';
+                var query = {
+                    sqlstr: sqlstr,
+                };
+                deviceLevelModel.query(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+'Failed to get the group member for'+msg);
+                        next(err);
+                    }else{
+                        var tmp = rows;
+                        for(var i=0;i<tmp.length;i++){
+                            tmp[i].nodes = [];
+                            tmp[i].num = 0;
+                            for(var j=0;j<data2.length;j++){
+                                if(data2[j].parentId == tmp[i].id){
+                                    tmp[i].type = 1;
+                                    tmp[i].num += data2[j].num;
+                                    tmp[i].nodes.push(data2[j]);
+                                }
+                            }
+                            tmp[i].text = tmp[i].name + "(" + tmp[i].num + ")";
+                            tmp[i].tags = ['温测'];
+                        }
+                        for(var i=0;i<tmp.length;i++){
+                            for(var j=0;j<tmp.length;j++){
+                                if((tmp[i].id == tmp[j].id)&&(i!=j)){
+                                    tmp[i].num += tmp[j].num;
+                                    for(var m=0;m<tmp[j].nodes.length;m++){
+                                        tmp[i].nodes.push(tmp[j].nodes[m])
+                                    }
+                                    tmp.splice(j,1);
+                                }
+                            }
+                        }
+                        var data3 = tmp;
+                        console.log(data3);
+                        next(null,data3);
+                    }
+                });
+            }
         },
         //3
-        function(data,next){
+        function(data3,next){
             var parentIds = [];
-            var tmpData;
-            for (var i=0;i<data.length;i++){
-                if(data[i].parentId != 0){
-                   tmpData = data[i].parentId;
-                   break;
-                } 
-            } 
-
-            for (var i=0;i<data.length;i++){
-                if(data[i].parentId == 0){
-                   parentIds.push(tmpData); 
-                } else{
-                    parentIds.push(data[i].parentId); 
-                }
-            } 
-
-            var sqlstr = 'select id, name, parentId, level from '+deviceLevelModel.tableName;
-            sqlstr +=' where id in ("';
-            sqlstr += parentIds.join('","');
-            sqlstr +='");';
-            var query = {
-                sqlstr: sqlstr,
-            };
-            deviceLevelModel.query(query, function(err, rows){
-                if (err) {
-                    var msg = err.msg || err;
-                    console.error(moduleName+'Failed to get the group member for'+msg);
-                    next(err);
+            for (var i=0;i<data3.length;i++){
+                if(data3[i].parentId=='root'){
+                    result.push(data3[i]);
                 }else{
-                    for(var i=0;i<data.length;i++){
-                        if(data[i].flag == 0){
-                            for(var j=0;j<rows.length;j++){
-                                if(data[i].parentId == rows[j].id){
-                                    var level = rows[j].level;
-                                    data[i].parent[level] = {
-                                        id: rows[j].id,
-                                        name: rows[j].name
-                                    };  
-                                    data[i].parentId = rows[j].parentId;
-                                }
-                                break;
+                    parentIds.push(data3[i].parentId);                    
+                }
+            }
+
+            if(parentIds.length==0){
+                for(var i=0;i<result.length;i++){
+                    for(var j=0;j<result.length;j++){
+                        if((result[i].id == result[j].id)&&(i!=j)){
+                            result[i].num += result[j].num;
+                            for(var m=0;m<result[j].num;m++){
+                                result[i].nodes.push(result[j].nodes[m])
                             }
-                            if(data[i].parentId == 0){
-                                data[i].flag = 1;
-                            }else{
-                                data[i].flag = 0;
+                            result.splice(j,1);
+                        }
+                    }
+                }
+                next(null,result);
+            }else{
+                var sqlstr = 'select id, name, parentId from '+deviceLevelModel.tableName;
+                sqlstr +=' where id in ("';
+                sqlstr += parentIds.join('","');
+                sqlstr +='");';
+                var query = {
+                    sqlstr: sqlstr,
+                };
+                deviceLevelModel.query(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+'Failed to get the group member for'+msg);
+                        next(err);
+                    }else{
+                        var tmp = rows;
+                        for(var i=0;i<tmp.length;i++){
+                            tmp[i].nodes = [];
+                            tmp[i].num = 0;
+                            for(var j=0;j<data3.length;j++){
+                                if(data3[j].parentId == tmp[i].id){
+                                    tmp[i].type = 1;
+                                    tmp[i].num += data3[j].num;
+                                    tmp[i].nodes.push(data3[j]);
+                                }
+                            }
+                            tmp[i].text = tmp[i].name + "(" + tmp[i].num + ")";
+                            tmp[i].tags = ['温测'];
+                        }
+                        for(var i=0;i<tmp.length;i++){
+                            for(var j=0;j<tmp.length;j++){
+                                if((tmp[i].id == tmp[j].id)&&(i!=j)){
+                                    tmp[i].num += tmp[j].num;
+                                    tmp[i].text = tmp[i].name + "(" + tmp[i].num + ")";
+                                    tmp[i].tags = ['温测'];
+                                    for(var m=0;m<tmp[j].nodes.length;m++){
+                                        tmp[i].nodes.push(tmp[j].nodes[m])
+                                    }
+                                    tmp.splice(j,1);
+                                }
+                            }
+                        }
+                        var data4 = tmp;
+                        console.log(data4);
+                        next(null,data4);
+                    }
+                });
+            }
+        },
+        //4
+        function(data4,next){
+            var parentIds = [];
+            for (var i=0;i<data4.length;i++){
+                if(data4[i].parentId=='root'){
+                    result.push(data4[i]);
+                }else{
+                    parentIds.push(data4[i].parentId);                    
+                }
+            }
+
+            console.log('~~~~~~~~~~~~~~');
+
+            if(parentIds.length==0){
+                for(var i=0;i<result.length;i++){
+                    for(var j=0;j<result.length;j++){
+                        if((result[i].id == result[j].id)&&(i!=j)){
+                            console.log('result'+i);
+                            console.log(result[i]);
+                            console.log('result'+j);
+                            console.log(result[j]);
+                            result[i].num += result[j].num;
+                            result[i].text = result[i].name + "(" + result[i].num + ")";
+                            result[i].tags = ['温测'];
+                            for(var m=0;m<result[j].nodes.length;m++){
+                                result[i].nodes.push(result[j].nodes[m])
+                            }
+                            result.splice(j,1);
+                        }
+                    }
+                }
+
+                console.log(result);
+                var tmp = [];
+                for(var n=0;n<result.length;n++){
+                    var tmp = result[n].nodes;
+                    for(var i=0;i<tmp.length;i++){
+                        for(var j=0;j<tmp.length;j++){
+                            // console.log(i+'+'+j);
+                            // console.log(tmp[i]);
+                            // console.log(tmp[j]);
+                            if(tmp[i].id == tmp[j].id){
+                                if(i!=j){
+                                    tmp[i].num += tmp[j].num;
+                                    tmp[i].text = tmp[i].name + "(" + tmp[i].num + ")";
+                                    for(var m=0;m<tmp[j].nodes.length;m++){
+                                        tmp[i].nodes.push(tmp[j].nodes[m])
+                                    }
+                                    tmp.splice(j,1);
+                                }    
                             }
                         }
                     }
-                    next(null,data);
                 }
-            });
+                // console.log('!!!!!!!!!!!!~~~~~~~~~~~');
+                // console.log(result);
+                next(null,result);
+            }else{
+                var sqlstr = 'select id, name, parentId from '+deviceLevelModel.tableName;
+                sqlstr +=' where id in ("';
+                sqlstr += parentIds.join('","');
+                sqlstr +='");';
+                var query = {
+                    sqlstr: sqlstr,
+                };
+                deviceLevelModel.query(query, function(err, rows){
+                    if (err) {
+                        var msg = err.msg || err;
+                        console.error(moduleName+'Failed to get the group member for'+msg);
+                        next(err);
+                    }else{
+                        var tmp = rows;
+                        for(var i=0;i<tmp.length;i++){
+                            tmp[i].nodes = [];
+                            tmp[i].num = 0;
+                            for(var j=0;j<data4.length;j++){
+                                if(data4[j].parentId == tmp[i].id){
+                                    tmp[i].type = 1;
+                                    tmp[i].num += data4[j].num;
+                                    tmp[i].nodes.push(data4[j]);
+                                }
+                            }
+                            tmp[i].text = tmp[i].name + "(" + tmp[i].num + ")";
+                            tmp[i].tags = ['温测'];
+                            result.push(tmp[i]);
+                        }
+
+                        for(var i=0;i<result.length;i++){
+                            for(var j=0;j<result.length;j++){
+                                if((result[i].id == result[j].id)&&(i!=j)){
+                                    result[i].num += result[j].num;
+                                    for(var m=0;m<result[j].num;m++){
+                                        result[i].nodes.push(result[j].nodes[m])
+                                    }
+                                    result.splice(j,1);
+                                }
+                            }
+                        }
+                        console.log(result);
+                        next(null,result);
+                    }
+                });
+            }
         },
         //n...
     ], 

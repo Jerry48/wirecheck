@@ -908,7 +908,7 @@ $(function() {
         $('#mapArea').show();
         $('#list2').hide();
         initMap(); 
-        listRefresh(deviceTree(), $('#content1'), 2, true); 
+        listRefresh(deviceTreeUnselectable(), $('#content1'), 2, true); 
     })
 
     function getDevicesByMap(url, method, data){
@@ -1073,14 +1073,14 @@ $(function() {
     })
 
 
-    // 通道列表
+    // 通道列表1
     function channelTree() {
         const data = {
             "userId": cookie_userId,
             "userType": cookie_userType,
         };
         let rootNode;
-        ajxSync('/v1/device/tree/channel/multi', 'POST', data)
+        ajxSync('/v1/device/tree/channel', 'POST', data)
         .then(data => {
             if (data.code == 0) {
                 rootNode = data.result.data;
@@ -1094,21 +1094,23 @@ $(function() {
         return rootNode;
     }
 
-    // 通道列表多选
-    function channelTreeMulti() {
-        let rootNode;
-        ajxSync('/v1/device/tree/channel/multi', 'POST', {userId: cookie_userId})
-        .then(data => {
-            if (data.code == 0) {
-                rootNode = data.result.data;
-            } else {
-                console.log('获取设备树失败');
-            }
-        })
-        return rootNode;
+    // 通道列表2
+    function channelTreeUnselectable() {
+        var tree = channelTree();
+        return loop(tree);
     }
 
-    // 设备线路列表
+    function loop(tree){
+        tree.forEach(node => {
+            if(node.type == 1){
+                node.selectable = false;
+                node.nodes = loop(node.nodes);
+            }
+        });
+        return tree;
+    }
+
+    // 设备线路列表1
     function channelLineTree() {
         let rootNode;
         ajxSync('/v1/device/tree/line', 'POST', {userId: cookie_userId})
@@ -1122,15 +1124,19 @@ $(function() {
         return rootNode;
     }
 
-    
-    // 设备列表
+    function channelLineTreeUnselectable() {
+        var tree = channelLineTree();
+        return loop(tree);
+    }
+
+    // 设备列表1
     function deviceTree() {
         const data = {
             "userId": cookie_userId
         };
         let rootNode;
         $.ajax({
-            url: '/v1/device/tree3',
+            url: '/v1/device/tree',
             type: "POST",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
@@ -1144,6 +1150,12 @@ $(function() {
             }
         })
         return rootNode;
+    }
+
+    // 设备列表2
+    function deviceTreeUnselectable() {
+        var tree = deviceTree();
+        return loop(tree);
     }
 
     function getSelectedDevice() {
@@ -1179,11 +1191,21 @@ $(function() {
         selector.unbind('nodeSelected');
         selector.on('nodeSelected', function(event, data) {
             $("#pics img").parent().css('border', '0px');
+
             var selectedItem = selector.treeview('getSelected')[0];
+
+            /*
+                type: 1 -> by level
+                type: 2 -> by line
+                type: 3 -> 0 -> by channel
+            */
             var type = selectedItem.type;
             var id = selectedItem.id;
             var name = selectedItem.text;
-            console.log('selected item type:'+type);
+
+            console.log('id:' + id);
+            console.log('selected item type:' + type);
+
             if(type === 3){
                 var tmpData = id.split('_');
                 var deviceId = tmpData[0];
@@ -1199,11 +1221,9 @@ $(function() {
                     // var deviceId = $('body').attr('pic-deviceId');
                     var index = parseInt($('body').attr('pic-index'));
                     var channelNo = parseInt($('body').attr('pic-channelNo'));
-                    var size = 9;
-                    var type = 0;
                     var data = {
                         "channelNo": channelNo,
-                        "type": type,
+                        "type": 0,
                         "id": deviceId,
                         "size": 9,
                         "index": 0,
@@ -1220,15 +1240,43 @@ $(function() {
                     newData.deviceIds.push(deviceId);
                     tempDevice(newData);
                 } else {
-                    var size = 5;
-                    var type = 0;
-                    var index = parseInt($('body').attr('pic-index'));
                     var data = {
                         "channelNo": channelNo,
-                        "type": type,
+                        "type": 0,
                         "id": deviceId,
-                        "size": size,
-                        "index": index,
+                        "size": 5,
+                        "index": 0,
+                        "startTime": "1900-01-01 00:00:00",
+                        "endTime": "2900-01-01 00:00:00"
+                    }
+                    // setDeviceStatus();
+
+                    clearInterval(intervalIds.getAllPics);
+                    clearInterval(intervalIds.findDevicePic);
+                    getDevicePics(data);
+                    intervalIds.findDevicePic = setInterval(function() {
+                        getDevicePics(data)
+                    }, INTERVAL);
+                }
+            }else if(type == 1){
+                if (parseInt($('body').attr('if-history'))) {
+                    var data = {
+                        "channelNo": "",
+                        "type": 1,
+                        "id": id,
+                        "size": 9,
+                        "index": 0,
+                        "startTime": "1970-01-01 00:00:00",
+                        "endTime": "2970-01-01 23:59:59"
+                    }
+                    getDevicePicsHistory(data);
+                }else {
+                    var data = {
+                        "channelNo": '',
+                        "type": 1,
+                        "id": id,
+                        "size": 5,
+                        "index": 0,
                         "startTime": "1900-01-01 00:00:00",
                         "endTime": "2900-01-01 00:00:00"
                     }

@@ -190,6 +190,7 @@ function processRequest(param, fn){
                 ids.push(id);
                 next(null, ids);
             }else if (param.type==1) {
+                param.ids = param.id;
                 deviceHelper.findDeviceIdsByLevel(param, next);
             }else if (param.type==2) {
                 deviceHelper.findDeviceIdsByGroup(param, next);
@@ -209,9 +210,13 @@ function processRequest(param, fn){
         	if (startTime) {
         		sqlstr += ' and ( createTime between \'' 
         			+startTime.format('YYYY-MM-DD HH:mm:ss');
-        		sqlstr += '\' and \''+endTime.format('YYYY-MM-DD HH:mm:ss')+'\') and channelNo = '+channelNo+' order by pictureName DESC';
+        		sqlstr += '\' and \''+endTime.format('YYYY-MM-DD HH:mm:ss')+'\')';
         	}
-        	sqlstr += ';';
+
+            if(channelNo) {
+                sqlstr += ' and channelNo = ' + channelNo;
+            }
+        	sqlstr += ' order by pictureName DESC;';
         	var query = {
         		sqlstr: sqlstr,
         	};
@@ -250,8 +255,10 @@ function processRequest(param, fn){
         			+ startTime.format('YYYY-MM-DD HH:mm:ss');
         		sqlstr += '\' and \''+endTime.format('YYYY-MM-DD HH:mm:ss')+'\')';
         	}
-        	sqlstr += ' and channelNo = '+channelNo+' order by createTime DESC ';
-            sqlstr += ' LIMIT ' + offset +', '+limit;
+            if(channelNo) {
+                sqlstr += ' and channelNo = ' + channelNo;
+            }
+            sqlstr += ' order by createTime DESC LIMIT ' + offset +', '+limit;
             sqlstr += ' ; ' ;
         	var query = {
         		sqlstr: sqlstr,

@@ -1,18 +1,4 @@
 $(function(){
-    const cookie_sessionId = Cookies.get('sessionId');
-    const userInfo = getUsersBySession(cookie_sessionId);
-    const cookie_userId = userInfo.userId;
-    const cookie_userType = parseInt(userInfo.userType);
-    const cookie_userName = userInfo.userName;
-    const userDetails = getUserDetails(cookie_userName);
-    const cookie_usrEdit = userDetails.usrEdit;
-    const cookie_pwdEdit = userDetails.pwdEdit;
-    const cookie_channelSet = userDetails.channelSet;
-    const cookie_deviceOp = userDetails.deviceOp;
-    const cookie_wechatPush = userDetails.wechatPush;
-    const cookie_createGroup = userDetails.createGroup;
-    const cookie_name = userDetails.name;
-
     if(!cookie_userType) {
         $("#tabs_left li:eq(1)").hide();
     }
@@ -102,24 +88,10 @@ $(function(){
         $('.content ul li').css('padding', '10px');
         $('.indent').css('margin', '5px');
 
-        var index = 0;
-        var size = 9;
         var data = {
-            "userId": cookie_userId,
-            "userType": cookie_userType,
-            "index" : index,
-            "size" : size
+            'index' : 0
         };
         getPics(data, true, 9);
-
-        var index = 0;
-        var size = 16;
-        var data = {
-            "userId": cookie_userId,
-            "userType": cookie_userType,
-            "index" : index,
-            "size" : size
-        };
         getPics(data, true, 16);
 
         if(getSelectedDevice() == -1){
@@ -144,36 +116,23 @@ $(function(){
     $('#picLast').click(function() {
         if ($('body').attr('if-all') == 1) {
             const index = parseInt($('body').attr('allpic-index'));
-            const size = 9;
             const data = {
-                "userId": cookie_userId,
-                "userType": cookie_userType,
-                "index": index - 1,
-                "size": size,
-                "startTime": "1970-01-01 00:00:00",
-                "endTime": "2900-01-01 23:59:59"
+                index : index - 1,
             };
             getPics(data, true, 9);
-            data.size = 16;
             getPics(data, true, 16);
         } else {
             const id = $('body').attr('pic-deviceId');
             const channelNo = parseInt($('body').attr('pic-channelNo'));
-            const size = 9;
             const index = parseInt($('body').attr('pic-index'));
-            const type = 0;
             const data = {
-                "channelNo": channelNo,
-                "id": id,
-                "size": size,
-                "type": type,
-                "index": index - 1,
-                "startTime": "1900-01-01 00:00:00",
-                "endTime": "2900-01-01 00:00:00"
+                channelNo : channelNo,
+                id : id,
+                index : index - 1,
+                type : 0
             }
             getPics(data, false, 9);
-            data.size = 16;
-            getPics(data, false, 9);
+            getPics(data, false, 16);
         }
     });
 
@@ -181,35 +140,22 @@ $(function(){
         console.log('adf');
         if ($('body').attr('if-all') == 1) {
             const index = parseInt($('body').attr('allpic-index'));
-            const size = 9;
             const data = {
-                "userId": cookie_userId,
-                "userType": cookie_userType,
-                "index": index + 1,
-                "size": size,
-                "startTime": "1970-01-01 00:00:00",
-                "endTime": "2900-01-01 23:59:59"
+                index : index + 1,
             };
             getPics(data, true, 9);
-            data.size = 16;
             getPics(data, true, 16);
         } else {
             const id = $('body').attr('pic-deviceId');
             const channelNo = parseInt($('body').attr('pic-channelNo'));
-            const size = 9;
             const index = parseInt($('body').attr('pic-index'));
-            const type = 0;
             const data = {
-                "channelNo": channelNo,
-                "id": id,
-                "size": size,
-                "type": type,
-                "index": index + 1,
-                "startTime": "1900-01-01 00:00:00",
-                "endTime": "2900-01-01 00:00:00"
+                channelNo : channelNo,
+                id : id,
+                index : index + 1,
+                type : 0
             }
             getPics(data, false, 9);
-            data.size = 16;
             getPics(data, false, 16);
         }
     });
@@ -217,35 +163,21 @@ $(function(){
     $('#refresh').click(function() {
         if ($('body').attr('if-all') == 1) {
             const index = parseInt($('body').attr('pic-index'));
-            const size = 9;
             const data = {
-                "userId": cookie_userId,
-                "userType": cookie_userType,
-                "index": 0,
-                "size": size,
-                "startTime": "1970-01-01 00:00:00",
-                "endTime": "2900-01-01 23:59:59"
+                index : 0,
             };
             getPics(data, true, 9);
-            data.size = 16;
             getPics(data, true, 16);
         } else {
             const id = $('body').attr('pic-deviceId');
             const channelNo = parseInt($('body').attr('pic-channelNo'));
-            const size = 9;
-            const index = parseInt($('body').attr('pic-index'));
-            const type = 0;
             const data = {
-                "channelNo": channelNo,
-                "id": id,
-                "size": size,
-                "type": type,
-                "index": 0,
-                "startTime": "1900-01-01 00:00:00",
-                "endTime": "2900-01-01 00:00:00"
+                channelNo: channelNo,
+                id: id,
+                type: 0,
+                index: 0,
             }
             getPics(data, false, 9);
-            data.size = 16;
             getPics(data, false, 16);
         }
     })
@@ -359,15 +291,32 @@ $(function(){
     })
     
     //修改巡检时间间隔
-    $('.interval').change(function(){
+    $('#interval').change(function(){
+        clearIntervals();
         var val = $(this).val();
-        $('.interval').val(val);
+        $('#interval').val(val);
         INTERVAL = parseInt(val) * 1000;
         if(getSelectedDevice() == -1){
-            clearInterval(intervalIds.getAllPics);
-            clearInterval(intervalIds.getAllPics4x4);
+            var data = {
+                index: 0,
+            }
             intervalIds.getAllPics = setInterval(function() {getPics(data, true, 9);}, INTERVAL);
             intervalIds.getAllPics4x4 = setInterval(function() {getPics(data, true, 16);}, INTERVAL);
+        }else{
+            const id = $('body').attr('pic-deviceId');
+            const channelNo = parseInt($('body').attr('pic-channelNo'));
+            const index = parseInt($('body').attr('pic-index'));
+            const type = $('body').attr('pic-type',type);
+            var data = {
+                channelNo: channelNo,
+                type: type,
+                id: deviceId,
+                index: index,
+            }
+            getPics(data, false, 9);
+            getPics(data, false, 16);
+            intervalIds.findDevicePic = setInterval(function() {getPics(data, false, 9);}, INTERVAL);       
+            intervalIds.findDevicePic4x4 = setInterval(function() {getPics(data, false, 16);}, INTERVAL);
         }
     })
 
@@ -463,7 +412,7 @@ $(function(){
         };
         var rootNode = [];
         $.ajax({
-            url:'/v1/device/tree2',
+            url:'/v1/device/tree/channel',
             type:"POST",
             data: JSON.stringify(data),
             contentType:"application/json; charset=utf-8",
@@ -505,8 +454,16 @@ $(function(){
     }
 
     function getPics(data, allFlag, number){
+        if(allFlag) {
+            data.userId = cookie_userId;
+            data.userType = cookie_userType;
+        }
+        
+        data.startTime = '1900-01-01 00:00:00';
+        data.endTime = '2900-01-01 00:00:00';
+        data.size = number;
+        console.log(data);
         console.log(`gonna get ${allFlag?'all':'device'} of ${number}`);
-        console.log();
         const outerData = data;
         const url = '/v1/search/pics/' + (allFlag ? 'all' : 'device');
         $.ajax({
@@ -529,7 +486,7 @@ $(function(){
                     $('body').attr('pic-deviceId', outerData.id);
                     $('body').attr('if-all', 0);
                 }
-                if(number === 16){
+                if(number === 9){
                     ID = 'pics';
                     fullID = 'fullMain';
                 }else{
@@ -545,17 +502,19 @@ $(function(){
                 $(`#${fullID} img`).attr('channelNo', '');
 
                 list.forEach((item, index) => {
-                    $(`#${ID} img:eq(${index})`).attr('src', item.thumbnailPicUrl);
-                    $(`#${ID} img:eq(${index})`).attr('picId', item.picId);
-                    $(`#${ID} img:eq(${index})`).attr('channelNo', item.channelNo);
-                    $(`#${ID} img:eq(${index})`).attr('data-original', item.picUrl);
-                    $(`#${ID} img:eq(${index})`).attr('deviceId', item.deviceId);
+                    var $ele = $(`#${ID} img:eq(${index})`);
+                    $ele.attr('src', item.thumbnailPicUrl);
+                    $ele.attr('picId', item.picId);
+                    $ele.attr('channelNo', item.channelNo);
+                    $ele.attr('data-original', item.picUrl);
+                    $ele.attr('deviceId', item.deviceId);
 
-                    $(`#${fullID} img:eq(${index})`).attr('src', item.thumbnailPicUrl);
-                    $(`#${fullID} img:eq(${index})`).attr('picId', item.picId);
-                    $(`#${fullID} img:eq(${index})`).attr('channelNo', item.channelNo);
-                    $(`#${fullID} img:eq(${index})`).attr('data-original', item.picUrl);
-                    $(`#${fullID} img:eq(${index})`).attr('deviceId', item.deviceId);
+                    $ele = $(`#${fullID} img:eq(${index})`);
+                    $ele.attr('src', item.thumbnailPicUrl);
+                    $ele.attr('picId', item.picId);
+                    $ele.attr('channelNo', item.channelNo);
+                    $ele.attr('data-original', item.picUrl);
+                    $ele.attr('deviceId', item.deviceId);
 
                     var viewer = new Viewer(document.getElementById(ID), {url: 'data-original'});
                     var viewer = new Viewer(document.getElementById(fullID), {url: 'data-original'});
@@ -584,33 +543,34 @@ $(function(){
         selector.unbind('nodeSelected');
         selector.on('nodeSelected', function(event, data) {
             $("img").css('border', '0px');
-            var type = selector.treeview('getSelected')[0].type;
-            var tmp = selector.treeview('getSelected')[0].id;
-            var deviceId = tmp.slice(0,17);
-            var channelNo = tmp.slice(18,19);
-            var name = selector.treeview('getSelected')[0].text;
-            $('body').attr('pic-deviceId',deviceId);
-            $('body').attr('pic-channelNo',channelNo);
-            if ($('#devices ul li').filter('.chosen').text() == '设备列表') {
-                $('input[name="daterange"]').val('');
-                type = (type === 3) ? 0 : 1;
-            } else {
-                type = (type === 3) ? 0 : 2;
-            }
+            var selectedItem = selector.treeview('getSelected')[0];
+            var type = selectedItem.type;
+            var id = selectedItem.id;
+            var name = selectedItem.text;
 
+            // console.log(type);
+            if(type == 3) {
+                type = 0;
+                var deviceId = id.slice(0,17);
+                var channelNo = id.slice(18,19);
+                var tmpId = deviceId;
+                $('body').attr('pic-deviceId',deviceId);
+                $('body').attr('pic-channelNo',channelNo);
+                $('body').attr('pic-type',type);
+            }else if(type == 1){
+                channelNo = '';
+                var tmpId = id;
+            }
+            
             var data = {
                 channelNo: channelNo,
                 type: type,
-                id: deviceId,
-                size: 9,
+                id: tmpId,
                 index: 0,
-                startTime: "1900-01-01 00:00:00",
-                endTime: "2900-01-01 00:00:00"
             }
             clearIntervals();
             getPics(data, false, 9);
-            intervalIds.findDevicePic = setInterval(function() {getPics(data, false, 9);}, INTERVAL);
-            data.size = 16;       
+            intervalIds.findDevicePic = setInterval(function() {getPics(data, false, 9);}, INTERVAL);       
             getPics(data, false, 16);
             intervalIds.findDevicePic4x4 = setInterval(function() {getPics(data, false, 16);}, INTERVAL);
         }) // end of nodeSelected event

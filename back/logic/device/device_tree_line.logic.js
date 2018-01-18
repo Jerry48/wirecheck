@@ -204,7 +204,6 @@ function processRequest(param, fn){
                             for(var j=0;j<data2.length;j++){
                                 if(data2[j].lineId == tmp[i].id){
                                     tmp[i].type = 1;
-                                    // tmp[i].selectable = false;
                                     tmp[i].num += 1;
                                     tmp[i].nodes.push(data2[j]);
                                 }
@@ -260,7 +259,6 @@ function processRequest(param, fn){
                             for(var j=0;j<data3.length;j++){
                                 if(data3[j].parentId == tmp[i].id){
                                     tmp[i].type = 1;
-                                    // tmp[i].selectable = false;
                                     tmp[i].num += data3[j].num;
                                     tmp[i].nodes.push(data3[j]);
                                 }

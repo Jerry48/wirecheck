@@ -285,6 +285,7 @@ function findAllDevicesByLevel(param, fn)
 				for (var i = 0; i < rows.length; i++) {
 					param.ids.push(rows[i].id);
 				}
+				console.log(param.ids);
 				return findAllDevicesByLevel(param, fn);
 			}else{
 				//no childs, 
@@ -314,7 +315,7 @@ function findAllDevicesByLevel(param, fn)
 function findDeviceIdsByLevel(param, fn){
     var query = {
         ids: param.id || '',
-        select : {id:'deviceId'},
+        select : {deviceID:'deviceId'},
     };
     findAllDevicesByLevel(query, function(err, rows){
         if (err) {
@@ -322,8 +323,10 @@ function findDeviceIdsByLevel(param, fn){
         }else{
             var ids = [];
             for (var i = 0; i < rows.length; i++) {
-                ids.push(rows[i].id);
+            	var tmp = JSON.parse(JSON.stringify(rows[i]));
+                ids.push(tmp.deviceID);
             }
+            console.log('selected ids:' + ids);
             fn(null, ids);
         }
     });

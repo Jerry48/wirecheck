@@ -913,7 +913,7 @@ $(function () {
         };
         var rootNode = [];
         $.ajax({
-            url: '/v1/device/tree/multi',
+            url: '/v1/device/tree',
             type: "POST",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
