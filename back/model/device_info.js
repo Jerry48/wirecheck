@@ -18,14 +18,13 @@ var date = new Date();
 
 // reference model
 var refModel = {
-    deviceID : 'device id',
+    deviceID: 'device id',
     name: 'device name',
     mac: 'tower mac',
     nickName: 'tower nickName',
     parentId: 'line id',
-    lineName:'lineName',
-    lineId:'lineId',
-    area: 'area',
+    lineName: 'lineName',
+    lineId: 'lineId',
     danger: 'danger',
     channelNo1: 1,
     channelNo2: 0,
@@ -38,19 +37,20 @@ var refModel = {
     latitude: 1.0,
     longitude: 1.0,
     beatInterval: 1, //minutes
-    photoInterval: 1,//minutes
+    photoInterval: 1, //minutes
     batteryVoltageLow: 1,
     chargeVoltageLow: 1,
     temperatureLow: 1,
-    batteryVoltageHigh:1,
-    chargeVoltageHigh:1,
-    temperatureHigh:1,
-    disableAlert:0, //是否撤防，0-no, 1-yes
-    standby: 1,//0,1,2,3
-    deviceWorkBeginTime: date, 
+    batteryVoltageHigh: 1,
+    chargeVoltageHigh: 1,
+    temperatureHigh: 1,
+    disableAlert: 0, //是否撤防，0-no, 1-yes
+    standby: 1, //0,1,2,3
+    deviceWorkBeginTime: date,
     deviceWorkEndTime: date,
-    resolution:1,//分辨率
-    capturePeriod:1,
+    resolution: 1, //分辨率
+    capturePeriod: 1,
+    captureTimes: 1,
     photoSize: 1,
     videoTime: 1, //装置每天最多拍摄短视频次数
     videoLength: 1,
@@ -96,11 +96,11 @@ function remove(query, fn) {
 
 
 //count record
-function count(query, fn){
+function count(query, fn) {
     dbModel.count(query, fn);
 }
 
-function query(sqlStr, fn){
+function query(sqlStr, fn) {
     dbModel.query(sqlStr, fn);
 }
 
@@ -108,7 +108,7 @@ module.exports.create = create;
 module.exports.lookup = lookup;
 module.exports.update = update;
 module.exports.remove = remove;
-module.exports.count  = count;
-module.exports.query  = query;
+module.exports.count = count;
+module.exports.query = query;
 module.exports.dataModel = refModel;
 module.exports.tableName = table_name;

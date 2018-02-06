@@ -322,18 +322,31 @@ $(function() {
 					var lv = 3;
 				}
 				var parentId = $('#modalAdd-body .selectLevel' + (lv - 1)).find("option:selected").val();
-				var area = '';
-				for (var i = 0; i < lv; i++) {
-					// console.log(i)
-					var tmp = $('#modalAdd-body .selectLevel' + i).find("option:selected").text();
-					if (i == lv - 1) {
-						area += tmp
-					} else {
-						area += tmp + "/";
-					}
+				// var area = '';
+				// for (var i = 0; i < lv; i++) {
+				// 	// console.log(i)
+				// 	var tmp = $('#modalAdd-body .selectLevel' + i).find("option:selected").text();
+				// 	if (i == lv - 1) {
+				// 		area += tmp
+				// 	} else {
+				// 		area += tmp + "/";
+				// 	}
 
-					// console.log(area);
+				// 	// console.log(area);
+				// };
+
+				var area = [];
+				var levels = [];
+				for (var i = 0; i < n; i++) {
+					var tmp = $('#modalEdit-body .selectLevel' + i).find("option:selected").text();
+					area.push(tmp);
+					var tmp = $('#modalEdit-body .selectLevel' + i).val();
+					levels.push(tmp);
 				};
+
+				var area = area.join('/');
+				var levels = levels.join('/')
+
 				var deviceDangerID = parseInt($('#modalAdd-body .selectDanger').find("option:selected").val());
 				var lineName = $('#modalAdd-body .selectLine').find("option:selected").text();
 				var lineId = $('#modalAdd-body .selectLine').find("option:selected").val();
@@ -349,6 +362,7 @@ $(function() {
 					'deviceDangerID': deviceDangerID,
 					'lineName': lineName,
 					'lineId': lineId,
+					'levels':levels
 				}
 				createDevice(data);
 			}
@@ -366,6 +380,18 @@ $(function() {
 		} else {
 			selectLevels();
 			var tr = $("#main2 tbody input:checkbox:checked").parent().parent();
+
+			var levels = tr.attr('levels');
+
+			var levelIds = levels.split('/');
+			for (var i = 0; i <levelIds.length; i++) {
+				$(`#modalEdit-body .selectLevel${i}`).val(levelIds[i]);
+				var data = {
+					'parentId': levelIds[i],
+					'level': i+1,
+				}
+				_selectLevel(data);
+			}
 
 			$('#modalEdit-body input:eq(0)').val(tr.find('td:eq(2)').text());
 			$('#modalEdit-body input:eq(1)').val(tr.find('td:eq(3)').text());
@@ -386,100 +412,108 @@ $(function() {
 				i++;
 				count--;
 			}
-			var area = tr.find('td:eq(5)').text();
-			var tmp = [];
-			tmp = area.split('/');
-			var count = $('#modalEdit-body .selectLevel0 option').length;
-			var j = 0;
-			var parentId = "";
-			while (count) {
-				if ($('#modalEdit-body .selectLevel0 option:eq(' + j + ')').text() == tmp[0]) {
-					var tmpval = $('#modalEdit-body .selectLevel0 option:eq(' + j + ')').val();
-					$('#modalEdit-body .selectLevel0').val(tmpval);
-					parentId = tmpval
-					break;
-				}
-				j++;
-				count--;
-			}
-			for (var i = 1; i < 4; i++) {
-				if (tmp[i] == "") {
-					break;
-				} else {
-					var data = {
-						'parentId': parentId,
-						'level': i,
-					}
-					selectLevel(data);
-					var count = $('#modalEdit-body .selectLevel' + i + ' option').length;
-					var j = 0;
-					while (count) {
-						if ($('#modalEdit-body .selectLevel' + i + ' option:eq(' + j + ')').text() == tmp[i]) {
-							var tmpval = $('#modalEdit-body .selectLevel' + i + ' option:eq(' + j + ')').val();
-							$('#modalEdit-body .selectLevel' + i).val(tmpval)
-							parentId = tmpval
-							break;
-						}
-						j++;
-						count--;
-					}
-				}
-			}
+			// var area = tr.find('td:eq(5)').text();
+			// var tmp = [];
+			// tmp = area.split('/');
+			// var count = $('#modalEdit-body .selectLevel0 option').length;
+			// var j = 0;
+			// var parentId = "";
+			// while (count) {
+			// 	if ($('#modalEdit-body .selectLevel0 option:eq(' + j + ')').text() == tmp[0]) {
+			// 		var tmpval = $('#modalEdit-body .selectLevel0 option:eq(' + j + ')').val();
+			// 		$('#modalEdit-body .selectLevel0').val(tmpval);
+			// 		parentId = tmpval
+			// 		break;
+			// 	}
+			// 	j++;
+			// 	count--;
+			// }
+			// for (var i = 1; i < 4; i++) {
+			// 	if (tmp[i] == "") {
+			// 		break;
+			// 	} else {
+			// 		var data = {
+			// 			'parentId': parentId,
+			// 			'level': i,
+			// 		}
+			// 		_selectLevel(data);
+			// 		var count = $('#modalEdit-body .selectLevel' + i + ' option').length;
+			// 		var j = 0;
+			// 		while (count) {
+			// 			if ($('#modalEdit-body .selectLevel' + i + ' option:eq(' + j + ')').text() == tmp[i]) {
+			// 				var tmpval = $('#modalEdit-body .selectLevel' + i + ' option:eq(' + j + ')').val();
+			// 				$('#modalEdit-body .selectLevel' + i).val(tmpval)
+			// 				parentId = tmpval
+			// 				break;
+			// 			}
+			// 			j++;
+			// 			count--;
+			// 		}
+			// 	}
+			// }
 			$('#modalEdit').modal();
 		}
 	})
 
 	$('#modalEdit .modal-footer button:eq(0)').click(function() {
-		if ($('#modalEdit-body input:eq(3)').val() != $('#modalEdit-body input:eq(4)').val()) {
-			alert('两次输入的密码不一致!');
-			$('#modalEdit-body input:eq(3)').val('');
-			$('#modalEdit-body input:eq(4)').val('');
-		} else {
-			var data = {
-				'userName': $('#modalEdit-body input:eq(2)').val(),
-				'password': $('#modalEdit-body input:eq(3)').val(),
-			};
-			if (checkUser(data) != 0) {
-				var tr = $("#main2 tbody input:checkbox:checked").parent().parent();
-				var deviceID = tr.attr('id');
-				var deviceName = $('#modalEdit-body input:eq(0)').val();
-				var deviceTele = $('#modalEdit-body input:eq(1)').val();
-				// var deviceMeid = $('#modalEdit-body input:eq(2)').val();
-				if ($('#modalEdit-body .selectLevel1').val() == "0") {
-					var parentId = $('#modalEdit-body .selectLevel0').val();
-					var n = 1;
+		// if ($('#modalEdit-body input:eq(3)').val() != $('#modalEdit-body input:eq(4)').val()) {
+		// 	alert('两次输入的密码不一致!');
+		// 	$('#modalEdit-body input:eq(3)').val('');
+		// 	$('#modalEdit-body input:eq(4)').val('');
+		// } else {
+			
+		// }
+		var data = {
+			'userName': $('#modalEdit-body input:eq(2)').val(),
+			'password': $('#modalEdit-body input:eq(3)').val(),
+		};
+		if (checkUser(data) != 0) {
+			var tr = $("#main2 tbody input:checkbox:checked").parent().parent();
+			var deviceID = tr.attr('id');
+			var deviceName = $('#modalEdit-body input:eq(0)').val();
+			var deviceTele = $('#modalEdit-body input:eq(1)').val();
+			// var deviceMeid = $('#modalEdit-body input:eq(2)').val();
+			if ($('#modalEdit-body .selectLevel1').val() == "0") {
+				var parentId = $('#modalEdit-body .selectLevel0').val();
+				var n = 1;
+			} else {
+				if ($('#modalEdit-body .selectLevel2').val() == "0") {
+					var parentId = $('#modalEdit-body .selectLevel1').val();
+					var n = 2;
 				} else {
-					if ($('#modalEdit-body .selectLevel2').val() == "0") {
-						var parentId = $('#modalEdit-body .selectLevel1').val();
-						var n = 2;
-					} else {
-						var parentId = $('#modalEdit-body .selectLevel2').val();
-						var n = 3;
-					}
+					var parentId = $('#modalEdit-body .selectLevel2').val();
+					var n = 3;
 				}
-
-				var area = [];
-				for (var i = 0; i < n; i++) {
-					var tmp = $('#modalEdit-body .selectLevel' + i).find("option:selected").text();
-					area.push(tmp);
-				};
-				var area = area.join('/');
-				var deviceDangerID = $('#modalEdit-body .selectDanger').find("option:selected").val();
-				var lineName = $('#modalEdit-body .selectLine').find("option:selected").text();
-				var lineId = $('#modalEdit-body .selectLine').find("option:selected").val();
-				var data = {
-					'deviceID': deviceID,
-					'deviceName': deviceName,
-					'deviceMeid': "",
-					'deviceTele': deviceTele,
-					'area': area,
-					'parentId': parentId,
-					'deviceDangerID': deviceDangerID,
-					'lineName': lineName,
-					'lineId': lineId,
-				}
-				editDevice(data);
 			}
+
+			var area = [];
+			var levels = [];
+			for (var i = 0; i < n; i++) {
+				var tmp = $('#modalEdit-body .selectLevel' + i).find("option:selected").text();
+				area.push(tmp);
+				var tmp = $('#modalEdit-body .selectLevel' + i).val();
+				levels.push(tmp);
+			};
+
+			var area = area.join('/');
+			var levels = levels.join('/')
+			console.log(levels);
+			var deviceDangerID = $('#modalEdit-body .selectDanger').find("option:selected").val();
+			var lineName = $('#modalEdit-body .selectLine').find("option:selected").text();
+			var lineId = $('#modalEdit-body .selectLine').find("option:selected").val();
+			var data = {
+				'deviceID': deviceID,
+				'deviceName': deviceName,
+				'deviceMeid': "",
+				'deviceTele': deviceTele,
+				'area': area,
+				'parentId': parentId,
+				'deviceDangerID': deviceDangerID,
+				'lineName': lineName,
+				'lineId': lineId,
+				'levels':levels,
+			}
+			editDevice(data);
 		}
 	})
 
@@ -555,19 +589,11 @@ $(function() {
 		} else if (num == 0) {
 			alert('未选中设备!');
 		} else {
-			for (var i = 0; i < 24; i++) {
-				$('#beginHour').append('<option value="' + i + '">' + i + '</option>');
-				$('#endHour').append('<option value="' + i + '">' + i + '</option>');
-			}
-			for (var i = 0; i < 60; i++) {
-				$('#beginMin').append('<option value="' + i + '">' + i + '</option>');
-				$('#endMin').append('<option value="' + i + '">' + i + '</option>');
-			}
-
 			var tr = $("#main2 tbody input:checkbox:checked").parent().parent();
 			var id = tr.attr('id');
 			$('#modalSetting input:eq(0)').val(tr.find('td:eq(2)').text());
-
+			console.log(tr.html());
+			console.log(tr.attr('resolution'));
 			var status = tr.attr('channelNo2');
 			$('#channelNo2').val(status);
 			if (status == 1) {
@@ -582,13 +608,10 @@ $(function() {
 			$('#channel3Name').val(tr.attr('channel3Name'));
 			$('#channel2Name').val(tr.attr('channel2Name'));
 			$('#channel1Name').val(tr.attr('channel1Name'));
-
-			var val = tr.attr('photosize');
-			$('#photoSize').val(val);
-			var val = tr.attr('captureperiod');
-			$('#capturePeriod').val(val);
-			var val = tr.attr('resolution');
-			$('#resolution').val(val);
+			$('#photoSize').val(tr.attr('photosize'));
+			$('#capturePeriod').val(tr.attr('captureperiod'));
+			$('#captureTimes').val(tr.attr('capturetimes'));
+			$('#resolution').val(tr.attr('resolution'));
 
 			for (var i = 0; i < 24; i++) {
 				$('#beginHour').append('<option value="' + i + '">' + i + '</option>');
@@ -614,49 +637,52 @@ $(function() {
 	})
 
 	$('#modalSetting .modal-footer button:eq(0)').click(function() {
-		if ($('#modalSetting-body input:eq(6)').val() != $('#modalSetting-body input:eq(7)').val()) {
-			alert('两次输入的密码不一致!');
-			$('#modalSetting-body input:eq(6)').val('');
-			$('#modalSetting-body input:eq(7)').val('');
-		} else {
-			var data = {
-				'userName': $('#modalSetting-body input:eq(5)').val(),
-				'password': $('#modalSetting-body input:eq(6)').val(),
-			};
-			if (checkUser(data) != 0) {
-				var deviceID = $('#main2 table tbody').find("input:checkbox:checked").parent().parent().attr('id');
-				var deviceName = $('#deviceName').val();
-				var channel1Name = $('#channel1Name').val();
-				var channel2Name = $('#channel2Name').val();
-				var channel3Name = $('#channel3Name').val();
-				var beginHour = $('#beginHour').find('option:selected').val();
-				var beginMin = $('#beginMin').find('option:selected').val();
-				var endHour = $('#endHour').find('option:selected').val();
-				var endMin = $('#endMin').find('option:selected').val();
-				var photoSize = parseInt($('#photoSize').find('option:selected').val());
-				var capturePeriod = parseInt($('#capturePeriod').find('option:selected').val());
-				var resolution = parseInt($('#resolution').find('option:selected').val());
-				var channelNo2 = parseInt($('#channelNo2').find('option:selected').val());
-				var channelNo3 = parseInt($('#channelNo3').find('option:selected').val());
+		// if ($('#modalSetting-body input:eq(6)').val() != $('#modalSetting-body input:eq(7)').val()) {
+		// 	alert('两次输入的密码不一致!');
+		// 	$('#modalSetting-body input:eq(6)').val('');
+		// 	$('#modalSetting-body input:eq(7)').val('');
+		// } else {
+			
+		// }
+		var data = {
+			'userName': $('#modalSetting-body input:eq(5)').val(),
+			'password': $('#modalSetting-body input:eq(6)').val(),
+		};
+		if (checkUser(data) != 0) {
+			var deviceID = $('#main2 table tbody').find("input:checkbox:checked").parent().parent().attr('id');
+			var deviceName = $('#deviceName').val();
+			var channel1Name = $('#channel1Name').val();
+			var channel2Name = $('#channel2Name').val();
+			var channel3Name = $('#channel3Name').val();
+			var beginHour = $('#beginHour').find('option:selected').val();
+			var beginMin = $('#beginMin').find('option:selected').val();
+			var endHour = $('#endHour').find('option:selected').val();
+			var endMin = $('#endMin').find('option:selected').val();
+			var photoSize = parseInt($('#photoSize').find('option:selected').val());
+			var capturePeriod = parseInt($('#capturePeriod').find('option:selected').val());
+			var resolution = parseInt($('#resolution').find('option:selected').val());
+			var channelNo2 = parseInt($('#channelNo2').find('option:selected').val());
+			var channelNo3 = parseInt($('#channelNo3').find('option:selected').val());
+			var captureTimes = $('#captureTimes').val();
 
-				var data = {
-					'deviceID': deviceID,
-					'deviceName': deviceName,
-					'beginHour': beginHour,
-					'beginMin': beginMin,
-					'endHour': endHour,
-					'endMin': endMin,
-					'photoSize': photoSize,
-					'capturePeriod': capturePeriod,
-					'resolution': resolution,
-					'channel1Name': channel1Name,
-					'channel2Name': channel2Name,
-					'channelNo2': channelNo2,
-					'channel3Name': channel3Name,
-					'channelNo3': channelNo3,
-				};
-				SettingsDevice(data);
-			}
+			var data = {
+				'deviceID': deviceID,
+				'deviceName': deviceName,
+				'beginHour': beginHour,
+				'beginMin': beginMin,
+				'endHour': endHour,
+				'endMin': endMin,
+				'photoSize': photoSize,
+				'capturePeriod': capturePeriod,
+				'captureTimes': captureTimes,
+				'resolution': resolution,
+				'channel1Name': channel1Name,
+				'channel2Name': channel2Name,
+				'channelNo2': channelNo2,
+				'channel3Name': channel3Name,
+				'channelNo3': channelNo3,
+			};
+			SettingsDevice(data);
 		}
 	})
 
@@ -1285,9 +1311,11 @@ $(function() {
 				$(row).attr('endMinutes', data.endMinutes);
                 $(row).attr('photoSize', data.photoSize);
                 $(row).attr('capturePeriod', data.capturePeriod);
+                $(row).attr('captureTimes', data.captureTimes);
                 $(row).attr('resolution', data.resolution);
                 $(row).attr('devicedangerid', data.devicedangerid);
                 $(row).attr('lineId', data.lineId);
+                $(row).attr('levels', data.levels);
             },
 			"language": {
 				"lengthMenu":     "显示 _MENU_ 条",
@@ -1353,6 +1381,7 @@ $(function() {
 			'deviceTele': inputData.deviceTele,
 			'lineName': inputData.lineName,
 			'lineId': inputData.lineId,
+			'levels':inputData.levels,
 		};
 		$.ajax({
 			url: '/v1/device/create',
@@ -1387,6 +1416,7 @@ $(function() {
 			'lineName': inputData.lineName,
 			'lineId': inputData.lineId,
 			'parentId': inputData.parentId,
+			'levels':inputData.levels
 		};
 		$.ajax({
 			url: '/v1/device/edit',

@@ -54,6 +54,10 @@ var refModel = {
         data: 'area',
         rangeCheck:null,
     },
+    levels:{
+        data: 'levels',
+        rangeCheck:null,
+    },
     deviceDangerID:{
         data: 0,
         rangeCheck: function(data){
@@ -184,6 +188,10 @@ var createModel = {
     },
     area:{
         data: 'area',
+        rangeCheck:null,
+    },
+    levels:{
+        data: 'levels',
         rangeCheck:null,
     },
     lineId:{

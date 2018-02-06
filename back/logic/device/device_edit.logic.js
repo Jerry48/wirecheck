@@ -49,6 +49,10 @@ var refModel = {
         rangeCheck:null,
         optional: 1,
     },
+    levels:{
+        data: 'levels',
+        rangeCheck:null,
+    },
     deviceDangerID :{
         data: 'deviceDangerID',
         rangeCheck:null,
@@ -80,6 +84,10 @@ var editModel = {
         data: 'area',
         rangeCheck:null,
         optional: 1,
+    },
+    levels:{
+        data: 'levels',
+        rangeCheck:null,
     },
     lineId: {
         data: 'lineId',

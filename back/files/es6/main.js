@@ -142,14 +142,10 @@ $(function() {
 
         // patrol pics
         var data = {
-            "userId": cookie_userId,
-            "userType": cookie_userType,
-            "size": 5,
-            "index": 0,
-            "startTime": "1970-01-01 00:00:00",
-            "endTime": "2900-01-01 23:59:59"
+            index : 0
         }
-        getAllPics(data);
+        getPics(data, true);
+        // getAllPics(data);
 
         // records
         getAlertRecords(0)
@@ -159,7 +155,10 @@ $(function() {
             () => {
                 var index = parseInt($('body').attr('allpic-index'));
                 if (index == 0) {
-                    getAllPics(data);
+                    var data = {
+                        index : 0
+                    }
+                    getPics(data, true);
                 }
             }, INTERVAL
         );
@@ -382,96 +381,66 @@ $(function() {
     $('#picLast').click(function() {
         if ($('body').attr('if-all') == 1) {
             var index = parseInt($('body').attr('allpic-index'));
-            var size = 5;
             var data = {
-                "userId": cookie_userId,
-                "userType": cookie_userType,
-                "index": index - 1,
-                "size": size,
-                "startTime": "1970-01-01 00:00:00",
-                "endTime": "2900-01-01 23:59:59"
+                index : index - 1
             };
-            getAllPics(data);
+            getPics(data, true);
         } else {
             var id = $('body').attr('pic-deviceId');
             var channelNo = parseInt($('body').attr('pic-channelNo'));
-            var size = 5;
             var index = parseInt($('body').attr('pic-index'));
-            var type = 0;
+            var type = $('body').attr('pic-type');
             var data = {
-                "channelNo": channelNo,
-                "id": id,
-                "size": size,
-                "type": type,
-                "index": index - 1,
-                "startTime": "1900-01-01 00:00:00",
-                "endTime": "2900-01-01 00:00:00"
+                channelNo : "",
+                id : id,
+                type : type,
+                index : index - 1,
             }
-            getDevicePics(data);
+            getPics(data, false);
         }
     });
 
     $('#picNext').click(function() {
         if ($('body').attr('if-all') == 1) {
             var index = parseInt($('body').attr('allpic-index'));
-            var size = 5;
             var data = {
-                "userId": cookie_userId,
-                "userType": cookie_userType,
-                "index": index + 1,
-                "size": size,
-                "startTime": "1970-01-01 00:00:00",
-                "endTime": "2900-01-01 23:59:59"
+                index : index + 1
             };
-            getAllPics(data);
+            getPics(data, true);
         } else {
             var id = $('body').attr('pic-deviceId');
             var channelNo = parseInt($('body').attr('pic-channelNo'));
-            var size = 5;
             var index = parseInt($('body').attr('pic-index'));
-            var type = 0;
+            var type = $('body').attr('pic-type');
             var data = {
-                "channelNo": channelNo,
-                "id": id,
-                "size": size,
-                "type": type,
-                "index": index + 1,
-                "startTime": "1900-01-01 00:00:00",
-                "endTime": "2900-01-01 00:00:00"
+                channelNo : "",
+                id : id,
+                type : type,
+                index : index + 1,
             }
-            getDevicePics(data);
+            getPics(data, false);
         }
     });
 
     $('#refresh').click(function() {
         if ($('body').attr('if-all') == 1) {
-            var index = parseInt($('body').attr('pic-index'));
-            var size = 5;
+            var index = parseInt($('body').attr('allpic-index'));
             var data = {
-                "userId": cookie_userId,
-                "userType": cookie_userType,
-                "index": 0,
-                "size": size,
-                "startTime": "1970-01-01 00:00:00",
-                "endTime": "2900-01-01 23:59:59"
+                index : 0
             };
-            getAllPics(data);
+            getPics(data, true);
         } else {
             var id = $('body').attr('pic-deviceId');
             var channelNo = parseInt($('body').attr('pic-channelNo'));
-            var size = 5;
             var index = parseInt($('body').attr('pic-index'));
-            var type = 0;
+            var type = $('body').attr('pic-type');;
             var data = {
-                "channelNo": channelNo,
-                "id": id,
-                "size": size,
-                "type": type,
-                "index": 0,
-                "startTime": "1900-01-01 00:00:00",
-                "endTime": "2900-01-01 00:00:00"
+                channelNo : channelNo,
+                id : id,
+                type : type,
+                index : 0,
             }
-            getDevicePics(data);
+            getPics(data, false);
         }
     })
 
@@ -666,16 +635,13 @@ $(function() {
             var index = parseInt($('body').attr('pic-index'));
             var channelNo = parseInt($('body').attr('pic-channelNo'));
             var size = 5;
-            var type = 1;
+            var type = $('body').attr('pic-type');;
 
             var data = {
-                "channelNo": channelNo,
-                "type": type,
-                "id": deviceId,
-                "size": size,
-                "index": index,
-                "startTime": "1900-01-01 00:00:00",
-                "endTime": "2900-01-01 00:00:00"
+                channelNo : channelNo,
+                type : type,
+                id : deviceId,
+                index : index,
             }
             if (index == 0) {
                 // alert('!');
@@ -1018,24 +984,24 @@ $(function() {
             var tmpData = tmp.split('_');
             var deviceId = tmpData[0];
             $.ajax({
-                    url: '/v1/command/setdevice',
-                    type: "POST",
-                    data: JSON.stringify({
-                        "deviceId": deviceId
-                    }),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function(data) {
-                        if (data.code == 0) {
-                            alert('设备配置成功！');
-                        } else if (data.code == NO_SOCKET || data.code == SERVER_ERROR) {
-                            alert('与设备服务器连接失败！错误码：' + data.code);
-                        } else {
-                            alert('设备配置失败！');
-                        }
+                url: '/v1/command/setdevice',
+                type: "POST",
+                data: JSON.stringify({
+                    "deviceId": deviceId
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(data) {
+                    if (data.code == 0) {
+                        alert('设备配置成功！');
+                    } else if (data.code == NO_SOCKET || data.code == SERVER_ERROR) {
+                        alert('与设备服务器连接失败！错误码：' + data.code);
+                    } else {
+                        alert('设备配置失败！');
                     }
-                }) // end of ajax
-                // $('#modalSetting').modal();
+                }
+            }) // end of ajax
+            // $('#modalSetting').modal();
         }
     })
 
@@ -1054,21 +1020,21 @@ $(function() {
                 "channelNo": channelNo,
             };
             $.ajax({
-                    url: '/v1/device/klTriggerPhoto',
-                    type: "POST",
-                    data: JSON.stringify(data),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function(data) {
-                        if (data.code == 0) {
-                            alert('设备拍照成功！请等待设备上传图片');
-                        } else if (data.code == NO_SOCKET || data.code == SERVER_ERROR) {
-                            alert('与设备服务器连接失败！错误码：' + data.code);
-                        } else {
-                            alert('拍照失败！');
-                        }
+                url: '/v1/device/klTriggerPhoto',
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(data) {
+                    if (data.code == 0) {
+                        alert('设备拍照成功！请等待设备上传图片');
+                    } else if (data.code == NO_SOCKET || data.code == SERVER_ERROR) {
+                        alert('与设备服务器连接失败！错误码：' + data.code);
+                    } else {
+                        alert('拍照失败！');
                     }
-                }) // end of ajax
+                }
+            }) // end of ajax
         }
     })
 
@@ -1113,7 +1079,7 @@ $(function() {
     // 设备线路列表1
     function channelLineTree() {
         let rootNode;
-        ajxSync('/v1/device/tree/line', 'POST', {userId: cookie_userId})
+        ajxSync('/v1/device/tree/channel/line', 'POST', {userId: cookie_userId})
         .then(data => {
             if (data.code == 0) {
                 rootNode = data.result.data;
@@ -1207,6 +1173,7 @@ $(function() {
             console.log('selected item type:' + type);
 
             if(type === 3){
+                type = 0;
                 var tmpData = id.split('_');
                 var deviceId = tmpData[0];
                 var channelNo = tmpData[1];
@@ -1241,21 +1208,18 @@ $(function() {
                     tempDevice(newData);
                 } else {
                     var data = {
-                        "channelNo": channelNo,
-                        "type": 0,
-                        "id": deviceId,
-                        "size": 5,
-                        "index": 0,
-                        "startTime": "1900-01-01 00:00:00",
-                        "endTime": "2900-01-01 00:00:00"
+                        channelNo : channelNo,
+                        type : 0,
+                        id : deviceId,
+                        index : 0,
                     }
                     // setDeviceStatus();
 
                     clearInterval(intervalIds.getAllPics);
                     clearInterval(intervalIds.findDevicePic);
-                    getDevicePics(data);
+                    getPics(data, false);
                     intervalIds.findDevicePic = setInterval(function() {
-                        getDevicePics(data)
+                        getPics(data, false)
                     }, INTERVAL);
                 }
             }else if(type == 1){
@@ -1272,28 +1236,25 @@ $(function() {
                     getDevicePicsHistory(data);
                 }else {
                     var data = {
-                        "channelNo": '',
-                        "type": 1,
-                        "id": id,
-                        "size": 5,
-                        "index": 0,
-                        "startTime": "1900-01-01 00:00:00",
-                        "endTime": "2900-01-01 00:00:00"
+                        channelNo : '',
+                        type : 1,
+                        id : id,
+                        index : 0,
                     }
                     // setDeviceStatus();
 
                     clearInterval(intervalIds.getAllPics);
                     clearInterval(intervalIds.findDevicePic);
-                    getDevicePics(data);
+                    getPics(data, false);
                     intervalIds.findDevicePic = setInterval(function() {
                         var index = parseInt($('body').attr('pic-index'));
                         if (index == 0) {
-                            getDevicePics(data);
+                            getPics(data, false);
                         }
                     }, INTERVAL);
                 }
             }
-            
+            $('body').attr('pic-type',type);
         })
     }
 
@@ -1322,26 +1283,114 @@ $(function() {
         })
     }
 
+    function getPics(data, allFlag) {
+        if (allFlag) {
+            data.userId = cookie_userId;
+            data.userType = cookie_userType;
+        }
+
+        data.startTime = '1900-01-01 00:00:00';
+        data.endTime = '2900-01-01 00:00:00';
+        data.size = 5;
+        var outerData = data;
+        var url = allFlag ? '/v1/search/pics/all' : '/v1/search/pics/device';
+
+        ajxSync(url, 'GET', data)
+        .then(function(data) {
+            if (data.code === 0) {
+                var list = data.result.list;
+                var curPage = outerData.index + 1;
+                var totalPage = Math.ceil(data.result.total / outerData.size);
+
+                if (totalPage > curPage){
+                    $('#picNext').show();
+                }else{
+                    $('#picNext').hide();
+                }
+
+                if (curPage == 1) {
+                    $('#picLast').hide();
+                } else {
+                    $('#picLast').show();
+                }
+
+                
+                if (allFlag) {
+                    $('body').attr('allpic-index', outerData.index);
+                    $('body').attr('if-all', 1);
+                } else {
+                    $('body').attr('pic-index', outerData.index);
+                    $('body').attr('pic-deviceId', outerData.id);
+                    $('body').attr('if-all', 0);
+                }
+                
+                // picThings();
+                var $ele = $('#pics img');
+                $ele.removeAttr('data-original');
+                $ele.removeAttr('src');
+                $ele.removeAttr('picId');
+                $ele.removeAttr('channelNo');
+                $('.pics p').text('');
+                // picReset();
+
+                list.forEach((item, index) => {
+                    var name = item.name;
+                    var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
+                    if (item.width > item.height) {
+                        horPicCss(index, item.width, item.height);
+                    } else {
+                        verPicCss(index, item.width, item.height);
+                    }
+
+                    var $ele = $('#pics img:eq(' + index + ')');
+                    $ele.attr('src', item.picUrl);
+                    $ele.attr('data-original', item.picUrl);
+                    $ele.attr('picId', item.picId);
+                    $ele.attr('channelNo', item.channelNo);
+                    $ele.attr('deviceId', item.deviceId);
+                    if (index > 0) {
+                        $('.pics:eq(' + (index - 1) + ') p').text(item.time + ' ' + item.deviceId);
+                    } else {
+                        $('#pics0_desc input:eq(0)').val(item.time);
+                        $('#pics0_desc input:eq(1)').val(item.deviceId);
+                        $('#pics0_desc input:eq(2)').val(item.deviceTele);
+                        $('#pics0_desc input:eq(3)').val(item.deviceId);
+                    }
+
+                    $('#picCount').text(`第${curPage}页, 共${totalPage}页`);
+                });
+                var viewer = new Viewer(document.getElementById('pics'), {url: 'data-original'});
+            } else {
+                console.log('查询图片失败！');
+            }
+        });
+    }
+
     //`getDevicePics
     function getDevicePics(data) {
-        // clearInterval(intervalIds.findDevicePic);
         var outerData = data;
         ajxSync('/v1/search/pics/device', 'GET', data)
         .then(function(data) {
             if (data.code == 0) {
-                if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1)
+                var list = data.result.list;
+                var curPage = outerData.index + 1;
+                var totalPage = Math.ceil(data.result.total / outerData.size);
+
+                if (totalPage > curPage){
                     $('#picNext').show();
-                else
-                    $('#picNext').show();
+                }else{
+                    $('#picNext').hide();
+                }
+
+                if (curPage == 1) {
+                    $('#picLast').hide();
+                } else {
+                    $('#picLast').show();
+                }
 
                 $('body').attr('pic-index', outerData.index);
                 $('body').attr('pic-deviceId', outerData.id);
                 $('body').attr('if-all', 0);
-                if ($('body').attr('pic-index') > 0) {
-                    $('#picLast').show();
-                } else {
-                    $('#picLast').show();
-                }
 
                 var list = data.result.list;
 
@@ -1352,46 +1401,35 @@ $(function() {
                 $('#pics img').removeAttr('channelNo');
                 $('.pics p').text('');
                 // picReset();
-                for (var i = 0; i < list.length; ++i) {
-                    if (list[i].picType == 2) {
-                        // for ref pic
+
+                list.forEach((item, index) => {
+                    var name = item.name;
+                    var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
+                    if (item.width > item.height) {
+                        horPicCss(index, item.width, item.height);
                     } else {
-                        if (list[i].picType == 1) {
-                            var name = list[i].name;
-                            var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
-                            // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 告警图片:"+timeName);
-                        } else {
-                            var name = list[i].name;
-                            var timeName = name.slice(18, 22) + '-' + name.slice(22, 24) + '-' + name.slice(24, 26) + "\t" + name.slice(26, 28) + ":" + name.slice(28, 30) + ":" + name.slice(30, 32);
-                            // $('#main h5:eq(' + i + ')').text(list[i].channelNo+"号摄像头 原始图片:"+timeName);
-                        }
-                        if (list[i].width > list[i].height) {
-                            horPicCss(i, list[i].width, list[i].height);
-                        } else {
-                            verPicCss(i, list[i].width, list[i].height);
-                        }
-
-                        $('#pics img:eq(' + i + ')').attr('src', list[i].picUrl);
-                        $('#pics img:eq(' + i + ')').attr('data-original', list[i].picUrl);
-                        $('#pics img:eq(' + i + ')').attr('picId', list[i].picId);
-                        $('#pics img:eq(' + i + ')').attr('channelNo', list[i].channelNo);
-                        $('#pics img:eq(' + i + ')').attr('deviceId', list[i].deviceId);
-                        if (i > 0) {
-                            $('.pics:eq(' + (i - 1) + ') p').text(list[i].time + ' ' + list[i].deviceId);
-                        } else {
-                            $('#pics0_desc input:eq(0)').val(list[i].time);
-                            $('#pics0_desc input:eq(1)').val(list[i].deviceId);
-                            $('#pics0_desc input:eq(2)').val(list[i].deviceTele);
-                            $('#pics0_desc input:eq(3)').val(list[i].deviceId);
-                        }
-
-                        $('#picCount').text('第' + (outerData.index + 1) + '页 共' + Math.ceil(data.result.total / outerData.size) + '页');
+                        verPicCss(index, item.width, item.height);
                     }
-                }
 
-                var viewer = new Viewer(document.getElementById('pics'), {
-                    url: 'data-original',
+                    var $ele = $('#pics img:eq(' + index + ')');
+                    $ele.attr('src', item.picUrl);
+                    $ele.attr('data-original', item.picUrl);
+                    $ele.attr('picId', item.picId);
+                    $ele.attr('channelNo', item.channelNo);
+                    $ele.attr('deviceId', item.deviceId);
+                    if (index > 0) {
+                        $('.pics:eq(' + (index - 1) + ') p').text(item.time + ' ' + item.deviceId);
+                    } else {
+                        $('#pics0_desc input:eq(0)').val(item.time);
+                        $('#pics0_desc input:eq(1)').val(item.deviceId);
+                        $('#pics0_desc input:eq(2)').val(item.deviceTele);
+                        $('#pics0_desc input:eq(3)').val(item.deviceId);
+                    }
+
+                    $('#picCount').text('第' + (outerData.index + 1) + '页 共' + Math.ceil(data.result.total / outerData.size) + '页');
                 });
+
+                var viewer = new Viewer(document.getElementById('pics'), {url: 'data-original'});
             } else {
                 if (Math.ceil(data.result.total / outerData.size) <= outerData.index + 1) {
                     alert('这已经是最后一页！');
@@ -1789,6 +1827,12 @@ function getDevicePicsHistory(data) {
             console.log(data);
         }
     });
+}
+
+
+
+function getPicsHistory(data, allFlag) {
+
 }
 
 // 查询所有历史图片

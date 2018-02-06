@@ -137,7 +137,6 @@ $(function(){
     });
 
     $('#picNext').click(function() {
-        console.log('adf');
         if ($('body').attr('if-all') == 1) {
             const index = parseInt($('body').attr('allpic-index'));
             const data = {
@@ -465,15 +464,8 @@ $(function(){
         console.log(data);
         console.log(`gonna get ${allFlag?'all':'device'} of ${number}`);
         const outerData = data;
-        const url = '/v1/search/pics/' + (allFlag ? 'all' : 'device');
-        $.ajax({
-            url:url,
-            type:"GET",
-            data: data,
-            contentType:"application/json; charset=utf-8",
-            dataType:"json",
-            async:false
-        })
+        const url = allFlag ? '/v1/search/pics/all' : '/v1/search/pics/device';
+        ajxSync(url, 'GET', data)
         .then(data => {
             if (data.code == 0) {
                 const list = data.result.list;
@@ -556,11 +548,12 @@ $(function(){
                 var tmpId = deviceId;
                 $('body').attr('pic-deviceId',deviceId);
                 $('body').attr('pic-channelNo',channelNo);
-                $('body').attr('pic-type',type);
             }else if(type == 1){
                 channelNo = '';
                 var tmpId = id;
             }
+
+            $('body').attr('pic-type',type);
             
             var data = {
                 channelNo: channelNo,

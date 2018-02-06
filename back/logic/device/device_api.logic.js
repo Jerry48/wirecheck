@@ -118,21 +118,20 @@ router.use(api_device_tree.router);
 var api_device_tree_channel = require('./device_tree_channel.logic');
 router.use(api_device_tree_channel.router);
 
-var api_device_tree_line = require('./device_tree_line.logic');
-router.use(api_device_tree_line.router);
+var api_device_tree_channel_line = require('./device_tree_channel_line.logic');
+router.use(api_device_tree_channel_line.router);
 
 var api_device_tree_priv = require('./device_tree_priv.logic');
 router.use(api_device_tree_priv.router);
+
+var api_device_tree_line = require('./device_tree_line.logic');
+router.use(api_device_tree_line.router);
+
 
 /*
 	end of tree
 */
 
-var api_device_tree_multi = require('./device_tree_multi.logic');
-router.use(api_device_tree_multi.router);
-
-var api_device_tree_line_multi = require('./device_tree_line_multi.logic');
-router.use(api_device_tree_line_multi.router);
 
 var api_device_find_parents = require('./device_find_parents.logic');
 router.use(api_device_find_parents.router);

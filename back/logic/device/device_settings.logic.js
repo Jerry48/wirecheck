@@ -82,6 +82,10 @@ var refModel = {
         data: 0,
         rangeCheck: null,
     },
+    captureTimes: {
+        data: 0,
+        rangeCheck: null,
+    },
     photoSize: {
         data: 0,
         rangeCheck: null,
@@ -170,6 +174,7 @@ function processRequest(param, fn) {
     var endMin = param.endMin || '';
     var photoSize = param.photoSize || 0;
     var capturePeriod = param.capturePeriod || 0;
+    var captureTimes = param.captureTimes || 0;
     var resolution = param.resolution || 0;
 
     beginHour = parseInt(beginHour) < 10 ? ('0' + parseInt(beginHour)) : (beginHour);
@@ -226,6 +231,7 @@ function processRequest(param, fn) {
                     deviceWorkEndTime: deviceWorkEndTime,
                     photoSize: photoSize,
                     capturePeriod: capturePeriod,
+                    captureTimes: captureTimes,
                     resolution: resolution,
                     name: deviceName,
                     channel1Name: channel1Name,

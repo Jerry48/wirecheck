@@ -1,4 +1,4 @@
-// device level list child api
+ // device level list child api
 // copyright@CCFLab.sjtu.edu.cn reserved, 2016
 /*
  * history:
@@ -21,7 +21,6 @@ var is = require('is_js');
 var userDeviceRModel = require('../../model/user_device_r_info');
 var userDeviceGroupRModel = require('../../model/user_device_group_r_info');
 var deviceGroupMemberModel = require('../../model/device_group_member_info');
-
 var deviceModel = require('../../model/device_info');
 var deviceLevelModel = require('../../model/device_level_info');
 var deviceLineModel = require('../../model/device_line_info');
@@ -82,6 +81,27 @@ function processRequest(param, fn){
     debug('Try to list the child of device level of '+userId);
 
     async.waterfall([
+        // function(next){
+        //     var match = {
+        //         ugId: userId,
+        //     };
+        //     var select = {
+        //         deviceId: 'deviceId',
+        //     };
+        //     var query = {
+        //         select: select,
+        //         match: match,
+        //     };
+        //     userDeviceRModel.lookup(query, function(err, rows){
+        //         if (err) {
+        //             var msg = err.msg || err;
+        //             console.error(moduleName+' Err:'+msg);
+        //             next(err);
+        //         }else{
+        //             next(null,rows);
+        //         }
+        //     });
+        // },
         function(next){
             var match = {
                 userId: userId,
@@ -142,20 +162,22 @@ function processRequest(param, fn){
                     }
                 });
             }
+            
         },
         function(result,next){
             var deviceIds = [];
             for (var i=0;i<result.length;i++){
-                deviceIds.push(result[i].deviceId || result[i].deviceID);
+                var tmp = JSON.parse(JSON.stringify(result))
+                deviceIds.push(tmp[i].deviceID || tmp[i].deviceId);
             }
-            var sqlstr = 'select id,name, deviceId, channelNo, status,lineId from '+channelModel.tableName;
-            sqlstr +=' where deviceId in ("';
+            var sqlstr = 'select name,deviceID,lineId from '+deviceModel.tableName;
+            sqlstr +=' where deviceID in ("';
             sqlstr += deviceIds.join('","');
-            sqlstr +='") and status = 1;';
+            sqlstr +='");';
             var query = {
                 sqlstr: sqlstr,
             };
-            channelModel.query(query, function(err, rows){
+            deviceModel.query(query, function(err, rows){
                 if (err) {
                     var msg = err.msg || err;
                     console.error(moduleName+'Failed to get the group member for'+msg);
@@ -163,10 +185,10 @@ function processRequest(param, fn){
                 }else{
                     for(var i=0;i<rows.length;i++){
                         data[i] = {
-                            id:rows[i].id,
-                            text:rows[i].name,
-                            deviceId: rows[i].deviceId,
+                        	id:rows[i].deviceID,
+                            deviceId: rows[i].deviceID,
                             lineId: rows[i].lineId,
+                            text: rows[i].name,
                             type : 3,
                         }
                     }
@@ -204,6 +226,7 @@ function processRequest(param, fn){
                             for(var j=0;j<data2.length;j++){
                                 if(data2[j].lineId == tmp[i].id){
                                     tmp[i].type = 1;
+                                    tmp[i].selectable = false;
                                     tmp[i].num += 1;
                                     tmp[i].nodes.push(data2[j]);
                                 }
@@ -259,6 +282,7 @@ function processRequest(param, fn){
                             for(var j=0;j<data3.length;j++){
                                 if(data3[j].parentId == tmp[i].id){
                                     tmp[i].type = 1;
+                                    tmp[i].selectable = false;
                                     tmp[i].num += data3[j].num;
                                     tmp[i].nodes.push(data3[j]);
                                 }

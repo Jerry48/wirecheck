@@ -180,9 +180,11 @@ function packageResponseData(inputData){
             deviceName: devices.deviceName,
             deviceTele: devices.deviceTele,
             area: devices.area,
+            levels: devices.levels,
             // deviceWorkBeginTime: devices.deviceWorkBeginTime,
             // deviceWorkEndTime: devices.deviceWorkEndTime,
             capturePeriod: devices.capturePeriod,
+            captureTimes: devices.captureTimes,
             photoSize: devices.photoSize,
             resolution: devices.resolution,
             lineName: devices.lineName,
@@ -413,7 +415,7 @@ function processRequest(param, fn){
 
             // var tmpids = ids.slice(offset,offset+limit);
             
-            var sqlstr = "select deviceID,name,area,lineId,deviceWorkBeginTime,deviceWorkEndTime,photoSize,capturePeriod,resolution,latitude,longitude,version";
+            var sqlstr = "select deviceID,name,area,levels,lineId,deviceWorkBeginTime,deviceWorkEndTime,photoSize,capturePeriod,captureTimes,resolution,latitude,longitude,version";
             sqlstr += ' from '+deviceModel.tableName + ' where deviceID in("' +ids.join('","')+'")';
             sqlstr += ' order by deviceID ASC ';
             sqlstr += ' LIMIT ' + offset +', '+limit;
@@ -435,11 +437,13 @@ function processRequest(param, fn){
                             latitude: rows[i].latitude,
                             longitude: rows[i].longitude,
                             area: rows[i].area,
+                            levels: rows[i].levels,
                             deviceWorkBeginTime: rows[i].deviceWorkBeginTime.toString(),
                             deviceWorkEndTime: rows[i].deviceWorkEndTime.toString(),
                             photoSize: rows[i].photoSize,
                             resolution: rows[i].resolution,
                             capturePeriod: rows[i].capturePeriod,
+                            captureTimes: rows[i].captureTimes,
                             deviceName: rows[i].name,
                             lineId: rows[i].lineId,
                             version: rows[i].version,
